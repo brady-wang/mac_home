@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+{__NOLAYOUT__}
+
+<!-- 查询栏 -->
+
+<div class="col-xs-11">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-inline" role="form" method="get" id="queryUserInfo">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">用户ID</div>
+                        <input class="form-control" name="userid" type="text" />
+                    </div>
+                </div>
+                <button type="button" class="btn btn-query" id="analysisByUid">查询</button>
+            </form>
+            <hr/>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr role="row" class="td-align-middle">
+                        <th>日期</th>
+                        <th>用户活动分享次数</th>
+                        <th>用户成功拉新总数</th>
+                        <th>新用户玩牌局数</th>
+                    </tr>
+                </thead>
+                <tbody id="list">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-xs-11">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr role="row" class="td-align-middle">
+                        <th>日期</th>
+                        <th>新用户分享次数</th>
+                        <th>老用户分享次数</th>
+                        <th>新用户分享人数</th>
+                        <th>老用户分享人数</th>
+                        <th>落地页打开次数</th>
+                        <th>活动注册总数</th>
+                        <th>活动新用户玩牌总局数</th>
+                        <th>拉新奖励获奖人数</th>
+                        <th>拉新奖励领奖人数</th>
+                        <th>新人牌局活动获奖人数</th>
+                        <th>新人牌局活动领奖人数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <foreach name="actData" item="item" key="key">
+                        <tr>
+                            <td>{$key}</td>
+                            <td>{$item.newUserShareCnt}</td>
+                            <td>{$item.oldUserShareCnt}</td>
+                            <td>{$item.newUserShareNum}</td>
+                            <td>{$item.oldUserShareNum}</td>
+                            <td>{$item.downPageOpen}</td>
+                            <td>{$item.regNum}</td>
+                            <td>{$item.regPlayNum}</td>
+                            <td>{$item.invitePrizeNum}</td>
+                            <td>{$item.invitePrizeNum}</td>
+                            <td>{$item.playPrizeNum}</td>
+                            <td>{$item.playPrizeNum}</td>
+                        </tr>
+                    </foreach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $('#analysisByUid').on('click', function(e) {
+            var data = $("#queryUserInfo").serializeObject();
+            $.getJSON('/Activity/actAnalysisByUid', data, function(rs){
+                if (rs.code != 0) {
+                    alert(rs.msg);
+                } else {
+                    var html = '';
+                    $.each(rs.data, function(key, val){
+                        html += '<tr>';
+                        html += '<td>'+ key +'</td>';
+                        html += '<td>'+ val.shareNum +'</td>';
+                        html += '<td>'+ val.inviteNum +'</td>';
+                        html += '<td>'+ val.playNum +'</td>';
+                        html += '</tr>';
+                    })
+                    $("#list").html(html);
+                }
+            });
+            return false;
+        });
+    })
+</script>
+

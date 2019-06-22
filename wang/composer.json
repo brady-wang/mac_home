@@ -1,0 +1,26 @@
+{
+    "name": "brady/learn",
+    "description": "this is my learn",
+    "require": {
+        "php":"^7.0.0",
+        "brady/tool":"dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "brady wang",
+            "email": "brady.wang@qq.com"
+        }
+    ],
+    "autoload":{
+        "classmap":[
+          "Libraries"
+        ],
+        "files":["helpers/baseHelper.php"],
+        "psr-4":{
+            "Wang\\":"src/",
+            "Brady\\Tool\\":"vendor/brady/tool/src",
+            "App\\":"App/"
+        }
+    }
+}

@@ -1,0 +1,83 @@
+<css href="/Public/Lib/tiptip-1.3/tipTip.css"/>
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js"/>
+<div class="header">
+    <h1 class="page-header">用户信息</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else/>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-3 control-label request">玩家ID</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="userid" name="userid" type="text" value=""
+                                           placeholder="请输入玩家ID"/>
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-query" type="button" onclick="return onQuery();">查询</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="userInfoPanel" style="display: none">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="userInfo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<div class="modal fade" id="giveMod" tabindex="-1" role="dialog" aria-labelledby="giveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="edtModalLabel">赠送元宝数量</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label class="col-sm-3 control-label">当前元宝:</label>
+                    <span id="current-gold">0</span>
+                </div><br>
+                <div>
+                    <label class="col-sm-3 control-label">赠送元宝:</label>
+                    <input class="form-control" type="text" value="" style="width: 50%" id="give-gold-num">
+                </div><br>
+                <div>
+                    <label class="col-sm-3 control-label">赠送后数量:</label>
+                    <span id="total-gold">0</span>
+                </div><br>
+                <div class="text-center" style="width: 100%;">
+                    <button class="btn btn-success" id="change-gold">确定修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tab-caption {
+        text-align: center;
+        font-size: 15px;
+        font-weight: bold;
+    }
+</style>
+<js href="/Public/Js/gamemgr/user-info.js"/>

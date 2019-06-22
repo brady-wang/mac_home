@@ -1,0 +1,111 @@
+
+<div class="header">
+    <h1 class="page-header">人工排查</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">有效AppID</div>
+                <div class="panel-body">
+                    <table class="table">
+                        <tbody>
+                            <foreach name="appidList" item="v">
+                                <tr <eq name="v.id" value="$conf['conf_id']"> class="text-danger"</eq>>
+                                    <td>{$v.id}</td>
+                                    <td>
+                                        <a
+                                            <eq name="v.id" value="$conf['conf_id']"> class="text-danger"</eq>
+                                            href="javascript:void(0)"
+                                            onclick="submitUpdateConfAppid({$v.id})"
+                                        >
+                                            {$v.appid}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </foreach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">有效域名</div>
+                <div class="panel-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <a
+                                        <eq name="conf.link" value="http://www.qq.com/">
+                                            class="text-danger"
+                                        <else/>
+                                            class="text-success"
+                                        </eq>
+                                        href="javascript:void(0)"
+                                        onclick="submitUpdateConfDomain(0)"
+                                    >
+                                        http://www.qq.com/
+                                    </a>
+                                </td>
+                            </tr>
+                            <foreach name="domainList" item="v">
+                                <tr <eq name="v.id" value="$conf['link_id']"> class="text-danger"</eq>>
+                                    <td>{$v.id}</td>
+                                    <td>
+                                        <a
+                                            <eq name="v.id" value="$conf['link_id']"> class="text-danger"</eq>
+                                            href="javascript:void(0)"
+                                            onclick="submitUpdateConfDomain({$v.id})"
+                                        >
+                                            {$v.link}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </foreach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">当前配置文件信息</div>
+                <div class="panel-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">id</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-static">{$conf['conf_id']}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">AppID</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-static">{$conf['appid']}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">域名id</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-static">{$conf['link_id']}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">域名</label>
+                            <div class="col-sm-8">
+                                <p class="form-control-static">{$conf['link']}</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<js href="/Public/Js/gameconfig/game-app-manual.js" />

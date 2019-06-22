@@ -1,0 +1,113 @@
+
+<include file="./Template/Common/header.html" />
+
+<style>
+body {
+    background: #fff;
+}
+#tbMail td {word-break:break-all;}
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10">
+            <present name="errMsg">
+                <p class="text-danger well">{$errMsg}</p>
+            <else />
+                <table class="table table-hover table-condensed" id="tbMail">
+                    <tbody>
+                        <tr>
+                            <td class="text-danger col-sm-2">id</td>
+                            <td class="text-info" colspan="3">{$info.id}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger col-sm-2">邮件标题</td>
+                            <td class="text-info" colspan="3">{$info.subj}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">邮件内容</td>
+                            <td class="text-info" colspan="3">{$info.cont}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger col-sm-2">发送玩家</td>
+                            <td class="text-info" colspan="3">
+                                <php>
+                                    $txt = '';
+                                    if ($info['user_type'] == 1) {
+                                        $txt = '全服玩家';
+                                    } else if ($info['user_type'] == 2) {
+                                        if (!empty($info['channel_code'])) {
+                                            foreach ($codeTypeMap as $cv) {
+                                                if ($cv['code'] == $info['channel_code']) {
+                                                    $txt = $cv['name'];
+                                                    break;
+                                                }
+                                            }
+                                        } else {
+                                            $txt = '无渠道玩家';
+                                        }
+                                    } else if ($info['user_type'] == 3) {
+                                        $sep = 0;
+                                        for ($idx = 0; $idx < count($info["users"]); $idx++) {
+                                            $txt .= $info["users"][$idx]->uid.':'.$info["users"][$idx]->num;
+                                            if ($idx != count($info["users"]) - 1) {
+                                                $txt .= ' ; ';
+                                            }
+                                            $sep++;
+                                            if ($sep == 5) {
+                                                $sep = 0;
+                                                $txt .= "<br/>";
+                                            }
+                                        }
+                                    } else {
+                                        $txt = $info['users'];
+                                    }
+                                    echo $txt;
+                                </php>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">补偿物品</td>
+                            <td class="text-info">{$info.pay}</td>
+                            <td class="text-danger">设置时间</td>
+                            <td class="text-info">{:date('Y-m-d H:i:s', $info['ctime'])}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">发送时间</td>
+                            <td class="text-info">{:date('Y-m-d H:i:s', $info['stime'])}</td>
+                            <td class="text-danger">失效时间</td>
+                            <td class="text-info">{:date('Y-m-d H:i:s', $info['etime'])}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">操作员</td>
+                            <td class="text-info">{$userMap[$info[operator_id]]}</td>
+                            <td class="text-danger">状态</td>
+                            <td class="text-info">
+                                <php>
+                                    $txt = '';
+                                    if ($info['send_flag'] == 1) {
+                                        $txt = '已发送';
+                                    } else if ($info['mail_status'] == 3) {
+                                        $txt = '已取消';
+                                    } else if ($info['mail_status'] == 2) {
+                                        $txt = '审核拒绝';
+                                    } else if ($info['mail_status'] == 1) {
+                                        $txt = '待发送';
+                                    } else if ($info['mail_status'] == 0) {
+                                        $txt = '待审核';
+                                    }
+                                    echo $txt;
+                                </php>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </present>
+        </div>
+    </div>
+</div>
+
+<include file="./Template/Common/footer.html" />

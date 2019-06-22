@@ -1,0 +1,144 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<div class="header">
+    <h1 class="page-header">钻石产出</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" method="get" action="/Stat/gameProduce">
+                        <!-- 开始日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">开始日期</div>
+                                <input class="form-control" id="startDate" name="start_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 结束日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">结束日期</div>
+                                <input class="form-control" id="endDate" name="end_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 查询按钮 -->
+                        <button class="btn btn-query" type="submit">查询</button>
+                        <button class="btn btn-operate tiptip" id="exportBtn" type="button" title="需选定起止日期才可导出文件">导出</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="divChart"  class="stat-chart"></div>
+                        <div class="text-center div-button-sel">
+                            <foreach name="titleLink" item="vo" key="k">
+                                <a href="#" class="btn btn-default dataButton" data-items="{$k}">
+                                    {$vo}
+                                </a> &nbsp;
+                            </foreach>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>总产出</th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过俱乐部操作中的赠送钻石，赠送给代理商的钻石数量。">赠送代理商钻石
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过俱乐部操作中的赠送专属钻石，赠送给代理商的专属钻石数量。">赠送专属钻石
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="下级代理商购钻后，上级代理获得的返钻数量。">代理商返钻
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="代理商通过代理商后台购买的钻石数量。">代理商购买
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="玩家通过游戏内商城购买的钻石数量。">游戏内购
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="玩家通过游戏内的每日分享得到的钻石数量。">每日分享
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="玩家通过游戏内的邀请好友功能获得的钻石数量。">邀请好友
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过后台以邮件形式发送给玩家的钻石数量。">赠送玩家钻石
+                                            </span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <td>{$v.stat_time|date="Y-m-d",###}</td>
+                                            <td>{$v.diamond_amount}</td>
+                                            <td>{$v.gift_agent}</td>
+                                            <td>{$v.gift_exclusive}</td>
+                                            <td>{$v.superior_award}</td>
+                                            <td>{$v.agent_purchase}</td>
+                                            <td>{$v.mall_purchase}</td>
+                                            <td>{$v.share_award}</td>
+                                            <td>{$v.invite_award}</td>
+                                            <td>{$v.admin_deliver}</td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <span>数据统计规则：<br/>
+                <strong>赠送代理商钻石：</strong>通过俱乐部操作中的赠送钻石，赠送给代理商的钻石数量。<br/>
+                <strong>赠送专属钻石：</strong>通过俱乐部操作中的赠送专属钻石，赠送给代理商的专属钻石数量。<br/>
+                <strong>代理商返钻：</strong>下级代理商购钻后，上级代理获得的返钻数量。<br/>
+                <strong>代理商购买：</strong>代理商通过代理商后台购买的钻石数量。<br/>
+                <strong>游戏内购：</strong>玩家通过游戏内商城购买的钻石数量。<br/>
+                <strong>每日分享：</strong>玩家通过游戏内的每日分享得到的钻石数量。<br/>
+                <strong>邀请好友：</strong>玩家通过游戏内的邀请好友功能获得的钻石数量。<br/>
+                <strong>赠送玩家钻石：</strong>通过后台以邮件形式发送给玩家的钻石数量。<br/>
+            </span>
+        </footer>
+    </present>
+</div>
+
+<script>
+var query = {$query};
+var chartData = {:json_encode($chartData)};
+</script>
+
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Js/stat/game-produce.js" />

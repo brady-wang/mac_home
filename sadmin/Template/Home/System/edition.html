@@ -1,0 +1,213 @@
+
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<div class="header">
+    <h1 class="page-header">功能兼容管理</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="系统用于标识不同功能的关键字，不可修改">功能标识</span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="兼容功能相关描述，用于告知哪些情况下开通或关闭">功能名称</span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="开发员关注，记录当删除指定记录时需要处理的代码">相关代码</span>
+                                        </th>
+                                        <th class="text-info fixed-width-150">
+                                            <span class="tiptip" title="游戏兼容开关，绿色字体表示开启功能，红色字体表示关闭功能">游戏兼容</span>
+                                        </th>
+                                        <th class="fixed-width-150">
+                                            <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#addMod">添加</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name='list' item='v'>
+                                        <tr>
+                                            <td class="td-valign-middle">{$v.id}</td>
+                                            <td class="td-valign-middle">{$v.edition_key}</td>
+                                            <td class="td-valign-middle">{$v.edition_name}</td>
+                                            <td class="td-valign-middle" id="tdDesc{$v.id}"></td>
+                                            <td class="td-valign-middle">
+                                                <foreach name="gameMap" item="gname" key="gid">
+                                                    <if condition="in_array($gid, $v['game_list'])">
+                                                        <span class="text-success">
+                                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> {$gname}
+                                                        </span><br/>
+                                                    <else/>
+                                                        <span class="text-danger">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {$gname}
+                                                        </span><br/>
+                                                    </if>
+                                                </foreach>
+                                            </td>
+                                            <td class="td-valign-middle">
+                                                <button class="btn btn-primary btn-sm" type="button" onclick="clickEdtEdition({$key});">修改</button>
+                                                <button
+                                                    class="btn btn-danger btn-sm"
+                                                    type="button"
+                                                    data-toggle="modal"
+                                                    data-target="#delMod"
+                                                    data-id="{$v.id}"
+                                                    data-edition-key="{$v.edition_key}"
+                                                >删除
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addMod" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addModalLabel">添加兼容项</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addModForm">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request">功能标识</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModEditionKey" type="text" name="edition_key" placeholder="以EKEY_为前缀，全大写下划线格式" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request">功能名称</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="addModEditionKey" type="text" name="edition_name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request">相关代码</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="addModDelDesc" rows="15" name="del_desc"></textarea>
+                        </div>
+                    </div>
+                    <fieldset id="addModGameFS">
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" onclick="submitAddEdition();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edtMod" tabindex="-1" role="dialog" aria-labelledby="edtModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="edtModalLabel">修改兼容项</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="edtModForm">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">id</label>
+                        <div class="col-sm-6">
+                            <p class="form-control-static" id="edtModId"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">功能标识</label>
+                        <div class="col-sm-6">
+                            <p class="form-control-static" id="edtModEditionKey"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request">功能名称</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="edtModEditionName" type="text" name="edition_name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request">相关代码</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="edtModDelDesc" rows="15" name="del_desc"></textarea>
+                        </div>
+                    </div>
+                    <fieldset id="edtModGameFS">
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" onclick="submitEdtEdition();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete modal -->
+<div class="modal fade" id="delMod" tabindex="-1" role="dialog" aria-labelledby="delModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="delModalLabel">删除兼容项</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">是否确定删除兼容项
+                                <span class='text-danger' id='delModId'></span>
+                                <span class='text-danger' id='delModEditionKey'></span>？
+                            </p>
+                        </div>
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-danger">删除前请确保已经清理好相关代码！</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="submitDelEdition();">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var gameMap = {:json_encode($gameMap)};
+var gameList = {:json_encode($list)};
+</script>
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Js/system/edition.js" />

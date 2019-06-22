@@ -1,0 +1,194 @@
+
+<!--  datepicker -->
+<link href="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css?ver={$fileVersion}" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js?ver={$fileVersion}"></script>
+<script src="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js?ver={$fileVersion}"></script>
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+
+<div class="header">
+    <h1 class="page-header">钻石消耗</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" method="get" action="/Stat/game/third/consume">
+                        <!-- 开始日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">开始日期</div>
+                                <input class="form-control" id="stime" name="start" type="text" value="{$start}" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 结束日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">结束日期</div>
+                                <input class="form-control" id="etime" name="end" type="text" value="{$end}" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <button type="submit" class="btn btn-query">查询</button>
+                        <button type="submit" name="export" class="btn btn-operate tiptip" title="需选定起止日期才可导出文件" onclick="return onExport();">导出</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="divChart"  class="stat-chart"></div>
+                        <div class="text-center div-button-sel">
+                            <foreach name="titleLink" item="vo" key="k">
+                                <a href="#" class="btn btn-default dataButton" data-items="{$k}">
+                                    {$vo}
+                                </a> &nbsp;
+                            </foreach>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                <thead>
+                                    <tr role="row">
+                                        <th>日期</th>
+                                        <th>总消耗</th>
+                                        <th>俱乐部总消耗</th>
+                                        <th>俱乐部4人局消耗</th>
+                                        <th>俱乐部3人局消耗</th>
+                                        <th>俱乐部2人局消耗</th>
+                                        <th>4人局消耗</th>
+                                        <th>3人局消耗</th>
+                                        <th>2人局消耗</th>
+                                        <th>后台扣除玩家钻石</th>
+                                        <th>后台扣除代理商钻石</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <volist name="list.listData" id="vo">
+                                    <tr>
+                                        <td>{$vo.data_time|date="Y-m-d",###}</td>
+                                        <td>{$vo.diamond_count}</td>
+                                        <td>{$vo.club_diamond_count}</td>
+                                        <td>{$vo.club_four_count}</td>
+                                        <td>{$vo.club_three_count}</td>
+                                        <td>{$vo.club_two_count}</td>
+                                        <td>{$vo.four_diamond}</td>
+                                        <td>{$vo.three_diamond}</td>
+                                        <td>{$vo.two_diamond}</td>
+                                        <td>{$vo.manage_minus}</td>
+                                        <td>{$vo.agent_diamond}</td>
+                                    </tr>
+                                </volist>
+                                </tbody>
+                            </table>
+                            {$pageshow}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+   <footer>
+        <p>数据统计规则：<br />
+            <strong>日期：</strong>显示年月日等信息，当天日期在第二天0点后显示。<br />
+            <strong>钻石总消耗：</strong>当日所有用户（包括俱乐部代开房）所消耗的钻石总数。<br />
+            <strong>俱乐部总消耗：</strong>当日所有俱乐部所消耗的钻石总数。<br />
+            <strong>俱乐部4人局消耗：</strong>当日所有当天俱乐部代开房4人房消耗的钻石总数量。<br />
+            <strong>俱乐部3人局消耗：</strong>当日所有当天俱乐部代开房3人房消耗的钻石总数量。<br />
+            <strong>俱乐部2人局消耗：</strong>当日所有当天俱乐部代开房2人房消耗的钻石总数量。<br />
+            <strong>4人局消耗：</strong>当日所有4人房当天消耗的钻石总数量。<br />
+            <strong>3人局消耗：</strong>当日所有3人房当天消耗的钻石总数量。<br />
+            <strong>2人局消耗：</strong>当日所有2人房当天消耗的钻石总数量。<br />
+            <strong>后台扣除玩家钻石：</strong>通过管理员后台，直接扣掉玩家身上的钻总量(后台功能暂未实现)。<br />
+            <strong>后台扣除代理商钻石：</strong>通过俱乐部后台，直接扣掉代理商身上的钻总量。<br />
+        </p>
+    </footer>
+</div>
+<script>
+    var chartData = {:json_encode($chartData)};
+    $(document).ready(function() {
+        // tip
+        $(".tiptip").tipTip({
+            maxWidth: "auto",
+            delay: 0
+        });
+        $("input[name=start]").datepicker({
+            language: "zh-CN",
+            autoclose: true,
+            clearBtn: true,
+            endDate: new Date(new Date().valueOf() - 24 * 3600 * 1000),
+            //todayBtn: true,
+            format: "yyyy-mm-dd"
+        });
+        $("input[name=end]").datepicker({
+            language: "zh-CN",
+            autoclose: true,
+            clearBtn: true,
+            endDate: new Date(new Date().valueOf() - 24 * 3600 * 1000),
+            format: "yyyy-mm-dd"
+        });
+        showChart(0);
+        $('.dataButton').click(function(){
+            var item = $(this).data("items");
+            for (var i = 0; i < chartData.length; i++) {
+                if (chartData[i].key == item) {
+                    showChart(i);               
+                }
+            }
+        });
+    });
+    function onExport() {
+        var stime = $("#stime").val();
+        var etime = $("#etime").val();
+        if (!stime || !etime) {
+            $.zmsg.error("必须选择开始日期和结束日期");
+            return false;
+        }
+    }
+    function showChart(idx) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('divChart'));
+
+        // 指定图表的配置项和数据
+        var dftOption = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                top: 20,
+                bottom: 20
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: chartData[idx].xAxis
+            },
+            yAxis: {
+               type: 'value'
+            },
+            series: [
+                {
+                    name:chartData[idx].name,
+                    type:'line',
+                    smooth: true,
+                    data:chartData[idx].data
+                }
+            ]
+        };
+        myChart.setOption(dftOption);
+        $(".dataButton").removeClass("btn-query");
+        $("[data-items=" + chartData[idx].key + "]").addClass("btn-query");
+    }
+</script>
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />

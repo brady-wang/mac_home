@@ -1,0 +1,343 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<style>
+/* 各复合数据右上角按钮active */
+.active-bg { background: #eee; }
+/* 各复合数据 chart 框高度 */
+.chart-cont-height { height: 320px; }
+</style>
+
+<div class="header">
+    <h1 class="page-header">经济分析<small>{$data.statDate}</small></h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="tiptip" title="从上线起所有途径产出的钻石总量">累计钻石产出</span>
+                </div>
+                <div class="panel-body">
+                    <h1 class="text-center">{$data.gnlProduce}</h1>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <span>日：{$data.ringDProduce}</span>
+                            <span>周：{$data.ringWProduce}</span>
+                            <span>月：{$data.ringMProduce}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="tiptip" title="总结余表示总产出减去总消耗">钻石总结余</span>
+                </div>
+                <div class="panel-body">
+                    <h1 class="text-center">{$data.gnlRemain}</h1>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <span>日：{$data.ringDRemain}</span>
+                            <span>周：{$data.ringWRemain}</span>
+                            <span>月：{$data.ringMRemain}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="tiptip" title="每天活跃代理当前钻石总量">活跃代理结余</span>
+                </div>
+                <div class="panel-body">
+                    <h1 class="text-center">{$data.gnlAgRemain}</h1>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <span>日：{$data.ringDAgRemain}</span>
+                            <span>周：{$data.ringWAgRemain}</span>
+                            <span>月：{$data.ringMAgRemain}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="tiptip" title="玩家当前的钻石总量 ">用户结余</span>
+                </div>
+                <div class="panel-body">
+                    <h1 class="text-center">{$data.gnlGmRemain}</h1>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <span>日：{$data.ringDGmRemain}</span>
+                            <span>周：{$data.ringWGmRemain}</span>
+                            <span>月：{$data.ringMGmRemain}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" id="queryForm" role="form" method="get" action="/Stat/clubEconomic">
+                        <!-- 查看方式 -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">查看方式</div>
+                                <select class="form-control" id="queryType" name="query_type">
+                                    <option value='1'>近14天</option>
+                                    <option value='2'>时间区间</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 开始日期 -->
+                        <div class="form-group has-feedback type-interval" style="display:none;">
+                            <div class="input-group">
+                                <div class="input-group-addon">开始日期</div>
+                                <input class="form-control" id="startDate" name="start_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 结束日期 -->
+                        <div class="form-group has-feedback type-interval" style="display:none;">
+                            <div class="input-group">
+                                <div class="input-group-addon">结束日期</div>
+                                <input class="form-control" id="endDate" name="end_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 查询按钮 -->
+                        <button class="btn btn-query" type="submit">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">钻石产出消耗</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default active-bg" id="dmdChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="dmdTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="dmdDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="dmdChartFS">
+                            <div class="chart-cont-height" id="dmdChartCont"></div>
+                        </fieldset>
+                        <fieldset id="dmdTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="每天钻石产出总量">当日钻石产出
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="每天钻石消耗总量">当日钻石消耗
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="每天活跃代理当前钻石总量">活跃代理钻石结余
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{$v.diamond_produce}</td>
+                                                <td>{$v.diamond_consume}</td>
+                                                <td>{$v.diamond_remain_active_agent}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">钻石结余</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="rmnChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="rmnTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="rmnDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="rmnChartFS">
+                            <div class="chart-cont-height" id="rmnChartCont"></div>
+                        </fieldset>
+                        <fieldset id="rmnTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="每天活跃代理通过各种途径获得的钻石总量">活跃代理发放
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="每天活跃代理当前钻石总量">活跃代理钻石结余
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="每天活跃玩家通过各种途径获得的钻石总量 ">活跃用户发放
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="玩家当前的钻石总量  ">用户结余
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{$v.diamond_produce_active_agent}</td>
+                                                <td>{$v.diamond_remain_active_agent}</td>
+                                                <td>{$v.diamond_produce_active_game}</td>
+                                                <td>{$v.diamond_remain_game}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">异常用户</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="abnChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="abnTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="abnDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="abnChartFS">
+                            <div class="chart-cont-height" id="abnChartCont"></div>
+                        </fieldset>
+                        <fieldset id="abnTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="每天（除官方充值外）一次性获得超过 300 的玩家数（安徽精华为 3000） ">一次性发放超过300
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="解散亲友圈转移钻石超过（300 或3000）的玩家数">亲友圈转移钻石代理数
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{$v.abnormal_get}</td>
+                                                <td>{$v.abnormal_transfer}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<script>
+var query = {:json_encode($query)};
+var comp = {:json_encode($data['compData'])};
+</script>
+
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />
+<js href="/Public/Js/stat/club-economic.js" />

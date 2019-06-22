@@ -1,0 +1,116 @@
+@CHARSET "UTF-8";
+
+/* tree struct leaf for unselected status, be compatible with <a> tag only */
+.tree-leaf-unselected {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #d9534f;
+    border-radius: 8px;
+}
+.tree-leaf-unselected:empty {
+    display: none;
+}
+a.tree-leaf-unselected:hover,
+a.tree-leaf-unselected:focus {
+    color: #fff;
+    background-color: #d43f3a;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* tree struct leaf for selected status, be compatible with <a> tag only */
+.tree-leaf-selected {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #5cb85c;
+    border-radius: 8px;
+}
+.tree-leaf-selected:empty {
+    display: none;
+}
+a.tree-leaf-selected:hover,
+a.tree-leaf-selected:focus {
+    color: #fff;
+    background-color: #4cae4c;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* tree struct leaf for disabled status, be compatible with <a> tag only */
+.tree-leaf-disabled {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #555;
+    border-radius: 8px;
+}
+.tree-leaf-disabled:empty {
+    display: none;
+}
+a.tree-leaf-disabled:hover,
+a.tree-leaf-disabled:focus {
+    color: #fff;
+    background-color: #555;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.gameAuthList{ padding: 0px;margin: 0px;}
+.gameAuthList li{ padding: 3px 5px; display: inline-block; float:left;cursor: pointer;}
+.gameAuthList li span{cursor: pointer;}
+.gameAuthList li span{cursor: pointer;}
+
+
+/**权限查询**/
+.role-node-box{ background: #dfdfdf; margin: 0px 5px; padding: 5px 10px; min-height: 500px;}
+.role-game-box{ background: #cfcfcf; margin: 0px 5px;padding: 5px 10px; min-height: 500px;width: 31%;}
+.role-box{ background: #efefef; margin: 0px 5px;padding: 5px 10px; width: 33%; min-height: 500px;}
+
+.show-title{ font-size: 16px;font-weight: bold; padding: 5px  0px;}
+.show-role{ padding: 0 0 0 10px;}
+.show-role li{line-height: 22px; line-height: 22px; padding-left: 10px;cursor: pointer;}
+.roleTextTips{ padding: 40px 0px; text-align: center;}
+
+
+.ztree li ul{ margin:0; padding:0 0 0 10px;}
+
+.ztree li {line-height:30px;}
+.ztree li.roleTextTips{ padding: 40px 0px; text-align: center;}
+.ztree li a {width:100%;height:30px;padding-top: 0px;}
+.ztree li a:hover {text-decoration:none; background-color: #E7E7E7;}
+.ztree li a span.button.switch {visibility:hidden}
+.ztree.showIcon li a span.button.switch {visibility:visible}
+.ztree li a.curSelectedNode {background-color:#D4D4D4;border:0;height:30px;}
+.ztree li span.button {margin-top: -7px;}
+.ztree li span.button.switch {width: 16px;height: 16px;}
+
+.ztree li a.level0 span {font-size: 16px;}
+.ztree li span.button {background-image:url("/Public/Images/left_menuForOutLook.png"); *background-image:url("/Public/Images/left_menuForOutLook.gif")}
+.ztree li span.button.switch.level0 {width: 20px; height:20px}
+.ztree li span.button.switch.level1 {width: 20px; height:20px}
+.ztree li span.button.noline_open {background-position: 0 0;}
+.ztree li span.button.noline_close {background-position: -18px 0;}
+.ztree li span.button.noline_open.level0 {background-position: 0 -18px;}
+.ztree li span.button.noline_close.level0 {background-position: -18px -18px;}
+
+

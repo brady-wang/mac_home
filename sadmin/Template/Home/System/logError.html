@@ -1,0 +1,225 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+
+<style>
+.btn-td-fixed-width {
+    width: 140px;
+}
+</style>
+
+<div class="header">
+    <h1 class="page-header">系统错误</h1>
+</div>
+<div id="page-inner">
+    <!-- 查询栏 -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!-- 查询栏 -->
+                    <form class="form-inline" role="form" method="get" action="/System/log/third/error">
+                        <!-- 状态 -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">状态</div>
+                                <select class="form-control" id="handleStatus" name="handle_status">
+                                    <option value="0">全部</option>
+                                    <foreach name="statusMap" item="v" key="k">
+                                        <option value="{$k}">{$v.name}</option>
+                                    </foreach>
+                                </select>
+                             </div>
+                        </div>
+                        <!-- 开始日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">开始日期</div>
+                                <input class="form-control" id="startDate" name="start_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 结束日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">结束日期</div>
+                                <input class="form-control" id="endDate" name="end_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 查询按钮 -->
+                        <button class="btn btn-query" type="submit">查询</button>
+                    </form>
+                </div><!-- /.panel-body -->
+            </div><!-- /.panel panel-default -->
+        </div>
+    </div><!-- /.row -->
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-lg-10 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>位置</th>
+                                        <th>错误信息</th>
+                                        <th>状态</th>
+                                        <th class="btn-td-fixed-width">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr data-id="{$v.id}" data-count="{$v.repeat_count}" data-time="{$v.create_time}">
+                                            <td>
+                                                <a class="text-primary" href="javascript:void(0);" onclick="clickExceptionInfo('{$v.id}');">
+                                                    {$v.exce_file}
+                                                    &nbsp;&nbsp;
+                                                    <span class="badge text-default">{$v.exce_line}</span>
+                                                </a>
+                                            </td>
+                                            <td><pre class="pre-dis-border">{$v.exce_log}</pre></td>
+                                            <td>
+                                                <span class="label {$statusMap[$v['handle_status']]['label']}">
+                                                    {$statusMap[$v['handle_status']]['name']}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <eq name="v.handle_status" value="1">
+                                                    <button class="btn btn-warning btn-sm" type="button" onclick="clickDispose($(this));">处理
+                                                    </button>
+                                                    <button class="btn btn-operate btn-sm" type="button" onclick="clickBatch($(this));">批量处理
+                                                    </button>
+                                                </eq>
+                                            </td>
+                                        </tr>
+                                    </foreach>
+                                    <tr>
+                                        <td colspan="4"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div><!-- /.panel-body -->
+                </div><!-- /.panel panel-default -->
+            </div>
+        </div><!-- /.row -->
+    </present>
+</div>
+
+<!-- 处理框 -->
+<div class="modal fade" id="disposeModal" tabindex="-1" role="dialog" aria-labelledby="disposeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="disposeModalLabel">错误处理</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">位置</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-static" id="dpsModPostition"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">错误信息</label>
+                        <div class="col-sm-8">
+                            <pre class="pre-dis-border" id="dpsModLog"></pre>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">重复次数</label>
+                        <div class="col-sm-2">
+                            <p class="form-control-static" id="dpsModCount"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">发生时间</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-static" id="dspModTime"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">备注</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" id="dspModRemark" rows="2"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input id="dspModId" type="hidden" />
+                <button type="button" class="btn btn-primary" id="fixSubmitBtn" onclick="submitExceptionFix();">已处理
+                </button>
+                <button type="button" class="btn btn-warning" id="ignoreSubmitBtn" onclick="submitExceptionIgnore();">不处理
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 批量处理框 -->
+<div class="modal fade" id="batModal" tabindex="-1" role="dialog" aria-labelledby="batModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="batModalLabel">批量处理错误</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">错误位置</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="batModPostition"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">错误信息</label>
+                        <div class="col-sm-9">
+                            <pre class="pre-dis-border" id="batModLog"></pre>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="batModRemark" rows="2"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input id="batModId" type="hidden" />
+                <button type="button" class="btn btn-primary" id="batFixSubmitBtn" onclick="submitBatchFix();">已处理
+                </button>
+                <button type="button" class="btn btn-warning" id="batIgnoreSubmitBtn" onclick="submitBatchIgnore();">不处理
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var query = {$query};
+</script>
+
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Js/system/log-error.js" />

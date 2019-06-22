@@ -1,0 +1,307 @@
+
+<div class="header">
+    <h1 class="page-header">邀请好友</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <ul class="nav nav-tabs chart-tab">
+                            <li class="active"><a href="#frd_inviteid" data-toggle="tab">填写邀请人ID奖励</a></li>
+                            <li class=""><a href="#frd_inviteconf" data-toggle="tab">邀请好友奖励配置</a></li>
+                        </ul>
+                        <div class='tab-content'>
+                            <div class='tab-pane fade active in' id='frd_inviteid'>
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">物品类型</label>
+                                        <div class="col-sm-2">
+                                            <select class="form-control" id="invite_type" name="invite_type">
+                                                <foreach name="inviteIdTypeMap" item="v">
+                                                    <option value="{$key}" >{$v}</option>
+                                                </foreach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <label class="col-sm-3 control-label request">物品数量</label>
+                                        <div class="col-sm-3">
+                                            <input class="form-control" id="invite_number" name="invite_number" type="text" value="{$invite_number}" />
+                                        </div>
+                                    </div>
+                                    <present name="inviteidFlag">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">&nbsp;</label>
+                                            <button class="btn btn-success" type="button" onclick="return saveInviteidId();">保存</button>
+                                        </div>
+                                    </present>
+                                </form>
+                            </div>
+                            <div class='tab-pane fade' id='frd_inviteconf'>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover dataTable no-footer" id='inviteConf'>
+                                        <thead>
+                                            <tr role="row"><th>编号</th><th>需邀请人数</th><th>奖励类型</th><th>奖励数量</th><!--<th width="120px">奖励类型</th><th>奖励数量</th><th width="120px">奖励类型</th><th>奖励数量</th>
+                                                <th width="120px">奖励类型</th><th>奖励数量</th><th width="120px">奖励类型</th><th>奖励数量</th>-->
+                                                <th class='fixed-width-td'><button class="btn btn-success btn-sm" type="button" onclick="return addInviteConf();">添加</button></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="list" id="vo">
+                                            <tr><td name="no">{$vo.no}</td><td><input class="form-control" type="text" name="event_num" value='{$vo.event_num}'></td>
+                                                <td>
+                                                    <select class="form-control" name="reward_type1">
+                                                        <!--<option value="0">无</option>-->
+                                                        <foreach name="inviteRewardTypeMap" item="v">
+                                                            <option value="{$key}" <php>echo $vo['reward_type1']==$key?'selected':''</php>>{$v}</option>
+                                                        </foreach>
+                                                    </select>
+                                                </td>
+                                                <td><input class="form-control" type="text" name="reward_val1" value='{$vo.reward_val1}'></td>
+                                                <!--<td>
+                                                    <select class="form-control" name="reward_type2">
+                                                        <option value="0">无</option>
+                                                        <foreach name="inviteRewardTypeMap" item="v">
+                                                            <option value="{$key}" <php>echo $vo['reward_type2']==$key?'selected':''</php>>{$v}</option>
+                                                        </foreach>
+                                                    </select>
+                                                </td>
+                                                <td><input class="form-control" type="text" name="reward_val2" value='{$vo.reward_val2}'></td>
+                                                <td>
+                                                    <select class="form-control" name="reward_type3">
+                                                        <option value="0">无</option>
+                                                        <foreach name="inviteRewardTypeMap" item="v">
+                                                            <option value="{$key}" <php>echo $vo['reward_type3']==$key?'selected':''</php>>{$v}</option>
+                                                        </foreach>
+                                                    </select>
+                                                </td>
+                                                <td><input class="form-control" type="text" name="reward_val3" value='{$vo.reward_val3}'></td>
+                                                <td>
+                                                    <select class="form-control" name="reward_type4">
+                                                        <option value="0">无</option>
+                                                        <foreach name="inviteRewardTypeMap" item="v">
+                                                            <option value="{$key}" <php>echo $vo['reward_type4']==$key?'selected':''</php>>{$v}</option>
+                                                        </foreach>
+                                                    </select>
+                                                </td>
+                                                <td><input class="form-control" type="text" name="reward_val4" value='{$vo.reward_val4}'></td>
+                                                <td>
+                                                    <select class="form-control" name="reward_type5">
+                                                        <option value="0">无</option>
+                                                        <foreach name="inviteRewardTypeMap" item="v">
+                                                            <option value="{$key}" <php>echo $vo['reward_type5']==$key?'selected':''</php>>{$v}</option>
+                                                        </foreach>
+                                                    </select>
+                                                </td>
+                                                <td><input class="form-control" type="text" name="reward_val5" value='{$vo.reward_val5}'></td>-->
+                                                <td><button class="btn btn-sm btn-danger btn-del" type="button" onclick="return delInviteConf(this);">删除</button></td>
+                                            </tr>
+                                        </volist>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <present name="invitefrdFlag">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">&nbsp;</label>
+                                        <button class="btn btn-success" type="button" onclick="return saveInviteidConf();">保存</button>
+                                    </div>
+                                </present>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+<script>
+    var reward_type = {:json_encode($inviteRewardTypeMap)};
+    var act_invite = {:intval($actInvite)};
+    $(document).ready(function() {
+        var invite_type = {:intval($invite_type)};
+        if (invite_type) {
+            $('#invite_type').children('[value=' + invite_type + ']').prop('selected', true);
+        }
+    });
+    function saveInviteidId() {
+        var data = {};
+        data.type = $("#invite_type").val();
+        data.number = $("#invite_number").val();
+        
+        var reg = /^[0-9]*$/;
+        if (!reg.test(data.number) || parseInt(data.number) <= 0) {
+            $.zmsg.error("物品数量必须为整数且数值大于0");
+            return false;
+        }
+        tipinfo = [];
+        tipinfo.push({title: '物品类型', value: $('#invite_type option:checked').text()});
+        tipinfo.push({title: '物品数量', value: data.number});
+        var tip = '<table style="width: 80%; margin: auto;">';
+        for (var idx = 0; idx < tipinfo.length; idx++) {
+            tip += '<tr class="text-danger"><td class="text-success">'+tipinfo[idx].title+'</td><td>'+tipinfo[idx].value+'</td></tr>';
+        }
+        tip += '</table>';
+        $.Zebra_Dialog(tip, {
+            'title': '更改配置确认',
+            'animation_speed_show': 500,
+            'center_buttons': true,
+            'type': '',
+            'buttons': ['取消', '确定'],
+            'onClose': function(caption) {
+                if ('取消' == caption) {
+                } else if ('确定' == caption) {
+                    $.loading.show("saveConfLoading");
+                    $.ajax({
+                        url: "/Gameconf/ajaxsaveInviteId",
+                        type: "POST",
+                        data: data,
+                        dataType: "json",
+                        success: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            if (0 == data.code) {
+                                $.zmsg.success('/Gameconf/friend/third/frdinvite');//$.zmsg.info('保存成功');
+                            } else {
+                                $.zmsg.error(data.msg);
+                            }
+                        },
+                        error: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            $.zmsg.fatal(data.responseText);
+                        }
+                    });
+                }
+            }
+        });
+        return false;
+    }
+    function saveInviteidConf() {
+        if (act_invite) {
+            $.zmsg.error("新年拉新活动正在运行，不允许修改邀请好友配置");
+            return false;
+        }
+        var data = {};
+        data.type = 'reward';
+        data.conf = [];
+        var tipinfo = [];
+        var invalid = false;
+        var tbody = $('#inviteConf').find('tbody');
+        if (tbody) {
+            var size = tbody.children('tr').size();
+            if (size <= 0) {
+                $.zmsg.error("配置必须至少保留一条");
+                return false;
+            }
+            tbody.children('tr').each(function(i) {
+                var obj = {};
+                obj.event_num = $(this).find('[name=event_num]').val();
+                obj.type1 = $(this).find('[name=reward_type1]').val();
+                obj.val1 = $(this).find('[name=reward_val1]').val();
+                obj.type2 = $(this).find('[name=reward_type2]').val();
+                obj.val2 = $(this).find('[name=reward_val2]').val();
+                obj.type3 = $(this).find('[name=reward_type3]').val();
+                obj.val3 = $(this).find('[name=reward_val3]').val();
+                obj.type4 = $(this).find('[name=reward_type4]').val();
+                obj.val4 = $(this).find('[name=reward_val4]').val();
+                obj.type5 = $(this).find('[name=reward_type5]').val();
+                obj.val5 = $(this).find('[name=reward_val5]').val();
+                data.conf.push(obj);
+                if (obj.event_num == '' || obj.val1 == '') {
+                    $.zmsg.error("配置不能为空");
+                    invalid = true;
+                    return false;
+                }
+                var reg = /^[0-9]*$/;
+                if (!reg.test(obj.event_num) || parseInt(obj.event_num) <= 0) {
+                    $.zmsg.error("需邀请人数必须为整数且数值大于0");
+                    invalid = true;
+                    return false;
+                }
+                if (!reg.test(obj.val1) || parseInt(obj.val1) <= 0) {
+                    $.zmsg.error("奖励数量必须为整数且数值大于0");
+                    invalid = true;
+                    return false;
+                }
+                tipinfo.push({num: obj.event_num, type1: $(this).find('[name=reward_type1] option:checked').text(), val1: obj.val1});
+            });
+        }
+        if (invalid)
+            return false;
+        var tip = '<table style="width: 80%; margin: auto;">';
+        tip += '<tr class="text-danger"><th class="text-success">需邀请人数</th><th class="text-success">奖励类型</th><th class="text-success">奖励数量</th></tr>';
+        for (var idx = 0; idx < tipinfo.length; idx++) {
+            tip += '<tr class="text-danger"><td>'+tipinfo[idx].num+'</td><td>'+tipinfo[idx].type1+'</td><td>'+tipinfo[idx].val1+'</td></tr>';
+        }
+        tip += '</table>';
+        $.Zebra_Dialog(tip, {
+            'title': '更改配置确认',
+            'animation_speed_show': 500,
+            'center_buttons': true,
+            'type': '',
+            'buttons': ['取消', '确定'],
+            'onClose': function(caption) {
+                if ('取消' == caption) {
+                } else if ('确定' == caption) {
+                    $.loading.show("delMsgLoading");
+                    $.ajax({
+                        url: "/Gameconf/ajaxsaveInviteConf",
+                        type: "POST",
+                        data: data,
+                        dataType: "json",
+                        success: function(data) {
+                            $.loading.hide('delMsgLoading');
+                            if (0 == data.code) {
+                                $.zmsg.success('/Gameconf/friend/third/frdinvite');//$.zmsg.info('保存成功');
+                            } else {
+                                $.zmsg.error(data.msg);
+                            }
+                        },
+                        error: function(data) {
+                            $.loading.hide('delMsgLoading');
+                            $.zmsg.fatal(data.responseText);
+                        }
+                    });
+                }
+            }
+        });
+        return false;
+    }
+    function addInviteConf() {
+        var tbody = $('#inviteConf').find('tbody');
+        if (tbody) {
+            var num = tbody.children('tr').length+1;
+            var html = '<tr><td name="no">'+num+'</td><td><input class="form-control" type="text" name="event_num"></td>';
+            var optiontext = '';
+            for (var k in reward_type) {
+                if (reward_type.hasOwnProperty(k)) {
+                    optiontext += '<option value="'+k+'">'+ reward_type[k]+'</option>';                  
+                }
+            }
+            for (var i = 1; i <= 1; i++) {  //5
+                html += '<td><select class="form-control" name="reward_type'+i+'">'+//<option value="0">无</option>
+                    optiontext+'</select></td>'+
+                    '<td><input class="form-control" type="text" name="reward_val'+i+'" value=""></td>';
+            }
+            html += '<td><button class="btn btn-sm btn-danger btn-del" type="button" onclick="return delInviteConf(this);">删除</button></td>';
+            tbody.append(html);
+        }
+    }
+    function delInviteConf(obj) {
+        var target = $(obj).closest('tr');
+        if (target)
+            target.remove();
+        var tbody = $('#inviteConf').find('tbody');
+        if (tbody) {
+            tbody.children('tr').each(function(i) {
+                $(this).find('[name=no]').html(i+1);
+            });
+        }
+    }
+</script>

@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+body {
+    padding-top: 150px;
+}
+
+.login-box {
+    box-shadow: 0px 0px 120px #000;
+}
+
+#admin_title {
+    color: #3E3E3E;
+}
+
+#copy_right {
+    color: #E0E2E4;
+}

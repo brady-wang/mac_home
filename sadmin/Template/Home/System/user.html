@@ -1,0 +1,350 @@
+
+<div class="header">
+    <h1 class="page-header">用户管理</h1>
+</div>
+<div id="page-inner">
+    <!-- 查询栏 -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" role="form" method="get" action="/System/user">
+                        <!-- uid -->
+                        <div class="form-group">
+                            <label class="sr-only">uid</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">uid</div>
+                                <input class="form-control" id="uid" name="uid" type="text" />
+                            </div>
+                        </div>
+                        <!-- 用户名 -->
+                        <div class="form-group has-feedback">
+                            <label class="sr-only">username</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">用户名</span>
+                                <input class="form-control" id="username" name="username" type="text" />
+                            </div>
+                            <span class="glyphicon glyphicon-option-horizontal form-control-feedback" aria-hidden="true"></span>
+                        </div>
+                        <!-- 角色 -->
+                        <div class="form-group">
+                            <label class="sr-only">role</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">角色</div>
+                                <select class="form-control"id="roleId" name="role_id">
+                                    <option value="0">全部</option>
+                                    <foreach name="roleMap" item="v">
+                                        <option value="{$key}">{$v}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 状态 -->
+                        <div class="form-group">
+                            <label class="sr-only">status</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">状态</div>
+                                <select class="form-control"id="status" name="status">
+                                    <option value="0">全部</option>
+                                    <option value="1">正常</option>
+                                    <option value="9">已删除</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-query">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-md-8 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>uid</th>
+                                        <th>用户名</th>
+                                        <th>姓名</th>
+                                        <th>角色</th>
+                                        <th>状态</th>
+                                        <th>
+                                            <present name="addFlag">
+                                                <button
+                                                    class="btn btn-sm btn-success"
+                                                    type="button"
+                                                    data-toggle="modal"
+                                                    data-target="#addMod"
+                                                >添加
+                                                </button>
+                                            </present>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <td>{$v.uid}</td>
+                                            <td>{$v.username}</td>
+                                            <td>{$v.realname}</td>
+                                            <td>
+                                                <notempty name="v.role_id">
+                                                    {$roleMap[$v['role_id']]}
+                                                </notempty>
+                                            </td>
+                                            <td>
+                                                <span class="label {$statusMap[$v['status']]['label']}">
+                                                    {$statusMap[$v['status']]['name']}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <!-- 只有正常用户才可以修改或删除用户 -->
+                                                <if condition="$v.status eq 1">
+                                                    <present name="updateFlag">
+                                                        <button
+                                                            class="btn btn-sm btn-primary"
+                                                            type="button"
+                                                            onclick="clickEdtUser({$key});"
+                                                        >修改
+                                                        </button>
+                                                    </present>
+                                                    <present name="deleteFlag">
+                                                        <button
+                                                            class="btn btn-sm btn-danger"
+                                                            type="button"
+                                                            data-toggle="modal"
+                                                            data-target="#delMod"
+                                                            data-uid="{$v.uid}"
+                                                            data-username="{$v.username}"
+                                                        >移除用户
+                                                        </button>
+                                                    </present>
+                                                <elseif condition="$v.status eq 9" />
+                                                    <present name="deleteFlag">
+                                                        <button
+                                                            class="btn btn-sm btn-warning"
+                                                            type="button"
+                                                            data-toggle="modal"
+                                                            data-target="#recvMod"
+                                                            data-uid="{$v.uid}"
+                                                            data-username="{$v.username}"
+                                                        >恢复用户
+                                                        </button>
+                                                    </present>
+                                                </if>
+                                            </td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addMod" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addModalLabel">添加用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addModForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request">角色</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="addModRole" name="role_id">
+                                <foreach name="roleMap" item="v">
+                                    <option value="{$key}">{$v}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModUsername">用户名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModUsername" type="text" name="username" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModRealname">姓名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModRealname" type="text" name="realname" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModPass">密码</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModPass" type="text" name="password" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" onclick="submitAddUser();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit modal -->
+<div class="modal fade" id="edtMod" tabindex="-1" role="dialog" aria-labelledby="edtModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="edtModalLabel">用户修改</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="edtModForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">uid</label>
+                        <div class="col-sm-4">
+                            <p class="form-control-static" id="edtModUid"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">角色</label>
+                        <div class="col-sm-4">
+                            <select class="form-control"id="edtModRoleId" name="role_id">
+                                <foreach name="roleMap" item="v">
+                                    <option value="{$key}">{$v}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="edtModUsername" name="username" type="text" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="edtModRealname">姓名</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="edtModRealname" type="text" name="realname" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">密码</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="edtModPassword" name="password" type="text" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" onclick="submitEdtUser();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete modal -->
+<div class="modal fade" id="delMod" tabindex="-1" role="dialog" aria-labelledby="delModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="delModalLabel">移除用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">是否确定移除用户
+                                <span class='text-danger' id='delModRoleUser'></span>
+                            </p>
+                            <input type="hidden" id="delModUid" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="submitDelUser();">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recover modal -->
+<div class="modal fade" id="recvMod" tabindex="-1" role="dialog" aria-labelledby="recvModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="recvModalLabel">恢复用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="recvModForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">uid</label>
+                        <div class="col-sm-4">
+                            <p class="form-control-static" id="recvModUid"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名</label>
+                        <div class="col-sm-4">
+                            <p class="form-control-static" id="recvModUsername"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">姓名</label>
+                        <div class="col-sm-4">
+                            <p class="form-control-static" id="recvModRealname"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">角色</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="recvModRoleId" name="role_id">
+                                <option value=""></option>
+                                <foreach name="roleMap" item="v">
+                                    <option value="{$key}">{$v}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" type="button" onclick="submitRecoverUser();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var query = {$query};
+var userList = {:json_encode($list)};
+</script>
+
+<js href="/Public/Js/system/user.js" />

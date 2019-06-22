@@ -1,0 +1,64 @@
+
+<include file="./Template/Common/header.html" />
+
+<style>
+body {
+    background: #fff;
+}
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10">
+            <present name="errMsg">
+                <p class="text-danger well">{$errMsg}</p>
+            <else />
+                <table class="table table-hover table-condensed">
+                    <tbody>
+                        <tr>
+                            <td class="text-danger">id</td>
+                            <td class="text-info">{$info.id}</td>
+                            <td class="text-danger">游戏ID</td>
+                            <td class="text-info">{$info.game_id}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">渠道号</td>
+                            <td class="text-info">{$info.channel_code}</td>
+                            <td class="text-danger">是否最新版本</td>
+                            <td class="text-info">
+                                <eq name="info.latest_flag" value="1">是<else/>否</eq>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">版本号</td>
+                            <td class="text-info">{$info.update_version}</td>
+                            <td class="text-danger">状态</td>
+                            <td class="text-info">
+                                <span class="label {$statusMap[$info['status']]['label']}">
+                                    {$statusMap[$info['status']]['name']}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">更新方式</td>
+                            <td class="text-info">{$modeMap[$info['update_mode']]['name']}</td>
+                            <td class="text-danger">资源地址</td>
+                            <td class="text-info">{$info.update_url}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">版本备注</td>
+                            <td class="text-info">{$info.remark}</td>
+                            <td class="text-danger">更新时间</td>
+                            <td class="text-info">{:date('Y-m-d H:i:S', $info['update_time'])}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </present>
+        </div>
+    </div>
+</div>
+
+<include file="./Template/Common/footer.html" />

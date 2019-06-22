@@ -1,0 +1,168 @@
+
+<css href="/Public/Css/system/role.css" />
+
+<div class="header">
+    <h1 class="page-header">修改角色</h1>
+</div>
+<div id="page-inner">
+    <!-- 角色信息 -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="card-title">
+                        <div class="title">角色信息</div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>一级访问权限</th>
+                                            <th>二级访问权限</th>
+                                            <th>一级操作权限</th>
+                                            <th>三级访问权限</th>
+                                            <th>二级操作权限</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <php><literal>
+                                            $loopFlag = 0;
+                                            foreach ($authStruct as $mCode => $main) {
+                                                echo "<tr>";
+                                                $loopFlag = 1;
+                                                echo "<td class=\"td-valign-middle\" rowspan=\"{$main['rowspan']}\">";
+                                                echo L($main['name']);
+                                                echo "</td>";
+                                                foreach ($main['sublevel'] as $sCode => $sublevel) {
+                                                    if (0 == $loopFlag) {
+                                                        echo "<tr>";
+                                                        $loopFlag = 1;
+                                                    }
+                                                    if (isset($sublevel['third'])) {
+                                                        echo "<td class=\"td-valign-middle\" rowspan=\"{$sublevel['rowspan']}\">";
+                                                        echo L($sublevel['name']);
+                                                        echo "</td>";
+                                                    } else {
+                                                        echo "<td>";
+                                                        echo "<a ";
+                                                        echo "class=\"tree-leaf-unselected access-auth\" ";
+                                                        echo "href=\"javascript:void(0)\" ";
+                                                        echo "data-code=\"{$sCode}\" ";
+                                                        echo "onclick=\"toggleAuthClass($(this));\">";
+                                                        echo L($sublevel['name']);
+                                                        echo "</a>";
+                                                        echo "</td>";
+                                                    }
+                                                    if (isset($sublevel['oper'])) {
+                                                        echo "<td class=\"oper-auth-td td-valign-middle oper-sl-{$sCode}\" rowspan=\"{$sublevel['rowspan']}\">";
+                                                        foreach ($sublevel['oper'] as $oCode => $oName) {
+                                                            echo "<a ";
+                                                            echo "class=\"tree-leaf-disabled oper-auth\" ";
+                                                            echo "href=\"javascript:void(0)\" ";
+                                                            echo "data-code=\"{$oCode}\" ";
+                                                            echo "onclick=\"toggleAuthClass($(this));\">";
+                                                            echo L($oName);
+                                                            echo "</a>&nbsp;";
+                                                        }
+                                                        echo "</td>";
+                                                    } else {
+                                                        echo "<td rowspan=\"{$sublevel['rowspan']}\"></td>";
+                                                    }
+                                                    if (isset($sublevel['third'])) {
+                                                        foreach ($sublevel['third'] as $tCode => $third) {
+                                                            if (0 == $loopFlag) {
+                                                                echo "<tr>";
+                                                                $loopFlag = 1;
+                                                            }
+                                                            echo "<td>";
+                                                            echo "<a ";
+                                                            echo "class=\"tree-leaf-unselected access-auth third-sl-{$sCode}\" ";
+                                                            echo "href=\"javascript:void(0)\" ";
+                                                            echo "data-code=\"{$tCode}\" ";
+                                                            echo "data-refer-scode=\"{$sCode}\" ";
+                                                            echo "onclick=\"toggleAuthClass($(this));\">";
+                                                            echo L($third['name']);
+                                                            echo "</a>";
+                                                            echo "</td>";
+                                                            if (isset($third['oper'])) {
+                                                                echo "<td class=\"oper-auth-td\">";
+                                                                foreach ($third['oper'] as $oCode => $oName) {
+                                                                    echo "<a ";
+                                                                    echo "class=\"tree-leaf-disabled oper-auth\" ";
+                                                                    echo "href=\"javascript:void(0)\" ";
+                                                                    echo "data-code=\"{$oCode}\" ";
+                                                                    echo "onclick=\"toggleAuthClass($(this));\">";
+                                                                    echo L($oName);
+                                                                    echo "</a>&nbsp;";
+                                                                }
+                                                            } else {
+                                                                echo "<td>";
+                                                            }
+                                                            echo "</td>";
+                                                            echo "</tr>";
+                                                            $loopFlag = 0;
+                                                        }
+                                                    } else {
+                                                        echo "<td></td>";
+                                                        echo "<td></td>";
+                                                        echo "</tr>";
+                                                        $loopFlag = 0;
+                                                    }
+                                                }
+                                            }
+                                            echo "<tr><td colspan=\"5\"></td></tr>";
+                                        </literal></php>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- 游戏授权部分开始-->
+                        <div class="form-group">
+                            <div class="col-sm-2 col-sm-offset-1" style="padding-left: 25px;">游戏授权</div>
+                            <div class="col-sm-8 " style="padding-left: 0px;">
+                                <notempty name="gameInfo">
+                                    <ul class="gameAuthList">
+                                        <volist name='gameInfo' id='vo'>
+                                            <li> <span id="game-{$vo.game_id}" data-id="{$vo.game_id}" class="checkgame <if condition="$authGame[ $vo['game_id'] ]"> tree-leaf-selected <else /> tree-leaf-unselected </if> ">{$vo.game_name}</span></li>
+                                        </volist>
+                                    <ul>
+                                </notempty>
+                            </div>
+                        </div>
+                        <!-- 游戏授权部分结束-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 提示信息 -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="card-title">
+                        <div class="title">页面提示：</div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ul class="text-success">
+                        <li><span class='tree-leaf-unselected'>未选择</span> 表示未选择</li>
+                        <li><span class='tree-leaf-selected'>已选择</span> 表示已选择</li>
+                        <li><span class='tree-leaf-disabled'>无法选择</span> 表示无法选择</li>
+                        <li>访问权限若选择子级权限，那对应的父级默认拥有权限</li>
+                        <li>若访问权限未选择，对应的操作权限便无法选择</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var referer = "{$referer}";
+var acss = {:json_encode($role['auth']['access'])};
+var oper = {:json_encode($role['auth']['operate'])};
+</script>
+<js href="/Public/Js/system/role-mgr.js" />

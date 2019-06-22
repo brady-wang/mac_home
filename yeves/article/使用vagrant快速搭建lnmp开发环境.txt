@@ -1,0 +1,85 @@
+title:使用vagrant快速搭建lnmp开发环境
+category:35
+tag:lnmp,virtualbox,linux,php,vagrant
+create_time:2018-03-11 14:51:26
+
+============================
+
+>> Vagrant 是一款用来构建虚拟开发环境的工具，非常适合 php/python/ruby/java 这类语言开发 web 应用，“代码在我机子上运行没有问题”这种说辞将成为历史。
+
+>> 我们可以通过 Vagrant 封装一个 Linux 的开发环境，分发给团队成员。成员可以在自己喜欢的桌面系统（Mac/Windows/Linux）上开发程序，代码却能统一在封装好的环境里运行，非常霸气。  
+
+## 安装步骤  
+
+### 安装 VirtualBox  
+* 刚用虚拟机的时候用的是vmware,but 太大了,太占内存了,vbox可以同时开几个虚拟机都没问题,不会卡机子,自从使用了vbox后,再没用过vmvare了.  
+* 在win7上和win10上都搭建过,最终发现win10无论下载什么版本的vbox启动都会报错,所以开发还是win7稳定 .虚拟机版本一直用的 4.2.12  [百度网盘下载地址](https://pan.baidu.com/s/1IL-B4X6GyUL7uZsQWhiYZA) 下载完成后按照步骤进行安装
+* 安装完成后,打开虚拟机,依次点击菜单 管理-全局设定-常规 进行选择默认虚拟机存放的位置,因为以后的虚拟机里面装的东西,都是放到这个目录,默认是放到系统盘的,我一般会选择磁盘空间比较大的D盘之类.如果c盘够大也可以不用管
+###  安装vagrant   
+ 到 [官网地址](https://www.vagrantup.com/downloads.html )进行下载,或者到 [我的网盘](https://pan.baidu.com/s/1W_RUjnA2FA161BMOe1IKMA) 进行下载 下载后按照步骤进行安装
+### 下载vbox的镜像  
+ 镜像下载地址[http://www.vagrantbox.es/](http://www.vagrantbox.es/) 熟悉什么系统的就下载什么系统 我网盘也保存有  ubuntu precise 32 VirtualBox [网盘地址](https://pan.baidu.com/s/177tx6jeuB-Cjlp9qzBPh4Q) 我自己比较熟悉的是centos [网盘地址](https://pan.baidu.com/s/1rqq1D8Y37R8ef7dCHnkUwQ)  
+
+### 添加镜像到vagrant
+ ```
+     # win+r 
+     cmd 回车
+     d:
+     mkdir vbox_list
+     cd vbox_list
+     ##复制下载好的centos-6.6-x86_64.box到该目录下
+     vagrant box add lnmp centos-6.6-x86_64.box ##lnmp为该box的名字,可以自己取,
+     vagrant init lnmp #初始化
+     vagrant up  
+```
+
+### 初始化后 会在当前目录生成一个 Vagrantfile文件和一个.vagrant目录  ,目录不用管  ,打开Vagrantfile文件 修改下面的两处
+
+config.vm.network "private_network", ip: "192.168.33.90"
+config.vm.synced_folder "d:/www/my", "/www"
+* 第一处是为了让本机电脑和虚拟机能网段ping通,到时候可以通过ip访问到虚拟机里面的代码
+* 第二处是为了把windows的开发目录文件共享到虚拟机上   
+   
+### 使用xshell连接工具连接到虚拟机  
+* ip为之前设置的,端口不是默认的22 而是启动的时候提示的 2222 或者2200 启动多个虚拟机占用了2222 下一个就会是2200了 
+* 默认账号和密码 vagrant vagrant  
+* 可以修改root密码  sudo passwd root  
+### 常用命令
+```
+  $ vagrant init  # 初始化
+  $ vagrant up  # 启动虚拟机
+  $ vagrant halt  # 关闭虚拟机
+  $ vagrant reload  # 重启虚拟机
+  $ vagrant ssh  # SSH 至虚拟机
+  $ vagrant status  # 查看虚拟机运行状态
+  $ vagrant destroy  # 销毁当前虚拟机
+```
+### 小tips  
+每次都要cmd 切换目录,启动 太麻烦了 ,可以使用快捷方式
+   桌面新建一个lnmp_start.bat  用编辑工具打开 写入
+    ```
+    d:
+    cd vbox_list
+    cd lnmp 
+    vagrant reload
+    ```  
+   如此每次上班开机只要点击下即可,还可以直接放入windows开机启动里面 
+    
+### 安装lnmp环境  
+*  之前刚做开发的时候,用过wamp,phpstudy,后来要求用linux环境,自己照着教程一步步安装nginx  mysql  php  总之各种步骤, 解压,./configure , make, make install 还要自己建用户,给权限 安装依赖 ,总之一番折腾下来,运气好,不报错,运气不好,最后php就编译错误了.  
+*  后来发现个好东西 lnmp一键安装 官网地址 [https://lnmp.org/](https://lnmp.org/) 此后开发就一直用了,很少出问题,安装也特别简单
+    ```
+      cd /usr/local/src #我一般安装到该目录
+        yum -y update #安装前西关先更新下
+        wget -c http://soft.vpser.net/lnmp/lnmp1.4.tar.gz && tar zxf lnmp1.4.tar.gz && cd lnmp1.4 && ./install.sh lnmp
+      ```
+* 之后就按照提示选择mysql版本 ,php版本 设置mysql密码,然后就是漫长的等待,机子快的半小时左右就装好了
+* 安装好后 执行 lnmp start 即可启动php环境 
+* 添加虚拟机域名  lnmp vhost add 就可以了, 具体使用请看官网
+### 打包  
+  环境也有出问题的时候,现在我安装好了,全新的,我担心什么时候出问题,或者我想家里用.那么可以打包,打包后,以后 vagrant box add lnmp my.box 之后就是一件搭建好环境的了  
+  打包命令  vagrant package --output my.box 
+  
+### 访问虚拟机 
+   使用switchhost工具,配置一个刚刚使用lnmp vhost add的域名 就可以访问我的虚拟机了 此时就可以实现在windows下进行linux环境的php开发
+ 

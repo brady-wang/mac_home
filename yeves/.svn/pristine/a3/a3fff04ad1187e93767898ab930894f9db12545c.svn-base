@@ -1,0 +1,23 @@
+title:markdown超链接新窗口
+category:35
+tag:markdown
+create_time:2018-03-11 14:59:11
+
+============================
+
+## markdown语法如果要给文字加上超链接 语法如下
+```
+[下载](http://www.baidu.com)
+```
+
+然而 这个超链接是在本页面打开的,如果我们想使其在新页面打开 需要给超链接 a标签增加_blank属性 markdown本身语法没发现可以实现,通过jquery实现
+ 代码如下
+
+``` 
+    $(function(){
+        $('a[href^="http"]').each(function() {
+            $(this).attr('target', '_blank');
+        });
+        
+    })
+```

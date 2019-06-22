@@ -1,0 +1,461 @@
+
+<css href="/Public/Lib/bootstrap-treeview-1.2.0/dist/bootstrap-treeview.min.css" />
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload-ui.css" />
+
+<div class="header">
+    <h1 class="page-header">朋友圈-分享配置</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-body" id="placeTreeDiv">
+                </div>
+            </div>
+            <div class="text-success">
+                <span><strong class="text-info">蓝色字体</strong>表示该地区有配置内容</span><br/>
+                <span><strong class="text-muted">灰色字体</strong>表示该地区无配置内容</span><br/>
+                <span>编辑中地区用图标 <span class="glyphicon glyphicon-edit text-danger"></span> 标注</span>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {$pageHead}
+                    <present name="editFlag">
+                        <if condition="in_array($placeId, $validPlace)">
+                            <button class="btn btn-sm btn-danger pull-right hori-gap" onclick="submitDelConf();">删除</button>
+                        </if>
+                        <notempty name="copyPlaceId">
+                            <button
+                                class="btn btn-sm btn-warning pull-right hori-gap"
+                                id="pasteBtn"
+                                data-replacement="{$copyPlaceTitle}"
+                                onclick="submitPasteConf({$copyPlaceId});"
+                            >粘贴</button>
+                        </notempty>
+                        <notempty name="conf">
+                            <button class="btn btn-sm btn-operate pull-right hori-gap" id="copyBtn">复制</button>
+                        </notempty>
+                    </present>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">大厅分享（无奖励、竖版独有）</div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal" id="fhallForm">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request">分享方式</label>
+                                            <div class="col-sm-8">
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="share_type" value="1" checked> 动态分享
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="share_type" value="2"> 系统分享
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <fieldset id="fhallDymcFS">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label request" for="fhallTitle">标题</label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="fhallTitle" name="title" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label request" for="fhallDesc">描述</label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="fhallDesc" name="desc" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request">
+                                                    <span class="tiptip" title="仅支持小于32KB的JPG图片，宽或高不能超过300像素">缩略图</span>
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <span class="btn btn-success fileinput-button" id="fhallImgBtn" data-tag="add">
+                                                        <span>上传</span>
+                                                        <span class="badge" id="fhallImgBadge">
+                                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                                        </span>
+                                                        <input type="file" name="thumb_image" id="fhallImgInput" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="fhallImgPreviewDiv" hidden>
+                                                <div class="col-sm-8 col-sm-offset-3">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset id="fhallSysFS" hidden>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request" for="fhallCont">
+                                                    <span class="tiptip" title="内容必须带一个URL地址，用中括号括起来，例 [http://www.stevengame.com/]">分享语句</span>
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <textarea class="form-control" id="fhallCont" name="cont" rows="5"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info" for="fhallAddress">
+                                                    <span class="tiptip" title="若不填写或填写%domain%则从域名配置动态取地址">二维码地址</span>
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="fhallAddress" name="address" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request" for="fhallQrcodeX">
+                                                    <span class="tiptip" title="二维码相对背景图的锚点，取值范围为0~1，0.5表示居中">二维码x锚点</span>
+                                                </label>
+                                                <div class="col-sm-2">
+                                                    <input class="form-control" id="fhallQrcodeX" name="qrcode_x" type="text" />
+                                                </div>
+                                                <label class="col-sm-2 control-label request" for="fhallQrcodeY">y锚点</label>
+                                                <div class="col-sm-2">
+                                                    <input class="form-control" id="fhallQrcodeY" name="qrcode_y" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request">
+                                                    <span class="tiptip" title="JPG图片，图片尺寸不能小于150x150">背景图</span>
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <span class="btn btn-success fileinput-button" id="fhallBgBtn" data-tag="add">
+                                                        <span>上传</span>
+                                                        <span class="badge" id="fhallBgBadge">
+                                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                                        </span>
+                                                        <input type="file" name="bg_image" id="fhallBgInput" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="fhallBgPreviewDiv" hidden>
+                                                <div class="col-sm-8 col-sm-offset-3">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <present name="editFlag">
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 col-sm-4">
+                                                    <present name="conf[1]">
+                                                        <button class="btn btn-primary" id="fhallEditBtn" type="button">保存</button>
+                                                    <else/>
+                                                        <button class="btn btn-success" id="fhallAddBtn" type="button">保存</button>
+                                                    </present>
+                                                </div>
+                                            </div>
+                                        </present>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">大厅分享（有奖励）</div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal" id="ahallForm">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request">分享方式</label>
+                                            <div class="col-sm-8">
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="share_type" value="1" checked> 动态分享
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="share_type" value="2"> 系统分享
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <fieldset id="ahallDymcFS">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label request" for="ahallTitle">标题</label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="ahallTitle" name="title" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label request" for="ahallDesc">描述</label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="ahallDesc" name="desc" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request">
+                                                    <span class="tiptip" title="仅支持小于32KB的JPG图片，宽或高不能超过300像素">缩略图</span>
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <span class="btn btn-success fileinput-button" id="ahallImgBtn" data-tag="add">
+                                                        <span>上传</span>
+                                                        <span class="badge" id="ahallImgBadge">
+                                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                                        </span>
+                                                        <input type="file" name="thumb_image" id="ahallImgInput" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="ahallImgPreviewDiv" hidden>
+                                                <div class="col-sm-8 col-sm-offset-3">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset id="ahallSysFS" hidden>
+                                            <div class="form-group">
+                                                <div class="col-sm-10 col-sm-offset-1">
+                                                    <p class="form-control-static text-danger">
+                                                        <span>由于系统分享收不到任何微信返回值，所以除非动态分享的所有AppId或域名被封，否则该功能慎用。具体表现如下：</span><br/>
+                                                        <span>安卓用户点击分享后未分享成功，用户也能领取到钻石；</span><br/>
+                                                        <span>IOS用户即使分享成功，也领取不到钻石</span><br/>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request" for="ahallCont">
+                                                    <span class="tiptip" title="内容必须带一个URL地址，用中括号括起来，例 [http://www.stevengame.com/]">分享语句</span>
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <textarea class="form-control" id="ahallCont" name="cont" rows="5"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info" for="ahallAddress">
+                                                    <span class="tiptip" title="若不填写或填写%domain%则从域名配置动态取地址">二维码地址</span>
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="ahallAddress" name="address" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request" for="ahallQrcodeX">
+                                                    <span class="tiptip" title="二维码相对背景图的锚点，取值范围为0~1，0.5表示居中">二维码x锚点</span>
+                                                </label>
+                                                <div class="col-sm-2">
+                                                    <input class="form-control" id="ahallQrcodeX" name="qrcode_x" type="text" />
+                                                </div>
+                                                <label class="col-sm-2 control-label request" for="ahallQrcodeY">y锚点</label>
+                                                <div class="col-sm-2">
+                                                    <input class="form-control" id="ahallQrcodeY" name="qrcode_y" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request">
+                                                    <span class="tiptip" title="JPG图片，图片尺寸不能小于150x150">背景图</span>
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <span class="btn btn-success fileinput-button" id="ahallBgBtn" data-tag="add">
+                                                        <span>上传</span>
+                                                        <span class="badge" id="ahallBgBadge">
+                                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                                        </span>
+                                                        <input type="file" name="bg_image" id="ahallBgInput" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="ahallBgPreviewDiv" hidden>
+                                                <div class="col-sm-8 col-sm-offset-3">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <present name="editFlag">
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 col-sm-4">
+                                                    <present name="conf[2]">
+                                                        <button class="btn btn-primary" id="ahallEditBtn" type="button">保存</button>
+                                                    <else/>
+                                                        <button class="btn btn-success" id="ahallAddBtn" type="button">保存</button>
+                                                    </present>
+                                                </div>
+                                            </div>
+                                        </present>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">领取钻石</div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal" id="diamondForm">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request">分享方式</label>
+                                            <div class="col-sm-8">
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="share_type" value="1" checked> 动态分享
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="share_type" value="2"> 系统分享
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <fieldset id="diamondDymcFS">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label request" for="diamondTitle">标题</label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="diamondTitle" name="title" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label request" for="diamondDesc">描述</label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="diamondDesc" name="desc" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request">
+                                                    <span class="tiptip" title="仅支持小于32KB的JPG图片，宽或高不能超过300像素">缩略图</span>
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <span class="btn btn-success fileinput-button" id="diamondImgBtn" data-tag="add">
+                                                        <span>上传</span>
+                                                        <span class="badge" id="diamondImgBadge">
+                                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                                        </span>
+                                                        <input type="file" name="thumb_image" id="diamondImgInput" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="diamondImgPreviewDiv" hidden>
+                                                <div class="col-sm-8 col-sm-offset-3">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset id="diamondSysFS" hidden>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request" for="diamondCont">
+                                                    <span class="tiptip" title="内容必须带一个URL地址，用中括号括起来，例 [http://www.stevengame.com/]">分享语句</span>
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <textarea class="form-control" id="diamondCont" name="cont" rows="5"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info" for="diamondAddress">
+                                                    <span class="tiptip" title="若不填写或填写%domain%则从域名配置动态取地址">二维码地址</span>
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="diamondAddress" name="address" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request" for="diamondQrcodeX">
+                                                    <span class="tiptip" title="二维码相对背景图的锚点，取值范围为0~1，0.5表示居中">二维码x锚点</span>
+                                                </label>
+                                                <div class="col-sm-2">
+                                                    <input class="form-control" id="diamondQrcodeX" name="qrcode_x" type="text" />
+                                                </div>
+                                                <label class="col-sm-2 control-label request" for="diamondQrcodeY">y锚点</label>
+                                                <div class="col-sm-2">
+                                                    <input class="form-control" id="diamondQrcodeY" name="qrcode_y" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label text-info request">
+                                                    <span class="tiptip" title="JPG图片，图片尺寸不能小于150x150">背景图</span>
+                                                </label>
+                                                <div class="col-sm-6">
+                                                    <span class="btn btn-success fileinput-button" id="diamondBgBtn" data-tag="add">
+                                                        <span>上传</span>
+                                                        <span class="badge" id="diamondBgBadge">
+                                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                                        </span>
+                                                        <input type="file" name="bg_image" id="diamondBgInput" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="diamondBgPreviewDiv" hidden>
+                                                <div class="col-sm-8 col-sm-offset-3">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <present name="editFlag">
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 col-sm-4">
+                                                    <present name="conf[3]">
+                                                        <button class="btn btn-primary" id="diamondEditBtn" type="button">保存</button>
+                                                    <else/>
+                                                        <button class="btn btn-success" id="diamondAddBtn" type="button">保存</button>
+                                                    </present>
+                                                </div>
+                                            </div>
+                                        </present>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">俱乐部分享</div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal" id="clubForm">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request">分享方式</label>
+                                            <div class="col-sm-8">
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="share_type" value="1" checked> 动态分享
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <fieldset id="clubDymcFS">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label request" for="clubTitle">标题</label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="clubTitle" name="title" type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label request" for="clubDesc">描述</label>
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" id="clubDesc" name="desc" type="text" />
+                                                    <span class="text-danger">必须包含两个"%s"，且"s"为小写，前者代表玩家名称， 后者代表俱乐部名称</span>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <present name="editFlag">
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 col-sm-4">
+                                                    <present name="conf[4]">
+                                                        <button class="btn btn-primary" id="clubEditBtn" type="button">保存</button>
+                                                    <else/>
+                                                        <button class="btn btn-success" id="clubAddBtn" type="button">保存</button>
+                                                    </present>
+                                                </div>
+                                            </div>
+                                        </present>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var pageHead = '{$pageHead}';
+var curFirstId = {$firstId};
+var curPlaceId = {$placeId};
+var validPlace = {:json_encode($validPlace)};
+var tree = {:json_encode($placeTree)};
+var shareTypeMap = {:json_encode($shareTypeMap)};
+var sourceMap = {:json_encode($sourceMap)};
+var conf = {:json_encode($conf)};
+var imgUrlPrefix = '{$imgUrlPrefix}';
+</script>
+
+<js href="/Public/Lib/bootstrap-treeview-1.2.0/dist/bootstrap-treeview.min.js" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/vendor/jquery.ui.widget.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.iframe-transport.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.fileupload.js" />
+<js href="/Public/Js/gameconfig/op-share-cont.js" />

@@ -1,0 +1,55 @@
+
+<div class="header">
+    <h1 class="page-header">修改密码</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12 col-md-8 col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <!-- empty heading -->
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" id="setForm" role="form" onkeydown="keydownSubmit();">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">uid</label>
+                            <div class="col-sm-7">
+                                <p class="form-control-static">{$Think.config.G_USER.uid}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">用户名</label>
+                            <div class="col-sm-7">
+                                <p class="form-control-static">{$Think.config.G_USER.username}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">新密码</label>
+                            <div class="col-sm-7">
+                                <input class="form-control" name="password" type="password" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">确认密码</label>
+                            <div class="col-sm-7">
+                                <input class="form-control" name="password_confirm" type="password" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-7">
+                                <button class="btn btn-primary" type="button" onclick="setSubmit();">提交</button>
+                                <a class="btn btn-default" href="{$referer}">返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var referer = '{$referer}';
+</script>
+
+<js href="/Public/Js/auth/user-set.js" />

@@ -1,0 +1,14 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: mac
+ * Date: 2018/12/4
+ * Time: 10:37
+ */
+
+//数据库配置
+return array(
+	'dsn'=>'mysql:host=192.168.33.10;dbname=test',
+	'username'=>'root',
+	'passwd'=>'root'
+);

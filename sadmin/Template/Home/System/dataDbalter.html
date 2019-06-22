@@ -1,0 +1,368 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+
+<div class="header">
+    <h1 class="page-header">数据库修改</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" role="form" method="get" action="/System/data/third/dbalter">
+                        <!-- 表名 -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">表名</div>
+                                <select class="form-control" id="tableName" name="table_name">
+                                    <option value="">全部</option>
+                                    <foreach name="tableMap" item="v">
+                                        <option value="{$v.tbname}">{$v.tbname}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 开始日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">申请开始日期</div>
+                                <input class="form-control" id="startDate" name="start_date" type="text" />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 结束日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">结束日期</div>
+                                <input class="form-control" id="endDate" name="end_date" type="text" />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 状态 -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">状态</div>
+                                <select class="form-control" id="status" name="status">
+                                    <option value="0">全部</option>
+                                    <foreach name="statusMap" item="v">
+                                        <option value="{$key}">{$v.name}</option>
+                                    </foreach>
+                                </select>
+                             </div>
+                        </div>
+                        <button class="btn btn-query" type="submit">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-10 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th class="fixed-width-60p">语句信息</th>
+                                        <th>申请原因</th>
+                                        <th>状态</th>
+                                        <th>
+                                            <button
+                                                class="btn btn-sm btn-success"
+                                                type="button"
+                                                data-toggle="modal"
+                                                data-target="#applyMod"
+                                            >申请</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v" key="id">
+                                        <tr>
+                                            <td>
+                                                <a class="text-primary" href="javascript:void(0);" onclick="clickSqlInfo({$id});">
+                                                    {$id}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <php>
+                                                    // 不收缩
+                                                    if (0 == $v['spreadFlag']) {
+                                                        $row = current($v['statement']);
+                                                        echo '<pre class="pre-dis-border">';
+                                                        // 待审核状态
+                                                        if ($v['status'] == "1" && $v['requester'] == $uid) {
+                                                            echo '<a href="javascript:void(0)"';
+                                                            echo ' class="'.$stmStatusMap[$row['status']]['text'].'"';
+                                                            echo ' onclick="clickEdtSql('.$row['id'].', $(this));">';
+                                                            echo $row['sql_statement'];
+                                                            echo '</a>';
+                                                        }
+                                                        // 其他状态
+                                                        else {
+                                                            echo '<span class="'.$stmStatusMap[$row['status']]['text'].'">';
+                                                            echo $row['sql_statement'];
+                                                            echo '</span>';
+                                                        }
+                                                        echo '</pre>';
+                                                    }
+                                                    // 收缩
+                                                    else {
+                                                        echo '<pre class="pre-dis-border" onclick="clickContSpread($(this));">';
+                                                        echo '<a href="javascript:void(0)">';
+                                                        echo '<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>&nbsp;';
+                                                        echo '<span>'.$v['spreadCont'].'</span>&nbsp;';
+                                                        echo '<span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>';
+                                                        echo '</a>';
+                                                        echo '</pre>';
+
+                                                        echo '<pre class="pre-dis-border" hidden>';
+                                                        echo '<a href="javascript:void(0)" onclick="clickContConcentrate($(this));">';
+                                                        echo '<span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>'."\n";
+                                                        echo '</a>';
+                                                        foreach ($v['statement'] as $row) {
+                                                            // 待审核状态
+                                                            if ($v['status'] == "1" && $v['requester'] == $uid) {
+                                                                echo '<a href="javascript:void(0)"';
+                                                                echo ' class="'.$stmStatusMap[$row['status']]['text'].'"';
+                                                                echo ' onclick="clickEdtSql('.$id.', '.$row['id'].', $(this));">';
+                                                                echo $row['sql_statement'];
+                                                                echo '</a>'."\n\n";
+                                                            }
+                                                            // 其他状态
+                                                            else {
+                                                                echo '<span class="'.$stmStatusMap[$row['status']]['text'].'">';
+                                                                echo $row['sql_statement'];
+                                                                echo '</span>';
+                                                                echo "\n\n";
+                                                            }
+                                                        }
+                                                        echo '</pre>';
+                                                    }
+                                                </php>
+                                            </td>
+                                            <td>{$v.describe}</td>
+                                            <td>
+                                                <label class="label {$statusMap[$v['status']]['label']}">
+                                                    {$statusMap[$v['status']]['name']}
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <if condition="$v.status eq 1">
+                                                    <if condition="$v.requester eq $uid">
+                                                        <button
+                                                            class="btn btn-sm btn-danger"
+                                                            type="button"
+                                                            onclick="clickCancelSql({$id});"
+                                                        >取消</button>
+                                                    </if>
+                                                    <present name="checkFlag">
+                                                        <button
+                                                            class="btn btn-sm btn-operate"
+                                                            type="button"
+                                                            onclick="clickCheckSql({$id});"
+                                                        >审核</button>
+                                                    </present>
+                                                </if>
+                                            </td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<div class="modal fade" id="applyMod" tabindex="-1" role="dialog" aria-labelledby="applyModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="applyModalLabel">数据库语句执行申请</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="well col-sm-offset-1 col-sm-10">
+                            <p class="form-control-static">
+                                <span class="text-success">支持多语句申请，但只能针对同一数据表；每条语句必须以分号";"结尾；单条语句长度不能超过60000字节；只允许申请以下关键字的语句</span>
+                                <br/>
+                                <span class="text-danger">
+                                    CREATE&nbsp;&nbsp;&nbsp;
+                                    ALTER&nbsp;&nbsp;&nbsp;
+                                    DROP&nbsp;&nbsp;&nbsp;
+                                    INSERT&nbsp;&nbsp;&nbsp;
+                                    UPDATE&nbsp;&nbsp;&nbsp;
+                                    DELETE
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="applyModSql">
+                            SQL
+                        </label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="applyModSql" rows="9"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="applyModReason">申请原因</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="applyModReason" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" id="applySubmitBtn" type="button" onclick="submitApplySql();">确定</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edtMod" tabindex="-1" role="dialog" aria-labelledby="edtModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="edtModalLabel">修改语句</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">语句id</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="edtModId"></p>
+                            <input type="hidden" id="edtModStmId" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label request">语句</label>
+                        <div class="col-sm-11">
+                            <textarea class="form-control" id="edtModCont" rows="24"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <p class="form-control-static text-danger">单次只能修改一条语句，若提交超过一条语句，超过部分系统直接忽略</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="edtSubmitBtn" type="button" onclick="submitEdtSql();">确定</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cancelMod" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="cancelModalLabel">取消确认</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-2">
+                            <p class="form-control-static text-success">是否确定取消数据库修改申请
+                                <span class='text-danger' id='cancelModId'></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="cancelModRemark">备注</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="cancelModRemark" rows="2"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="submitCancelSql();">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="checkMod" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="checkModalLabel">语句审核</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">id</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="checkModId"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">申请原因</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="checkModDesc"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">语句信息</label>
+                        <div class="col-sm-9">
+                            <pre class="form-control-static pre-dis-border" id="checkModStatement"></pre>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request">备注</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="checkModRemark" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="checkModId"/>
+                <button class="btn btn-primary" id="checkExecuteBtn" type="button" onclick="submitExecuteSql();">执行</button>
+                <button class="btn btn-danger" id="checkRejectBtn" type="button" onclick="submitRejectSql();">驳回</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var query = {$query};
+var sqlList = {:json_encode($list)};
+</script>
+
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Js/system/data-dbalter.js" />

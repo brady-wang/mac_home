@@ -1,0 +1,16 @@
+/usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties & 
+
+/usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties &
+
+/usr/local/kafka/bin/kafka-topics.sh --create --bootstrap-server 192.168.1.11:9092 --replication-factor 1 --partitions 1 --topic test
+
+
+/usr/local/kafka/bin/kafka-topics.sh --list --bootstrap-server 192.168.1.11:9092
+
+
+/usr/local/kafka/bin/kafka-console-producer.sh --broker-list 192.168.1.11:9092 --topic test
+
+/usr/local/kafka/bin/kafka-console-consumer.sh --bootstrap-server 192.168.1.11:9092 --topic test --from-beginning
+
+
+netstat -tunlp|egrep "(2181|9092)"

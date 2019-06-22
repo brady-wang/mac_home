@@ -1,0 +1,33 @@
+.ZebraDialog .ZebraDialog_Information {
+    background: #f3f3f4
+}
+
+.ZebraDialog .ZebraDialog_Icon {
+    padding: 5px;
+}
+
+.ZebraDialog .ZebraDialog_Icon .form-control {
+    height: 22px;
+}
+.ZebraDialog .ZebraDialog_Icon .form-group {
+    margin-right: 36px;
+}
+
+.ZebraDialog .ZebraDialog_Icon .input-group {
+    margin-right: 27px;
+}
+
+.ZebraDialog .ZebraDialog_Icon .table th, .ZebraDialog .ZebraDialog_Icon .table td {
+    text-align: left;
+}
+
+.ZebraDialog .ZebraDialog_Icon > div {
+    padding-top: 5px;
+}
+
+
+
+#page-wrapper .row {
+    margin-right: 0px;
+    margin-left: 0px;
+}

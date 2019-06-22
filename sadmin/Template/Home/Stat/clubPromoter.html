@@ -1,0 +1,402 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<style>
+/* 各复合数据右上角按钮active */
+.active-bg { background: #eee; }
+/* 各复合数据 chart 框高度 */
+.chart-cont-height { height: 320px; }
+</style>
+
+<div class="header">
+    <h1 class="page-header">代理概况<small>{$data.statDate}</small></h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="tiptip" title="自APP上线起所有开通代理累计的总人数">累计代理数</span>
+                </div>
+                <div class="panel-body">
+                    <h1 class="text-center">{$data.gnlPromoter}</h1>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <span>日：{$data.ringDPromoter}</span>
+                            <span>周：{$data.ringWPromoter}</span>
+                            <span>月：{$data.ringMPromoter}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="tiptip" title="被标记转正的代理总数，不包括已删除代理">累计转正代理数</span>
+                </div>
+                <div class="panel-body">
+                    <h1 class="text-center">{$data.gnlTransfer}</h1>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <span>日：{$data.ringDTransfer}</span>
+                            <span>周：{$data.ringWTransfer}</span>
+                            <span>月：{$data.ringMTransfer}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="tiptip" title="当日存在亲友圈钻石消耗或钻石转移的代理数">活跃代理数</span>
+                </div>
+                <div class="panel-body">
+                    <h1 class="text-center">{$data.gnlActive}</h1>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <span>日：{$data.ringDEffective}</span>
+                            <span>周：{$data.ringWEffective}</span>
+                            <span>月：{$data.ringMEffective}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="tiptip" title="自APP上线起所有代理充值总金额，单位元">累计代理充值总额</span>
+                </div>
+                <div class="panel-body">
+                    <h1 class="text-center">{$data.gnlRecharge}</h1>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <span>日：{$data.ringDRecharge}</span>
+                            <span>周：{$data.ringWRecharge}</span>
+                            <span>月：{$data.ringMRecharge}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" id="queryForm" role="form" method="get" action="/Stat/clubPromoter">
+                        <!-- 查看方式 -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">查看方式</div>
+                                <select class="form-control" id="queryType" name="query_type">
+                                    <option value='1'>近14天</option>
+                                    <option value='2'>时间区间</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 开始日期 -->
+                        <div class="form-group has-feedback type-interval" style="display:none;">
+                            <div class="input-group">
+                                <div class="input-group-addon">开始日期</div>
+                                <input class="form-control" id="startDate" name="start_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 结束日期 -->
+                        <div class="form-group has-feedback type-interval" style="display:none;">
+                            <div class="input-group">
+                                <div class="input-group-addon">结束日期</div>
+                                <input class="form-control" id="endDate" name="end_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 查询按钮 -->
+                        <button class="btn btn-query" type="submit">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">新增代理</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default active-bg" id="incChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="incTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="incDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="incChartFS">
+                            <div class="chart-cont-height" id="incChartCont"></div>
+                        </fieldset>
+                        <fieldset id="incTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="当日新增代理数">新开通代理
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="当日转正代理数">新转正代理
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{$v.promoter_count}</td>
+                                                <td>{$v.transfer_count}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">有效代理数据</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="effChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="effTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="effDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="effChartFS">
+                            <div class="chart-cont-height" id="effChartCont"></div>
+                        </fieldset>
+                        <fieldset id="effTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="有效代理中转正的累计人数，不包括已删除代理">累计转正
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="有效代理中当日俱乐部有消耗或者向玩家转移过钻石（也就是有效代理中的活跃俱乐部代理+活跃散户代理的和）">当日活跃
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="当日有效代理充值总额">当日充值总额
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{$v.effective_transfer}</td>
+                                                <td>{$v.effective_active}</td>
+                                                <td>{:round($v['effective_recharge'] / 100)}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">亲友圈代理分析</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="clbChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="clbTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="clbDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="clbChartFS">
+                            <div class="chart-cont-height" id="clbChartCont"></div>
+                        </fieldset>
+                        <fieldset id="clbTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="同有效代理中转正的累计人数">累计转正
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="统计当日专属钻石和开房钻石有用于亲友圈开房的消耗">当日活跃
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="当日亲友圈代理充值总额">当日充值总额
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{$v.effective_transfer}</td>
+                                                <td>{$v.club_active}</td>
+                                                <td>{:round($v['club_recharge'] / 100)}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">散户代理分析</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="rtlChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="rtlTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="rtlDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="rtlChartFS">
+                            <div class="chart-cont-height" id="rtlChartCont"></div>
+                        </fieldset>
+                        <fieldset id="rtlTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="同有效代理中转正的累计人数">累计转正
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="统计当日通用钻石有用于给玩家充值的消耗且亲友圈没有开房消耗（包含撤回）">当日活跃
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="当日散户代理充值总额">当日充值总额
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{$v.effective_transfer}</td>
+                                                <td>{$v.retail_active}</td>
+                                                <td>{:round($v['retail_recharge'] / 100)}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<script>
+var query = {:json_encode($query)};
+var comp = {:json_encode($data['compData'])};
+</script>
+
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />
+<js href="/Public/Js/stat/club-promoter.js" />

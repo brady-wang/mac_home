@@ -1,0 +1,164 @@
+
+<css href="/Public/Lib/bootstrap-treeview-1.2.0/dist/bootstrap-treeview.min.css" />
+
+<div class="header">
+    <h1 class="page-header">好友/群-分享配置</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-body" id="placeTreeDiv">
+                </div>
+            </div>
+            <div class="text-success">
+                <span><strong class="text-info">蓝色字体</strong>表示该地区有配置内容</span><br/>
+                <span><strong class="text-muted">灰色字体</strong>表示该地区无配置内容</span><br/>
+                <span>编辑中地区用图标 <span class="glyphicon glyphicon-edit text-danger"></span> 标注</span>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {$pageHead}
+                    <present name="editFlag">
+                        <if condition="in_array($placeId, $validPlace)">
+                            <button class="btn btn-sm btn-danger pull-right hori-gap" onclick="submitDelConf();">删除</button>
+                        </if>
+                        <notempty name="copyPlaceId">
+                            <button
+                                class="btn btn-sm btn-warning pull-right hori-gap"
+                                id="pasteBtn"
+                                data-replacement="{$copyPlaceTitle}"
+                                onclick="submitPasteConf({$copyPlaceId});"
+                            >粘贴</button>
+                        </notempty>
+                        <notempty name="conf">
+                            <button class="btn btn-sm btn-operate pull-right hori-gap" id="copyBtn">复制</button>
+                        </notempty>
+                    </present>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">大厅分享给好友（无奖励）</div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal" id="hallForm">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request" for="hallTitle">标题</label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control" id="hallTitle" name="title" type="text" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request" for="hallDesc">描述</label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control" id="hallDesc" name="desc" type="text" />
+                                            </div>
+                                        </div>
+                                        <present name="editFlag">
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 col-sm-4">
+                                                    <present name="conf[6]">
+                                                        <button class="btn btn-primary" id="hallEditBtn" type="button">保存</button>
+                                                    <else/>
+                                                        <button class="btn btn-success" id="hallAddBtn" type="button">保存</button>
+                                                    </present>
+                                                </div>
+                                            </div>
+                                        </present>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">领取钻石-分享给好友</div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal" id="diamondForm">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request" for="diamondTitle">标题</label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control" id="diamondTitle" name="title" type="text" />
+                                                <span class="text-danger">必须包含且最多只能有一个参数 "%d"</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request" for="diamondDesc">描述</label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control" id="diamondDesc" name="desc" type="text" />
+                                                <span class="text-danger">必须包含且最多只能有一个参数 "%d"</span>
+                                            </div>
+                                        </div>
+                                        <present name="editFlag">
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 col-sm-4">
+                                                    <present name="conf[7]">
+                                                        <button class="btn btn-primary" id="diamondEditBtn" type="button">保存</button>
+                                                    <else/>
+                                                        <button class="btn btn-success" id="diamondAddBtn" type="button">保存</button>
+                                                    </present>
+                                                </div>
+                                            </div>
+                                        </present>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">俱乐部分享给好友</div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal" id="clubForm">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request" for="clubTitle">标题</label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control" id="clubTitle" name="title" type="text" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label request" for="clubDesc">描述</label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control" id="clubDesc" name="desc" type="text" />
+                                                <span class="text-danger">必须包含两个"%s"，且"s"为小写，前者代表玩家名称， 后者代表俱乐部名称</span>
+                                            </div>
+                                        </div>
+                                        <present name="editFlag">
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 col-sm-4">
+                                                    <present name="conf[8]">
+                                                        <button class="btn btn-primary" id="clubEditBtn" type="button">保存</button>
+                                                    <else/>
+                                                        <button class="btn btn-success" id="clubAddBtn" type="button">保存</button>
+                                                    </present>
+                                                </div>
+                                            </div>
+                                        </present>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var pageHead = '{$pageHead}';
+var curFirstId = {$firstId};
+var curPlaceId = {$placeId};
+var validPlace = {:json_encode($validPlace)};
+var tree = {:json_encode($placeTree)};
+var sourceMap = {:json_encode($sourceMap)};
+var conf = {:json_encode($conf)};
+</script>
+
+<js href="/Public/Lib/bootstrap-treeview-1.2.0/dist/bootstrap-treeview.min.js" />
+<js href="/Public/Js/gameconfig/op-friend-share.js" />

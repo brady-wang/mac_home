@@ -1,0 +1,37 @@
+title:git refusing to merge unrelated histories
+category:34
+tag:git
+create_time:2018-03-11 15:48:24
+
+============================
+
+github新建了个项目,本地非空文件git init 后,拉代码发现报错
+```
+refusing to merge unrelated histories
+
+```
+
+解决办法 :
+git pull origin master --allow-unrelated-histories
+
+然后 git status 
+```
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+
+        both added:      README.md
+
+```
+
+打开代码如下
+```
+<<<<<<&lt; HEAD
+my website
+=======
+# my_web
+myselft website
+&gt;>>>>>> 49b150126ca9cc53028bb6b90c4a91f3c012a706
+
+```
+
+修改掉冲突后重新提交 git add README.md

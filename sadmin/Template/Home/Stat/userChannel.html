@@ -1,0 +1,130 @@
+
+<!--  datepicker -->
+<link href="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css?ver={$fileVersion}" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js?ver={$fileVersion}"></script>
+<script src="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js?ver={$fileVersion}"></script>
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+
+<div class="header"> 
+    <h1 class="page-header">渠道统计</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal" method="post" onsubmit="return checkSelDay();" action="/Stat/user/third/channel">
+                        <div class="form-group has-feedback">
+                            <!-- 开始日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">开始日期</div>
+                                    <input class="form-control" id="stime" name="stime" type="text" readonly="readonly" value="{$stime}" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <!-- 结束日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">结束日期</div>
+                                    <input class="form-control" id="etime" name="etime" type="text" readonly="readonly" value="{$etime}" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <!-- 平台 -->
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-addon">平台</div>
+                                    <select class="form-control" id="os" name="os">
+                                        <option value="0">全部</option>
+                                        <foreach name="osMap" item="v">
+                                            <option value="{$key}">{$v}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- 类型 -->
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-addon">类型</div>
+                                    <select class="form-control" id="type" name="type">
+                                        <option value="1">登录</option>
+                                        <option value="2">注册</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" name="search" class="btn btn-query">查询</button>
+                            <button type="submit" name="export" class="btn btn-operate tiptip" title="需选定起止日期才可导出文件" onclick="return onExport();">导出</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="divChart" class="stat-chart"></div>
+                        <div class="text-center div-button-sel">
+                            <foreach name="titleLink" item="vo" key="k">
+                                <a href="#" class="btn btn-default dataButton" data-items="{$k}">
+                                    {$vo}
+                                </a> &nbsp;
+                            </foreach>
+                        </div>
+                        <div id="html_info"></div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                <thead>
+                                    <tr role="row"><th>日期</th>
+                                        <foreach name="areaMap" item="v">
+                                            <th>{$v}</th>
+                                        </foreach>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <volist name="list" id="vo">
+                                        <tr>
+                                            <td>{$vo.data_time|date="Y-m-d",###}</td>
+                                            <foreach name="areaMap" item="v" key="k">
+                                                <php> $bexist = false; </php>
+                                                <volist name="vo.channel" id="item">  
+                                                    <if condition="$item.code eq $k">
+                                                        <php> $bexist = true; </php>
+                                                        <td>{$item.value}</td>
+                                                    </if>
+                                                </volist> 
+                                                <php>
+                                                    if (!$bexist) {
+                                                        echo "<td>0</td>";
+                                                    }
+                                                </php>
+                                            </foreach>
+                                        </tr>
+                                    </volist>
+                                </tbody>
+                            </table>
+                            {$pageshow}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />
+<script src="__PUBLIC__/Js/stat/user-channel.js?ver={$fileVersion}"></script>
+<script>
+    var os = {:intval($os)};
+    var type = {:intval($type)};
+    var chartData = {:json_encode($chartData)};
+</script>

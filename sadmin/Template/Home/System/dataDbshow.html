@@ -1,0 +1,40 @@
+
+<div class="header">
+    <h1 class="page-header">数据库结构</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <foreach name="tb" item="v">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading{$key}">
+                                    <h4 class="panel-title">
+                                        <a
+                                            role="button"
+                                            data-toggle="collapse"
+                                            data-parent="#accordion"
+                                            href="#collapse{$key}"
+                                            aria-expanded="true"
+                                            aria-controls="collapse{$key}"
+                                        >
+                                            {$v.tbname}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse{$key}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{$key}">
+                                    <div class="panel-body">
+                                        <pre>{$v.struct}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </foreach>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div class="header">
+    <h2 class="page-header">活动管理</h1>
+</div>
+
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                        <button type="submit" class="btn btn-query cleanAll">清除所有活动数据</button>
+                        <!--hr/>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">设置玩牌日期</div>
+                                <input class="form-control" name="playDate" type="text" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-query playDateSet">设置</button-->
+                        <hr/>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">用户ID</div>
+                                <input class="form-control" name="name" type="text" />
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">注册时间</div>
+                                <input class="form-control" name="name" type="text" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-query userInfoSet">设置</button>
+                        <hr/>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">用户ID</div>
+                                <input class="form-control" name="name" type="text" />
+                            </div>
+                        </div>
+                        <button type="submit" data-id="bind" class="btn btn-query userInfoClean">清除所有绑定关系</button>
+                        <button type="submit" data-id="play" class="btn btn-query userInfoClean">清除玩牌信息</button>
+                        <button type="submit" data-id="reward" class="btn btn-query userInfoClean">清除兑奖信息</button>
+                        <button type="submit" data-id="account" class="btn btn-query userInfoClean">清除账号</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        var postUrl = '/Activity/setTestParams';
+        $('.cleanAll').click(function(){
+            return false;
+        });
+
+        $('.playDateSet').click(function(){
+            $.post(postUrl, {playDate : $("input[name=playDate]").val()}, function(rs){
+                alert('succ');
+            });
+            return false;
+        });
+
+        $('.userInfoSet').click(function(){
+            return false;
+        });
+
+        $('.userInfoClean').click(function(){
+            return false;
+        });
+    });
+</script>

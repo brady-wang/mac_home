@@ -1,0 +1,110 @@
+
+<link href="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css?ver={$fileVersion}" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js?ver={$fileVersion}"></script>
+<script src="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js?ver={$fileVersion}"></script>
+<div class="header">
+    <h1 class="page-header">操作记录</h1>
+</div>
+<div id="page-inner">
+    <!-- 查询栏 -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!-- 查询栏 -->
+                    <form class="form-horizontal" role="form" method="get" action="/Gameconf/mall/third/malloper">
+                        <div class="form-group has-feedback">
+                            <!-- 开始日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">开始时间</div>
+                                    <input class="form-control" id="stime" name="stime" type="text" readonly="readonly" value="{$stime}" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <!-- 结束日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">结束时间</div>
+                                    <input class="form-control" id="etime" name="etime" type="text" readonly="readonly" value="{$etime}" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <button type="submit" name="search" class="btn btn-query btn-sm">查询</button>
+                            <button type="submit" name="export" class="btn btn-operate btn-sm">导出</button>
+                        </div>
+                    </form>
+                </div><!-- /.panel-body -->
+            </div><!-- /.panel panel-default -->
+        </div>
+    </div><!-- /.row -->
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-lg-10 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>操作类型</th>
+                                        <th>货物ID</th>
+                                        <th>货物类型</th>
+                                        <th>操作人员</th>
+                                        <th>时间</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <td>{$v.id}</td>
+                                            <td>{$v.title}</td>
+                                            <td>{$v.mallid}</td>
+                                            <td>
+                                                {$v.malltype}
+                                            </td>
+                                            <td>{$v.username}</td>
+                                            <td>
+                                                {$v.ctime|date="Y-m-d H:i:s",###}
+                                            </td>                                            
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pageshow}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.row -->
+    </present>
+</div>
+<script>
+$(document).ready(function() {
+    $("input[name=stime]").datepicker({
+        language: "zh-CN",
+        autoclose: true,
+        clearBtn: true,
+        endDate: new Date(),//new Date(new Date().valueOf() - 24 * 3600 * 1000),
+        //todayBtn: true,
+        format: "yyyy-mm-dd"
+    });
+    $("input[name=etime]").datepicker({
+        language: "zh-CN",
+        autoclose: true,
+        clearBtn: true,
+        endDate: new Date(),//new Date(new Date().valueOf() - 24 * 3600 * 1000),
+        format: "yyyy-mm-dd"
+    });
+});
+</script>
+
+

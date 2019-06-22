@@ -1,0 +1,253 @@
+
+
+<css href="/Public/Lib/bootstrap-datetimepicker-2.4.4/css/bootstrap-datetimepicker.min.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload-ui.css" />
+<css href="/Public/Css/system/checkbox3.min.css" />
+
+<div class="header">
+    <h1 class="page-header">添加商品 <small>后台配置 商城配置</small></h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-lg-10 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" id="addGoodsForm" action="/Conf/saveMallGoodsInfo" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label request">物品类型</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control" id="addGoodsType" name="type">
+                                        <volist name="categoryList" id="vo">
+                                            <option value="{$vo.id}" <if condition="$type eq $vo['id']" > selected ="selected" </if> >{$vo.category_name}</option>
+                                        </volist>
+                                        <input class="form-control" id="id" type="hidden" name="id" value="{$id}" />
+                                    </select>
+                                </div>
+
+                                <label class="col-sm-2 control-label request" for="addGoodsCode">物品编号</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsCode" type="text" name="code" value="{$code}" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label request" for="addGoodsName">物品名称</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsName" type="text" name="name" value="{$name}" />
+                                </div>
+
+                                <label class="col-sm-2 control-label" for="addGoodsSubscript">物品属性</label>
+                                <div class="col-sm-3">
+                                    <div class="radio3 radio-check radio-inline">
+                                        <input type="radio" id="subscript1" name="subscript" value="1" <if condition="$subscript eq 1" > checked="checked" </if> >
+                                        <label for="subscript1">
+                                            新品
+                                        </label>
+                                    </div>
+                                    <div class="radio3 radio-check radio-success radio-inline">
+                                        <input type="radio" id="subscript2" name="subscript" value="2" <if condition="$subscript eq 2" > checked="checked" </if>  >
+                                        <label for="subscript2">
+                                            热门
+                                        </label>
+                                    </div>       
+                                </div>
+                            </div>
+
+
+                            <div class="form-group" id="">
+                                <label class="col-sm-2 control-label" for="addGoodsDesc">摘要</label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" id="addGoodsDesc" rows="3" name="desc"> {$descpt}</textarea>
+                                </div>
+                            </div>
+
+
+                            <!--  图标start -->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label request" for="addGoodsContent">图标</label>
+                                <div class="col-sm-8">
+                                    <span class="btn btn-success fileinput-button" id="addGoodsImgBtn" data-tag="add">
+                                        <span>上传</span>
+                                        <span class="badge" id="addGoodsImgBadge">
+                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                        </span>
+                                        <input type="file" name="icon" id="addGoodsImgInput" />
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group" id="addGoodsImgPreviewDiv" <if condition="$icon eq '' "> hidden </if> >
+                                <div class="col-sm-10 col-sm-offset-3">
+                                    <if condition="$icon neq '' ">
+                                        <img class="addGoodsImg" src="{$icon}" style="box-shadow: rgb(86, 86, 86) 0px 0px 3px; width: 100px; max-width: 100%;">
+                                    </if>
+                                </div>
+                                <input type="hidden" id="addGoodsImgStr" value="{$icon}" />
+                            </div>
+                            <!--  图标end -->
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label request" for="addGoodsunit">单位</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsunit" type="text" name="unit" value="{$unit}" />
+                                </div>
+
+                                <label class="col-sm-2 control-label request" for="addGoodsCurrency">货币代码</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsCurrency" type="text" name="currency" value="{$currency}" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label request" for="addGoodsEndPrice">价格</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsEndPrice" type="number" name="price" value="{$price}" />
+                                </div>
+
+                                <label class="col-sm-2 control-label request" for="addGoodsNum">库存</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsNum" type="number" name="num" value="{$num}" />
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label request" for="addGoodsLimitNum">单次允许兑换量</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsLimitNum" type="number" name="limitNum" value="{$limitNum}" />
+                                </div>
+
+                                <label class="col-sm-2 control-label request" for="addGoodsSelledNum">累计允许兑换量</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsSelledNum" type="number" name="selledNum" value="{$selledNum}" />
+                                </div>
+                            </div>
+
+                            <!--  图标start -->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label request" for="addGoodsContent">图册</label>
+                                <div class="col-sm-8">
+                                    <span class="btn btn-success fileinput-button" id="addGoodsListImgBtn" data-tag="add">
+                                        <span>上传</span>
+                                        <span class="badge" id="addGoodsListImgBadge">
+                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                        </span>
+                                        <input type="file" name="icon" id="addGoodsListImgInput" />
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group" id="addGoodsListImgPreviewDiv" <if condition="empty($imgArr)"> hidden </if> >
+                                <div class="col-sm-10 col-sm-offset-3">
+                                    <volist name="imgArr" id="vo">
+                                        <span class="imgListItem">
+                                            <i class="fa fa-times imgListItem-close"></i>
+                                            <img class="addGoodsImg" src="{$vo}" style="box-shadow: rgb(86, 86, 86) 0px 0px 3px; width: 100px; max-width: 100%;">
+                                        </span>
+                                    </volist>
+                                </div>
+                                <input type="hidden" id="addGoodsListImgStr" value="{$img}" />
+                            </div>
+                            <!--  图标end -->
+
+                            <div class="form-group" id="">
+                                <label class="col-sm-2 control-label" for="addGoodsdetails">详细</label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" id="addGoodsdetails" rows="3" name="details">{$details}</textarea>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="addGoodstag">标签</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" id="addGoodstag" type="text" name="tag" value="{$tag}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="addGoodsdiscount">折扣</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsdiscount" type="number" name="discount" value="{$discount}" />
+                                </div>
+
+                                <label class="col-sm-2 control-label" for="addGoodsSort">物品排序</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsSort" type="number" name="sort" value="{$sort}" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="addGoodsstartTime">开始时间</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsstartTime" type="text" name="startTime" value="{$startTime}" />
+                                </div>
+
+                                <label class="col-sm-2 control-label" for="addGoodsendTime">结束时间</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="addGoodsendTime" type="text" name="endTime" value="{$endTime}"  />
+                                </div>
+                            </div>
+
+                            <!-- 保存、返回 -->
+                            <div class="col-sm-offset-2 col-sm-4">
+                                <button type="button" class="btn btn-success" id="addMallGoodsBtn"> 保存</button>
+                                <a class="btn btn-default" href="{$backUrl}">返回</a>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/bootstrap-datetimepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/locales/bootstrap-datetimepicker.zh-cn.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/vendor/jquery.ui.widget.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.iframe-transport.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.fileupload.js" />
+
+
+<js href="/Public/Js/conf/mall.js" />
+
+
+<script>
+    var backUrl = '{$backUrl}';
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

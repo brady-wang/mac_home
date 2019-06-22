@@ -1,0 +1,223 @@
+
+<css href="/Public/Lib/ui-choose/ui-choose.css"/>
+<css href="/Public/Lib/bootstrap-datetimepicker-2.4.4/css/bootstrap-datetimepicker.min.css" />
+<css href="/Public/Lib/bootstrap-switch-3.3.2/css/bootstrap-switch.min.css" />
+
+<div class="header">
+    <h1 class="page-header">活动管理</h1>
+</div>
+<!-- 查询栏 -->
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" role="form" method="get" action="/Activity/actList">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">活动名称</div>
+                                <input class="form-control" name="name" type="text" value="{$name}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">开始时间</div>
+                                <input class="form-control" name="stime" type="text" readonly="readonly" value="{$stime}" />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">结束时间</div>
+                                <input class="form-control" name="etime" type="text" readonly="readonly" value="{$etime}" />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <button type="submit" name="search" class="btn btn-query">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button class="btn btn-sm btn-danger" type="button" data-toggle="modal" data-target="#setMod">设置</button>
+                    <button class="btn btn-sm btn-success" type="button" data-toggle="modal" data-target="#addMod">添加</button>
+                </div>
+
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered table-hover dataTable no-footer td-align-middle td-valign-middle">
+                        <thead>
+                            <tr role="row" class="td-align-middle">
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th>上线产品</th>
+                                <th>活动时间</th>
+                                <th>更新信息</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <volist name="actData" id="vo">
+                                <tr>
+                                    <td>{$vo.act_id}</td>
+                                    <td>{$vo.name}</td>
+                                    <td>{$vo.pName}</td>
+                                    <td>{$vo.actTime}</td>
+                                    <td>{$vo.updateInfo}</td>
+                                    <td>{$vo.status}</td>
+                                    <td>
+                                        <a href="/Activity/actDetail?actId={$vo.act_id}" class="btn btn-default dataButton">配置活动</a>
+                                        <a href="/Activity/actAnalysis?actId={$vo.act_id}" class="btn btn-default dataButton">运营统计</a>
+                                        <php>
+                                            if($Think.APP_STATUS != 'production') {
+                                        </php>
+                                        <a href="/Activity/setTestParams?actId={$vo.act_id}" class="btn btn-default dataButton">测试配置</a>
+                                        <php>
+                                            }
+                                        </php>
+                                    </td>
+                                </tr>
+                            </volist>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document" style="width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addModalLabel">添加活动</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SET Modal -->
+    <div class="modal fade" id="setMod" tabindex="-1" role="dialog" aria-labelledby="setModalLabel">
+        <div class="modal-dialog" role="document" style="width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addModalLabel">活动设置</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="setModForm">
+                        <div class="form-group">
+                            <label class="col-sm-3 request">活动总开关</label>
+                            <div class="col-sm-6 input-group">
+                                <input type="checkbox" class="actSwitch" value={$actConf.act_switch} name="act_switch" checked>
+                            </div>
+                        </div>
+
+                        <div class="form-group check-dotted">
+                            <label class="col-sm-3 request">活动列表地址</label>
+                            <div class="col-sm-6 input-group">
+                                <input class="form-control" type="text" value='{$actConf.act_list}' name="act_list" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 request">客户端登陆请求地址</label>
+                            <div class="col-sm-6 input-group">
+                                <input class="form-control" type="text" value='{$actConf.act_request.login}' name="act_request[login]" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 request">客户端俱乐部面板地址</label>
+                            <div class="col-sm-6 input-group">
+                                <input class="form-control" type="text" value='{$actConf.act_request.club}' name="act_request[club]" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" onclick="submitSetAct();">提交</button>
+                    <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="addMod" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+        <div class="modal-dialog" role="document" style="width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addModalLabel">添加活动</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="addModForm">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label request">活动ID</label>
+                            <div class="col-sm-6 input-group">
+                                <input class="form-control" type="text" name="act_id" />
+                                <b style="color:red">请咨询开发人员，否则后果自负！</b>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label request">活动名称</label>
+                            <div class="col-sm-6 input-group">
+                                <input class="form-control" type="text" name="name" />
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group check-dotted">
+                            <label class="col-sm-3 control-label request">上线产品</label>
+                            <div class="input-group">
+                                <select class="ui-choose" name="pid[]" id="gameId" multiple="multiple">
+                                    <option value=0>全部</option>
+                                    <foreach name="gameData" item="vo" key="k">
+                                        <option value="{$k}">{$vo}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group has-feedback">
+                            <label class="col-sm-3 control-label request">活动时间</label>
+                            <div class="col-sm-4">
+                                <input class="form-control" type="text" name="stime" readonly="readonly"/>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <span class='pull-left'>~</span>
+                            <div class="col-sm-4">
+                                <input class="form-control" type="text" name="etime" readonly="readonly"/>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">备注</label>
+                            <div class='col-sm-8'>
+                                <textarea class=" form-control" name='remark'/></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" onclick="submitAddAct();">提交</button>
+                    <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/bootstrap-datetimepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/locales/bootstrap-datetimepicker.zh-cn.js" />
+<js href="/Public/Lib/bootstrap-switch-3.3.2/js/bootstrap-switch.min.js" />
+<js href="/Public/Lib/ui-choose/ui-choose.js" />
+<js href="/Public/Js/activity/activity.js" />

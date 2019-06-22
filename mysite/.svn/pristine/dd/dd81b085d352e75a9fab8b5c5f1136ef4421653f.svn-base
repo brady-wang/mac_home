@@ -1,0 +1,47 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: brady
+ * Date: 2018/10/18
+ * Time: 10:44
+ */
+
+if (!function_exists("dump")) {
+    function dump($arr)
+    {
+        echo "<pre>";
+        print_r($arr);
+        echo "</pre>";
+    }
+}
+
+if (!function_exists('get_public_domain')) {
+
+    function get_public_domain()
+    {
+        $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
+        $host = preg_replace('/:\d+/', "", $host);
+        $arrHost = explode('.', $host);
+        $arrHostCount = count($arrHost);
+        return $arrHostCount > 1 ? $arrHost[$arrHostCount - 2] . '.' . $arrHost[$arrHostCount - 1] : '';
+    }
+
+}
+
+
+
+function sql()
+{
+    $CI = &get_instance();
+    echo $CI->db->last_query();
+    echo '<hr>';
+}
+
+/*api mobile 生成sign By Terry.*/
+if (!function_exists('api_mobile_create_sign')) {
+
+    function api_mobile_create_sign($token) {
+        return sha1(config_item('mobile')['api_key'].sha1($token).config_item('mobile')['api_key2']);
+    }
+
+}

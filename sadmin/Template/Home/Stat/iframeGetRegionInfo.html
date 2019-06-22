@@ -1,0 +1,92 @@
+
+<include file="./Template/Common/header.html" />
+
+<style>
+body {
+    background: #fff;
+}
+.region-div {
+    width: 960px;
+    height: 600px;
+}
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10">
+            <present name="errMsg">
+                <p class="text-danger well">{$errMsg}</p>
+            <else />
+                <div class="region-div" id="regionMain"></div>
+            </present>
+        </div>
+    </div>
+</div>
+
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />
+<script>
+    var regionChart = echarts.init(document.getElementById('regionMain'));
+
+    var regionData = {:json_encode($regionData)};
+
+    var option = {
+        // 标题组件，包含主标题和副标题
+        title: {
+            // 主标题文本，支持使用 \n 换行。
+            text: '每日简报 {$pieTitle}',
+            // 副标题文本，支持使用 \n 换行。
+            subtext: '地区数据',
+            // grid 组件离容器左侧的距离
+            left: '20'
+        },
+        // 提示框组件
+        tooltip: {
+            // 触发类型：item 数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用
+            trigger: 'item',
+            // 提示框浮层内容格式器，饼图字符串模板： {a}（系列名称），{b}（数据项名称），{c}（数值）, {d}（百分比）
+            formatter: "{b} : {c}"
+        },
+        // 图例组件
+        legend: {
+            // 图例的类型 'scroll'：可滚动翻页的图例。当图例数量较多时可以使用
+            type: 'scroll',
+            // 图例列表的布局朝向
+            orient: 'vertical',
+            // 图例组件离容器右侧的距离
+            right: 10,
+            // 图例内边距，设置上下的内边距为 80，左右的内边距为 0
+            padding: [80, 0],
+            // 图例选择的模式，控制是否可以通过点击图例改变系列的显示状态。设成 false 关闭
+            selectedMode: false,
+            // 图例的数据数组
+            data: regionData.legendData
+        },
+        // 系列列表。每个系列通过 type 决定自己的图表类型
+        series : [{
+            // 系列名称，用于tooltip的显示，legend 的图例筛选，在 setOption 更新数据和配置项时用于指定对应的系列
+            name: '地区',
+            // 饼图
+            type: 'pie',
+            // 选中模式 multiple 表示多选
+            selectedMode: 'multiple',
+            // 饼图的半径，数组的第一项是内半径，第二项是外半径
+            radius : '65%',
+            // 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标
+            center: ['40%', '50%'],
+            // 图形样式
+            itemStyle: {
+                // 高亮的扇区和标签样式
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+            // 系列中的数据内容数组
+            data: regionData.seriesData
+        }]
+    };
+    regionChart.setOption(option);
+</script>
+
+<include file="./Template/Common/footer.html" />

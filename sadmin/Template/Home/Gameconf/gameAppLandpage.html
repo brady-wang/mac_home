@@ -1,0 +1,116 @@
+
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload-ui.css" />
+<style>
+    body{
+        overflow: hidden;
+    }
+</style>
+<div class="header"> 
+    <h1 class="page-header">落地页配置</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="panel panel-default" style="height: 700px;width: auto;overflow-y: auto">
+                    <div class="panel-body" id="placeTreeDiv"></div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {$pageHead}
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form" id="formLandpage">
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-2 control-label request">标题</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" id="title" name="title" type="text" value="{$landpage_title}" />
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-2 control-label request">图片</label>
+                                <div class="col-sm-2">
+                                    <span class="btn btn-success fileinput-button" id="ImgBtnLandpagePic" data-tag="add">
+                                        <span>上传图片</span>
+                                        <span class="badge" id="ImgBadgeLandpagPic">
+                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                        </span>
+                                        <input type="file" name="image" id="ImgInputLandpagePic" />
+                                    </span>
+                                    <input id="hiddenLandpagePic" type="hidden"  />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div id="ImgPreviewDivLandpagePic" hidden><div class="col-sm-4 col-sm-offset-2"></div></div>
+                            </div>
+                            <present name="anddownFlag">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label request">安卓下载地址</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" id="and_downlink" name="and_downlink" type="text" value="{$and_downlink}" />
+                                    </div>
+                                </div>
+                            </present>
+                            <present name="iosdownFlag">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label request">IOS下载地址</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" id="ios_downlink" name="ios_downlink" type="text" value="{$ios_downlink}" />
+                                    </div>
+                                </div>
+                            </present>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">&nbsp;</label>
+                                <label class="col-sm-3 control-label"></label>
+                                <label class="col-sm-6 request">线上环境更新配置后,需5分钟左右生效</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">&nbsp;</label>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-success" type="button" id="UpimgBtn" onclick="return saveLandpage();">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+<div id="shade" style="text-align: center;position: fixed;z-index: 1000;top: 0;left: 0;
+    width: 100%;height: 100%;background-color: rgba(102, 102, 102, 0.9);overflow: scroll">
+    <img id="bigImg" src="{$image_path}" style="height: auto;width: 90%;margin: auto;position: absolute;top: 0;left: 0;right: 0;overflow-y: auto" >
+</div>
+<js href="/Public/Lib/bootstrap-treeview-1.2.0/dist/bootstrap-treeview.min.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/vendor/jquery.ui.widget.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.iframe-transport.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.fileupload.js" />
+<script>
+    var imageUrl = "";
+    <notempty name="image_path">
+        imageUrl = '{$image_path}';
+    </notempty>
+    var opeAndroid = 0;
+    <notempty name="anddownFlag">
+        opeAndroid = 1;
+    </notempty>
+    var opeIos = 0;
+    <notempty name="iosdownFlag">
+        opeIos = 1;
+    </notempty>
+    var tree = {$placeTree};
+    var pageHead = '{$pageHead}';
+    var curPlaceId = {$placeId};
+    var validPlace = {$validPlace};
+
+</script>
+<js href="/Public/Js/gameconfig/game-app-landpage.js" />

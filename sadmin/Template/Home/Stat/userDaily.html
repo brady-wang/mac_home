@@ -1,0 +1,126 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<div class="header">
+    <h1 class="page-header">每日简报</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" role="form" method="get" action="/Stat/user/third/daily">
+                        <!-- 日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">选择月份</div>
+                                <input class="form-control" id="select_month" name="select_month" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 查询按钮 -->
+                        <button class="btn btn-query" type="submit">查询</button>
+                        <button class="btn btn-operate tiptip" id="exportBtn" type="button" title="需选定起止日期才可导出文件">导出</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <p>最近统计时间：<span class="text-primary">{$cutTime}</span></p>
+                    </div>
+                    <div class="panel-heading">
+                        <p>
+                            <span class="tiptip text-info" title="选择月份中累计新增注册人数">（总）新增注册：</span><span class="text-danger">{$total_register}</span>
+                            <span class="tiptip text-info" title="选择月份中累计登录玩家人数，同一玩家重复登录只记一次">（总）登录人数：</span><span class="text-danger">{$total_login}</span>
+                            <span class="tiptip text-info" title="选择月份中至少成功开局一次的累计人数">（总）活跃人数：</span><span class="text-danger">{$total_active}</span>
+                            <span class="tiptip text-info" title="选择月份中消耗钻石总数">（总）消耗钻石：</span><span class="text-danger">{$total_consume}</span>
+                        </p>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="当日注册人数">新增注册
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="当日登录人数，同一玩家重复登录只记一次">登录人数
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="登录玩家中，至少成功开局一次的人数">活跃人数
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="当日消耗钻石总计">消耗钻石
+                                            </span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <td>{$v.data_time|date="Y-m-d", ###}</td>
+                                            <td>
+                                                <a class="text-primary" href="javascript:void(0);" onclick="clickRegionInfo('{$v.id}', 1);">
+                                                    {$v.add_user}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class="text-primary" href="javascript:void(0);" onclick="clickRegionInfo('{$v.id}', 2);">
+                                                    {$v.login_user}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class="text-primary" href="javascript:void(0);" onclick="clickRegionInfo('{$v.id}', 3);">
+                                                    {$v.active_user}
+                                                </a>
+                                            </td>
+                                            <td>{$v.consume_prop}</td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>数据统计规则：<br />
+                <strong>新增注册：</strong>当日注册人数<br />
+                <strong>登录人数：</strong>当日登录人数，同一玩家重复登录只记一次<br />
+                <strong>活跃人数：</strong>登录玩家中，至少成功开局一次的人数<br />
+                <strong>消耗钻石：</strong>当日消耗钻石总计<br />
+                <strong>（总）新增注册：</strong>选择月份中累计新增注册人数<br />
+                <strong>（总）登录人数：</strong>选择月份中累计登录玩家人数，同一玩家重复登录只记一次<br />
+                <strong>（总）活跃人数：</strong>选择月份中至少成功开局一次的累计人数<br />
+            </p>
+        </footer>
+    </present>
+</div>
+
+<script>
+var query = {:json_encode($query)};
+</script>
+
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Js/stat/user-daily.js" />

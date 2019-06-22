@@ -1,0 +1,364 @@
+
+<div class="header">
+    <h1 class="page-header">兑换红包</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <ul class="nav nav-tabs chart-tab">
+                            <li class="{$tab_date_conf}"><a href="#red_date" data-toggle="tab">活动日期配置</a></li>
+                            <li class="{$tab_gold_drop}"><a href="#red_gold" data-toggle="tab">元宝掉落配置</a></li>
+                        </ul>
+                        <div class='tab-content'>
+                            <div class='tab-pane fade {$page_date_conf}' id='red_date'>
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group has-feedback" style="margin-top:30px;font-size:16px;letter-spacing: 0.2em;">
+                                        <label class="col-sm-3 control-label">&nbsp;</label>元宝掉落时间
+                                    </div>
+                                    <!--<div class="form-group has-feedback">
+                                        <label class="col-sm-3 control-label">起始时间</label>
+                                        <div class="col-sm-3">
+                                            <input class="form-control" id="goldstarttime" name="goldstarttime" type="text" value="{$goldstarttime}" />
+                                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <label class="col-sm-3 control-label">结束时间</label>
+                                        <div class="col-sm-3">
+                                            <input class="form-control" id="goldendtime" name="goldendtime" type="text" value="{$goldendtime}" />
+                                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                        </div>
+                                    </div>-->
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">元宝掉落是否开启</label>
+                                        <div class="col-sm-3">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="active" value="1" {$active1} /> 开启
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="active" value="0" {$active0} /> 结束
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <!--
+                                    <div style="margin-top:60px;border-bottom: 1px solid #ccc;"></div>
+                                    <div class="form-group has-feedback" style="margin-top:30px;font-size:16px;letter-spacing: 0.2em;">
+                                        <label class="col-sm-3 control-label">&nbsp;</label>兑换码有效时间
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <label class="col-sm-2 control-label">兑换码有效时间</label>
+                                        <div class="">
+                                            <input class="" id="redeemcodeday" name="redeemcodeday" type="text" value="{$redeemcodeday}" /> 天
+                                            <input class="" id="redeemcodehour" name="redeemcodehour" type="text" value="{$redeemcodehour}" /> 小时
+                                            <input class="" id="redeemcodemin" name="redeemcodemin" type="text" value="{$redeemcodemin}" /> 分钟
+                                        </div>
+                                    </div>
+                                    -->
+                                    <present name="dateFlag">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">&nbsp;</label>
+                                            <button class="btn btn-primary" type="button" onclick="return saveRedDateConf();">保存</button>
+                                        </div>
+                                    </present>
+                                </form>
+                            </div>
+                            <div class='tab-pane fade {$page_gold_drop}' id='red_gold'>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover dataTable no-footer" id='redGoldConf'>
+                                        <thead>
+                                            <tr role="row"><th>编号</th><th>牌局人数</th><th>完成局数</th><th>元宝掉落数量上下限</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>1</td><td>4</td><td>4</td>
+                                                <td>下限：<input class="" type="text" name="gold_low_4" id="gold_low_4" value='{$gold_low_4}'> ~ 
+                                                    上限：<input class="" type="text" name="gold_high_4" id="gold_high_4" value='{$gold_high_4}'></td>
+                                            </tr>
+                                            <tr><td>2</td><td>4</td><td>8</td>
+                                                <td>下限：<input class="" type="text" name="gold_low_8" id="gold_low_8" value='{$gold_low_8}'> ~ 
+                                                上限：<input class="" type="text" name="gold_high_8" id="gold_high_8" value='{$gold_high_8}'></td>
+                                            </tr>
+                                            <tr><td>3</td><td>4</td><td>16</td>
+                                                <td>下限：<input class="" type="text" name="gold_low_16" id="gold_low_16" value='{$gold_low_16}'> ~ 
+                                                上限：<input class="" type="text" name="gold_high_16" id="gold_high_16" value='{$gold_high_16}'></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="form-group">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<label>2人局获得元宝比率：</label>
+                                    <input type="text" class="" id="gold_rate_2" value="{$gold_rate_2}" /> %
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<label>3人局获得元宝比率：</label>
+                                    <input type="text" class="" id="gold_rate_3" value="{$gold_rate_3}" /> %
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover dataTable no-footer" id='redGoldConf'>
+                                        <thead>
+                                            <tr role="row"><th>编号</th><th>牌局人数</th><th>完成局数</th><th>元宝掉落数量区间</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>1</td><td>2</td><td>4</td>
+                                                <td>下限：{$gold_low_2_4} ~ 上限：{$gold_high_2_4}</td>
+                                            </tr>
+                                            <tr><td>2</td><td>2</td><td>8</td>
+                                                <td>下限：{$gold_low_2_8} ~ 上限：{$gold_high_2_8}</td>
+                                            </tr>
+                                            <tr><td>3</td><td>2</td><td>16</td>
+                                                <td>下限：{$gold_low_2_16} ~ 上限：{$gold_high_2_16}</td>
+                                            </tr>
+                                            <tr><td>4</td><td>3</td><td>4</td>
+                                                <td>下限：{$gold_low_3_4} ~ 上限：{$gold_high_3_4}</td>
+                                            </tr>
+                                            <tr><td>5</td><td>3</td><td>8</td>
+                                                <td>下限：{$gold_low_3_8} ~ 上限：{$gold_high_3_8}</td>
+                                            </tr>
+                                            <tr><td>6</td><td>3</td><td>16</td>
+                                                <td>下限：{$gold_low_3_16} ~ 上限：{$gold_high_3_16}</td>
+                                            </tr>
+                                            <tr><td>7</td><td>4</td><td>4</td>
+                                                <td>下限：{$gold_low_4_4} ~ 上限：{$gold_high_4_4}</td>
+                                            </tr>
+                                            <tr><td>8</td><td>4</td><td>8</td>
+                                                <td>下限：{$gold_low_4_8} ~ 上限：{$gold_high_4_8}</td>
+                                            </tr>
+                                            <tr><td>9</td><td>4</td><td>16</td>
+                                                <td>下限：{$gold_low_4_16} ~ 上限：{$gold_high_4_16}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <present name="droprateFlag">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">&nbsp;</label>
+                                        <button class="btn btn-warning" type="button" onclick="return loadDefaultConf();">重置</button>
+                                        <button class="btn btn-primary" type="button" onclick="return saveGoldRedConf();">保存</button>
+                                    </div>
+                                </present>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+<div class="modal fade" id="loadConf" tabindex="-1" role="dialog" aria-labelledby="loadDefaultConf">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="loadDefaultConf">默认配置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="edtModTextTitle"></label>
+                    <div class="">
+                        <table style="width: 80%; margin: auto;">
+                            <tr class="text-danger">
+                                <td class="text-success">4局元宝掉落</td>
+                                <td class="text-danger">50 ~ 100</td>
+                            </tr>
+                            <tr class="text-danger">
+                                <td class="text-success">8局元宝掉落</td>
+                                <td class="text-danger">50 ~ 100</td>
+                            </tr>
+                            <tr class="text-danger">
+                                <td class="text-success">16局元宝掉落</td>
+                                <td class="text-danger">100 ~ 200</td>
+                            </tr>
+                            <tr class="text-danger">
+                                <td class="text-success">2人局元宝掉落比率</td>
+                                <td class="text-danger">50%</td>
+                            </tr>
+                            <tr class="text-danger">
+                                <td class="text-success">3人局元宝掉落比率	</td>
+                                <td class="text-danger">75%</td>
+                            </tr>
+                        </table>
+                        <br>
+                        确认要恢复默认配置吗？<span style="color:red;">(若执行此操作，将覆盖当前配置并生效)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <label class="col-sm-3 control-label" for="saveDefConf"> </label>
+                <div class="col-sm-4">
+                    <button class="btn btn-primary" type="button" id="saveDefConf" onclick="saveDefConf();">确定</button>
+                    <button class="btn btn-primary" type="button" id="saveDefConf" onclick="cancelDefConf();">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // 保存活动日期配置
+    function saveRedDateConf() {
+        var data = {};
+        data.active = $("input[name=active]:checked").val();
+        data.redeemcodeday = $("#redeemcodeday").val();
+        data.redeemcodehour = $("#redeemcodehour").val();
+        data.redeemcodemin = $("#redeemcodemin").val();
+
+        tipinfo = [];
+        tipinfo.push({title: '元宝掉落是否开启', value: (data.active==1?'开启':'结束')});
+        var tip = '<table style="width: 80%; margin: auto;">';
+        for (var idx = 0; idx < tipinfo.length; idx++) {
+            tip += '<tr class="text-danger"><td class="text-success">'+tipinfo[idx].title+'</td><td>'+tipinfo[idx].value+'</td></tr>';
+        }
+        tip += '</table>';
+        $.Zebra_Dialog(tip, {
+            'title': '更改配置确认',
+            'animation_speed_show': 500,
+            'center_buttons': true,
+            'type': '',
+            'buttons': ['取消', '确定'],
+            'onClose': function(caption) {
+                if ('取消' == caption) {
+                } else if ('确定' == caption) {
+                    $.loading.show("saveConfLoading");
+                    $.ajax({
+                        url: "/Gameconf/ajaxSaveRedDateConf",
+                        type: "POST",
+                        data: data,
+                        dataType: "json",
+                        success: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            if (0 == data.code) {
+                                $.zmsg.success('/Gameconf/project/third/proredpack');
+                            } else {
+                                $.zmsg.error(data.msg);
+                            }
+                        },
+                        error: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            $.zmsg.fatal(data.responseText);
+                        }
+                    });
+                }
+            }
+        });
+        return false;
+    }
+
+    // 保存元宝掉落配置
+    function saveGoldRedConf() {
+        var data = {};
+        data.low4 = $("#gold_low_4").val();
+        data.high4 = $("#gold_high_4").val();
+        data.low8 = $("#gold_low_8").val();
+        data.high8 = $("#gold_high_8").val();
+        data.low16 = $("#gold_low_16").val();
+        data.high16 = $("#gold_high_16").val();
+        data.rate2 = $("#gold_rate_2").val();
+        data.rate3 = $("#gold_rate_3").val();
+        if (data.low4 == '' || data.high4 == '' || data.low8 == '' || data.high8 == '' || data.low16 == '' || data.high16 == ''
+            || data.rate2 == '' || data.rate3 == '') {
+            $.zmsg.error("配置不能为空");
+            return false;
+        }
+        var reg = /^[0-9]*$/;
+        if (!reg.test(data.low4) || parseInt(data.low4) <= 0 || !reg.test(data.high4) || parseInt(data.high4) <= 0
+            || !reg.test(data.low8) || parseInt(data.low8) <= 0 || !reg.test(data.high8) || parseInt(data.high8) <= 0
+            || !reg.test(data.low16) || parseInt(data.low16) <= 0 || !reg.test(data.high16) || parseInt(data.high16) <= 0) {
+            $.zmsg.error("元宝掉落数量必须为整数且数值大于0");
+            return false;
+        }
+        if (!reg.test(data.rate2) || parseInt(data.rate2) >= 100 || !reg.test(data.rate3) || parseInt(data.rate3) >= 100) {
+            $.zmsg.error("元宝掉落比率必须为整数且比率不能超过100");
+            return false;
+        }
+        // 验证上下限大小
+        if (parseInt(data.low4) >= parseInt(data.high4) ||
+            parseInt(data.low8) >= parseInt(data.high8) ||
+            parseInt(data.low16) >= parseInt(data.high16)
+        ){
+            $.zmsg.error('元宝掉落数量上限不可大于下限且不能相等');
+            return false;
+        }
+        var tipinfo = [];
+        tipinfo.push({title: '4局元宝掉落', value: data.low4+' ~ '+data.high4});
+        tipinfo.push({title: '8局元宝掉落', value: data.low8+' ~ '+data.high8});
+        tipinfo.push({title: '16局元宝掉落', value: data.low16+' ~ '+data.high16});
+        tipinfo.push({title: '2人局元宝掉落比率', value: data.rate2+'%'});
+        tipinfo.push({title: '3人局元宝掉落比率', value: data.rate3+'%'});
+        var tip = '<table style="width: 80%; margin: auto;">';
+        for (var idx = 0; idx < tipinfo.length; idx++) {
+            tip += '<tr class="text-danger"><td class="text-success">'+tipinfo[idx].title+'</td><td>'+tipinfo[idx].value+'</td></tr>';
+        }
+        tip += '</table>';
+        $.Zebra_Dialog(tip, {
+            'title': '更改配置确认',
+            'animation_speed_show': 500,
+            'center_buttons': true,
+            'type': '',
+            'buttons': ['取消', '确定'],
+            'onClose': function(caption) {
+                if ('取消' == caption) {
+                } else if ('确定' == caption) {
+                    $.loading.show("saveConfLoading");
+                    $.ajax({
+                        url: "/Gameconf/ajaxSaveRedGoldConf",
+                        type: "POST",
+                        data: data,
+                        dataType: "json",
+                        success: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            if (0 == data.code) {
+                                $.zmsg.success('/Gameconf/project/third/proredpack');
+                            } else {
+                                $.zmsg.error(data.msg);
+                            }
+                        },
+                        error: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            $.zmsg.fatal(data.responseText);
+                        }
+                    });
+                }
+            }
+        });
+        return false;
+    }
+
+    // 恢复默认配置
+    function loadDefaultConf() {
+        $('#loadConf').modal();
+        return false;
+    }
+    function cancelDefConf() {
+        $('#loadConf').modal('hide');
+    }
+    function saveDefConf() {
+        $.loading.show("saveConfLoading");
+        $('#loadConf').modal('hide');
+        $.ajax({
+            url: "/Gameconf/ajaxResetRedGoldConf",
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                $.loading.hide('saveConfLoading');
+                if (0 == data.code) {
+                    $.zmsg.success('/Gameconf/project/third/proredpack');
+                } else {
+                    $.zmsg.error(data.msg);
+                }
+            },
+            error: function(data) {
+                $.loading.hide('saveConfLoading');
+                $.zmsg.fatal(data.responseText);
+            }
+        })
+    }
+</script>

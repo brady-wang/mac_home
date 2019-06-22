@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<div class="header">
+    <h2 class="page-header">活动管理</h2>
+</div>
+<div class="header">
+    <ul class="nav nav-tabs chart-tab">
+        <li <if condition="$searchType eq 'all'">class="active"</if> ><a href="/Activity/actAnalysis?actId={$actId}">活动总数据</a></li>
+        <li <if condition="$searchType eq 'user'">class="active"</if> ><a href="/Activity/actAnalysisByUid?actId={$actId}">用户数据查询</a></li>
+    </ul>
+</div>
+<div id="page-inner">
+        <if condition="$searchType eq 'all'">
+            <div class="row" >
+
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr role="row" class="td-align-middle">
+                                    <th>点击活动人数</th>
+                                    <th>用户参与活动的平均次数</th>
+                                    <th>成功完成任务的人数</th>
+                                    <th>未成功完成的人数</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{$actData['actDataInfo']['clickActNum']}</td>
+                                    <td>{$actData['actDataInfo']['avgActCount']}</td>
+                                    <td>{$actData['actDataInfo']['taskDoneNum']}</td>
+                                    <td>{$actData['actDataInfo']['taskUnDoneNum']}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr role="row" class="td-align-middle">
+                                        <!--<th>点击升级人数</th>-->
+                                        <!--<th>升级成功人数</th>-->
+                                        <!--<th>升级失败人数</th>-->
+                                        <th>获得木蛋的人数</th>
+                                        <!--<th>获得石蛋的人数</th>-->
+                                        <!--<th>获得铁蛋的人数</th>-->
+                                        <!--<th>获得铜蛋的人数</th>-->
+                                        <!--<th>获得银蛋的人数</th>-->
+                                        <th>获得金蛋的人数</th>
+                                        <!--<th>获得铂金蛋的人数</th>-->
+                                        <!--<th>获得钻石蛋的人数</th>-->
+                                        <th>获得66神蛋的人数</th>
+                                        <th>砸木蛋的人数</th>
+                                        <!--<th>砸石蛋的人数</th>-->
+                                        <!--<th>砸铁蛋的人数</th>-->
+                                        <!--<th>砸铜蛋的人数</th>-->
+                                        <!--<th>砸银蛋的人数</th>-->
+                                        <th>砸金蛋的人数</th>
+                                        <!--<th>砸铂金蛋的人数</th>-->
+                                        <!--<th>砸钻石蛋的人数</th>-->
+                                        <th>砸66神蛋的人数</th>
+                                        <th>点击蛋箱的人数</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="list">
+                                    <tr>
+                                        <!--<td>{$actData['actDataInfo']['clickUpNum']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['clickUpSucNum']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['clickUpFalNum']}</td>-->
+                                        <td>{$actData['actDataInfo']['getEggNum1']}</td>
+                                        <!--<td>{$actData['actDataInfo']['getEggNum2']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['getEggNum3']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['getEggNum4']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['getEggNum5']}</td>-->
+                                        <td>{$actData['actDataInfo']['getEggNum6']}</td>
+                                        <!--<td>{$actData['actDataInfo']['getEggNum7']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['getEggNum8']}</td>-->
+                                        <td>{$actData['actDataInfo']['getEggNum9']}</td>
+                                        <td>{$actData['actDataInfo']['openEggNum1']}</td>
+                                        <!--<td>{$actData['actDataInfo']['openEggNum2']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['openEggNum3']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['openEggNum4']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['openEggNum5']}</td>-->
+                                        <td>{$actData['actDataInfo']['openEggNum6']}</td>
+                                        <!--<td>{$actData['actDataInfo']['openEggNum7']}</td>-->
+                                        <!--<td>{$actData['actDataInfo']['openEggNum8']}</td>-->
+                                        <td>{$actData['actDataInfo']['openEggNum9']}</td>
+                                        <td>{$actData['actDataInfo']['eggListNum']}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr role="row" class="td-align-middle">
+                                    <th>日期</th>
+                                    <th>点击活动次数</th>
+                                    <!--<th>点击升级次数</th>-->
+                                    <!--<th>升级成功的次数</th>-->
+                                    <!--<th>升级失败的次数</th>-->
+                                    <th>获得木蛋的次数</th>
+                                    <!--<th>获得石蛋的次数</th>-->
+                                    <!--<th>获得铁蛋的次数</th>-->
+                                    <!--<th>获得铜蛋的次数</th>-->
+                                    <!--<th>获得银蛋的次数</th>-->
+                                    <th>获得金蛋的次数</th>
+                                    <!--<th>获得铂金蛋的次数</th>-->
+                                    <!--<th>获得钻石蛋的次数</th>-->
+                                    <th>获得66神蛋的次数</th>
+                                    <th>砸木蛋的次数</th>
+                                    <!--<th>砸石蛋的次数</th>-->
+                                    <!--<th>砸铁蛋的次数</th>-->
+                                    <!--<th>砸铜蛋的次数</th>-->
+                                    <!--<th>砸银蛋的次数</th>-->
+                                    <th>砸金蛋的次数</th>
+                                    <!--<th>砸铂金蛋的次数</th>-->
+                                    <!--<th>砸钻石蛋的次数</th>-->
+                                    <th>砸66神蛋的次数</th>
+                                    <th>点击蛋箱的次数</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <foreach name="actData.eggDataInfo" item="item" key="key">
+                                    <tr>
+                                        <td>{$key}</td>
+                                        <td>{$item.clickActCnt}</td>
+                                        <!--<td>{$item.clickUpCnt}</td>-->
+                                        <!--<td>{$item.clickUpSucCnt}</td>-->
+                                        <!--<td>{$item.clickUpFalCnt}</td>-->
+                                        <td>{$item.getEggCnt1}</td>
+                                        <!--<td>{$item.getEggCnt2}</td>-->
+                                        <!--<td>{$item.getEggCnt3}</td>-->
+                                        <!--<td>{$item.getEggCnt4}</td>-->
+                                        <!--<td>{$item.getEggCnt5}</td>-->
+                                        <td>{$item.getEggCnt6}</td>
+                                        <!--<td>{$item.getEggCnt7}</td>-->
+                                        <!--<td>{$item.getEggCnt8}</td>-->
+                                        <td>{$item.getEggCnt9}</td>
+                                        <td>{$item.openEggCnt1}</td>
+                                        <!--<td>{$item.openEggCnt2}</td>-->
+                                        <!--<td>{$item.openEggCnt3}</td>-->
+                                        <!--<td>{$item.openEggCnt4}</td>-->
+                                        <!--<td>{$item.openEggCnt5}</td>-->
+                                        <td>{$item.openEggCnt6}</td>
+                                        <!--<td>{$item.openEggCnt7}</td>-->
+                                        <!--<td>{$item.openEggCnt8}</td>-->
+                                        <td>{$item.openEggCnt9}</td>
+                                        <td>{$item.eggListCnt}</td>
+                                    </tr>
+                                </foreach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </if>
+        <if condition="$searchType eq 'user'">
+            <div class="row" >
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <form class="form-inline" role="form" method="get" action="/Activity/actAnalysisByUid">
+                                <!-- uid -->
+                                <input type="hidden" name="actId" value="{$actId}">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">用户ID</div>
+                                        <input class="form-control" id="userId" name="userId" type="text" />
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-query">查询</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr role="row" class="td-align-middle">
+                                    <th>日期</th>
+                                    <th>牌局数</th>
+                                    <th>初始任务等级</th>
+                                    <th>当前任务等级</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <foreach name="actData.playInfo" item="item" key="key">
+                                    <tr>
+                                        <td>{$key}</td>
+                                        <td>{$item}</td>
+                                        <td>{$actData['originTask'][$key]}</td>
+                                        <td>{$actData['curTask'][$key]}</td>
+                                    </tr>
+                                </foreach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr role="row" class="td-align-middle">
+                                    <th>木蛋</th>
+                                    <!--<th>石蛋</th>-->
+                                    <!--<th>铁蛋</th>-->
+                                    <!--<th>铜蛋</th>-->
+                                    <!--<th>银蛋</th>-->
+                                    <th>金蛋</th>
+                                    <!--<th>铂金蛋</th>-->
+                                    <!--<th>钻石蛋</th>-->
+                                    <th>66神蛋</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                <foreach name="actData.eggList" item="item" key="key">
+                                    <td>{$item}</td>
+                                </foreach>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr role="row" class="td-align-middle">
+                                    <th>日期</th>
+                                    <th>蛋类型</th>
+                                    <th>奖品类型</th>
+                                    <th>数量</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <foreach name="actData.rewardList" item="item" key="key">
+                                <tr>
+                                    <td>{$item.addtime}</td>
+                                    <td>{$actData['eggMap'][$item['egg_id']]}</td>
+                                    <td>
+                                        <if condition="$item.reward_type eq 'yuanbao'">元宝</if>
+                                        <if condition="$item.reward_type eq 'redPacket'">现金红包</if>
+                                    </td>
+                                    <td>
+                                        <if condition="$item.reward_type eq 'yuanbao'">{:ceil($item['reward'])}</if>
+                                        <if condition="$item.reward_type eq 'redPacket'">{:round($item['reward'], 2)}</if>
+                                    </td>
+                                </tr>
+                                </foreach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </if>
+</div>
+<script>
+    var query = {$query};
+    $(function(){
+
+        if (query.userId) {
+            $('#userId').val(query.userId);
+        }
+
+        $('#analysisByUid').on('click', function(e) {
+            var data = $("#queryUserInfo").serializeObject();
+            $.getJSON('/Activity/actAnalysisByUid', data, function(rs){
+                if (rs.code != 0) {
+                    alert(rs.msg);
+                } else {
+                    var html = '';
+                    $.each(rs.data, function(key, val){
+                        html += '<tr>';
+                        html += '<td>'+ key +'</td>';
+                        html += '<td>'+ val.shareNum +'</td>';
+                        html += '<td>'+ val.inviteNum +'</td>';
+                        html += '<td>'+ val.playNum +'</td>';
+                        html += '</tr>';
+                    })
+                    $("#list").html(html);
+                }
+            });
+            return false;
+        });
+    })
+</script>
+

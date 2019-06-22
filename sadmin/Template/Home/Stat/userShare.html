@@ -1,0 +1,374 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<div class="header">
+    <h1 class="page-header">分享统计</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" method="get" action="/Stat/userShare">
+                        <!-- 开始日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">开始日期</div>
+                                <input class="form-control" id="startDate" name="start_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 结束日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group">
+                                <div class="input-group-addon">结束日期</div>
+                                <input class="form-control" id="endDate" name="end_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <button type="submit" class="btn btn-query">查询</button>
+                        <button class="btn btn-operate tiptip" id="exportBtn" type="button" title="需选定起止日期才可导出文件">导出</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="divChart"  class="stat-chart"></div>
+                        <div class="text-center div-button-sel">
+                            <foreach name="chartMap" item="v" key="k">
+                                <a href="javascript:void(0)" class="btn btn-default dataButton" data-items="{$k}">
+                                    {$v.name}
+                                </a> &nbsp;
+                            </foreach>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2" class="text-center td-valign-middle">日期</th>
+                                        <th colspan="3" class="text-center">分享领钻</th>
+                                        <th colspan="5" class="text-center">固定分享</th>
+                                        <th colspan="5" class="text-center">领取钻石</th>
+                                        <th colspan="3" class="text-center">活动</th>
+                                        <th colspan="6" class="text-center">亲友圈</th>
+                                        <th colspan="2" class="text-center">房间邀请</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="大厅每日分享领取钻石的图标（次数/人数）">图标
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="点击可分享按钮（次数/人数）">按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击分享按钮成功完成分享操作（次数/人数）">成功
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="大厅右上角固定的分享图标（次数/人数）">图标
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="点击分享到好友/群按钮（次数/人数）">好友/群按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击分享到好友/群按钮成功完成分享操作（次数/人数）">好友/群成功
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="点击分享到朋友圈按钮（次数/人数）">朋友圈按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击分享到朋友圈按钮成功完成分享操作（次数/人数）">朋友圈成功
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="大厅底部领取钻石图标（次数/人数）">图标
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="点击分享到好友/群按钮（次数/人数）">好友/群按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击分享到好友/群按钮成功完成分享操作（次数/人数）">好友/群成功
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="点击分享到朋友圈按钮（次数/人数）">朋友圈按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击分享到朋友圈按钮成功完成分享操作（次数/人数）">朋友圈成功
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="大厅底部活动图标（次数/人数）">图标
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="点击活动中可分享按钮（次数/人数）">按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击分享按钮成功完成分享操作（次数/人数）">成功
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="群主在亲友圈中点击分享到好友/群按钮（次数/人数）">好友/群按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击分享到好友/群按钮成功完成分享操作（次数/人数）">好友/群成功
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="群主在亲友圈中点击分享到朋友圈按钮（次数/人数）">朋友圈按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击分享到朋友圈按钮成功完成分享操作（次数/人数）">朋友圈成功
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="群主在亲友圈中点击二维码分享按钮（次数/人数）">二维码按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击二维码分享按钮成功完成分享操作（次数/人数）">二维码成功
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="点击微信邀请好友按钮（次数/人数）">按钮
+                                            </span>
+                                        </th>
+                                        <th class="text-info">
+                                            <span class="tiptip" title="通过点击微信邀请好友按钮成功完成分享操作（次数/人数）">成功
+                                            </span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <!-- 日期 -->
+                                            <td>{$v.stat_time|date="Y-m-d", ###}</td>
+                                            <!-- 大厅每日分享领取钻石的图标 -->
+                                            <td>
+                                                <span class="text-success">{$v.award_icon_count}</span><br/>
+                                                <span class="text-danger">{$v.award_icon_num}</span>
+                                            </td>
+                                            <!-- 点击可分享按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.award_btn_count}</span><br/>
+                                                <span class="text-danger">{$v.award_btn_num}</span>
+                                            </td>
+                                            <!-- 通过点击分享按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.award_succ_count}</span><br/>
+                                                <span class="text-danger">{$v.award_succ_num}</span>
+                                            </td>
+                                            <!-- 大厅右上角固定的分享图标 -->
+                                            <td>
+                                                <span class="text-success">{$v.share_icon_count}</span><br/>
+                                                <span class="text-danger">{$v.share_icon_num}</span>
+                                            </td>
+                                            <!-- 点击分享到好友/群按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.share_friend_count}</span><br/>
+                                                <span class="text-danger">{$v.share_friend_num}</span>
+                                            </td>
+                                            <!-- 通过点击分享到好友/群按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.share_fsucc_count}</span><br/>
+                                                <span class="text-danger">{$v.share_fsucc_num}</span>
+                                            </td>
+                                            <!-- 点击分享到朋友圈按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.share_social_count}</span><br/>
+                                                <span class="text-danger">{$v.share_social_num}</span>
+                                            </td>
+                                            <!-- 通过点击分享到朋友圈按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.share_ssucc_count}</span><br/>
+                                                <span class="text-danger">{$v.share_ssucc_num}</span>
+                                            </td>
+                                            <!-- 大厅底部领取钻石图标 -->
+                                            <td>
+                                                <span class="text-success">{$v.diamond_icon_count}</span><br/>
+                                                <span class="text-danger">{$v.diamond_icon_num}</span>
+                                            </td>
+                                            <!-- 点击分享到好友/群按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.diamond_friend_count}</span><br/>
+                                                <span class="text-danger">{$v.diamond_friend_num}</span>
+                                            </td>
+                                            <!-- 通过点击分享到好友/群按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.diamond_fsucc_count}</span><br/>
+                                                <span class="text-danger">{$v.diamond_fsucc_num}</span>
+                                            </td>
+                                            <!-- 点击分享到朋友圈按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.diamond_social_count}</span><br/>
+                                                <span class="text-danger">{$v.diamond_social_num}</span>
+                                            </td>
+                                            <!-- 通过点击分享到朋友圈按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.diamond_ssucc_count}</span><br/>
+                                                <span class="text-danger">{$v.diamond_ssucc_num}</span>
+                                            </td>
+                                            <!-- 大厅底部活动图标 -->
+                                            <td>
+                                                <span class="text-success">{$v.activity_icon_count}</span><br/>
+                                                <span class="text-danger">{$v.activity_icon_num}</span>
+                                            </td>
+                                            <!-- 点击活动中可分享按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.activity_btn_count}</span><br/>
+                                                <span class="text-danger">{$v.activity_btn_num}</span>
+                                            </td>
+                                            <!-- 通过点击分享按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.activity_succ_count}</span><br/>
+                                                <span class="text-danger">{$v.activity_succ_num}</span>
+                                            </td>
+                                            <!-- 群主在亲友圈中点击分享到好友/群按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.club_friend_count}</span><br/>
+                                                <span class="text-danger">{$v.club_friend_num}</span>
+                                            </td>
+                                            <!-- 通过点击分享到好友/群按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.club_fsucc_count}</span><br/>
+                                                <span class="text-danger">{$v.club_fsucc_num}</span>
+                                            </td>
+                                            <!-- 群主在亲友圈中点击分享到朋友圈按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.club_social_count}</span><br/>
+                                                <span class="text-danger">{$v.club_social_num}</span>
+                                            </td>
+                                            <!-- 通过点击分享到朋友圈按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.club_ssucc_count}</span><br/>
+                                                <span class="text-danger">{$v.club_ssucc_num}</span>
+                                            </td>
+                                            <!-- 群主在亲友圈中点击二维码分享按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.club_qrcode_count}</span><br/>
+                                                <span class="text-danger">{$v.club_qrcode_num}</span>
+                                            </td>
+                                            <!-- 通过点击二维码分享按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.club_qsucc_count}</span><br/>
+                                                <span class="text-danger">{$v.club_qsucc_num}</span>
+                                            </td>
+                                            <!-- 点击微信邀请好友按钮 -->
+                                            <td>
+                                                <span class="text-success">{$v.room_btn_count}</span><br/>
+                                                <span class="text-danger">{$v.room_btn_num}</span>
+                                            </td>
+                                            <!-- 通过点击微信邀请好友按钮成功完成分享操作 -->
+                                            <td>
+                                                <span class="text-success">{$v.room_succ_count}</span><br/>
+                                                <span class="text-danger">{$v.room_succ_num}</span>
+                                            </td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>数据统计规则<span class="text-danger">（人数均表示按uid去重）</span>：</p>
+            <ul>
+                <li>
+                    <strong>分享领钻：</strong>
+                    <ul>
+                        <li><strong>图标：</strong>大厅每日分享领取钻石的图标（次数/人数）</li>
+                        <li><strong>按钮：</strong>点击可分享按钮（次数/人数）</li>
+                        <li><strong>成功：</strong>通过点击分享按钮成功完成分享操作（次数/人数）</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>固定分享：</strong>
+                    <ul>
+                        <li><strong>图标：</strong>大厅右上角固定的分享图标（次数/人数）</li>
+                        <li><strong>好友/群按钮：</strong>点击分享到好友/群按钮（次数/人数）</li>
+                        <li><strong>好友/群成功：</strong>通过点击分享到好友/群按钮成功完成分享操作（次数/人数）</li>
+                        <li><strong>朋友圈按钮：</strong>点击分享到朋友圈按钮（次数/人数）</li>
+                        <li><strong>朋友圈成功：</strong>通过点击分享到朋友圈按钮成功完成分享操作（次数/人数）</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>领取钻石：</strong>
+                    <ul>
+                        <li><strong>图标：</strong>大厅底部领取钻石图标（次数/人数）</li>
+                        <li><strong>好友/群按钮：</strong>点击分享到好友/群按钮（次数/人数）</li>
+                        <li><strong>好友/群成功：</strong>通过点击分享到好友/群按钮成功完成分享操作（次数/人数）</li>
+                        <li><strong>朋友圈按钮：</strong>点击分享到朋友圈按钮（次数/人数）</li>
+                        <li><strong>朋友圈成功：</strong>通过点击分享到朋友圈按钮成功完成分享操作（次数/人数）</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>活动：</strong>
+                    <ul>
+                        <li><strong>图标：</strong>大厅底部活动图标（次数/人数）</li>
+                        <li><strong>按钮：</strong>点击活动中可分享按钮（次数/人数）</li>
+                        <li><strong>成功：</strong>通过点击分享按钮成功完成分享操作（次数/人数）</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>亲友圈：</strong>
+                    <ul>
+                        <li><strong>好友/群按钮：</strong>群主在亲友圈中点击分享到好友/群按钮（次数/人数）</li>
+                        <li><strong>好友/群成功：</strong>通过点击分享到好友/群按钮成功完成分享操作（次数/人数）</li>
+                        <li><strong>朋友圈按钮：</strong>群主在亲友圈中点击分享到朋友圈按钮（次数/人数）</li>
+                        <li><strong>朋友圈成功：</strong>通过点击分享到朋友圈按钮成功完成分享操作（次数/人数）</li>
+                        <li><strong>二维码按钮：</strong>群主在亲友圈中点击二维码分享按钮（次数/人数）</li>
+                        <li><strong>二维码成功：</strong>通过点击二维码分享按钮成功完成分享操作（次数/人数）</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>房间邀请：</strong>
+                    <ul>
+                        <li><strong>按钮：</strong>点击微信邀请好友按钮（次数/人数）</li>
+                        <li><strong>成功：</strong>通过点击微信邀请好友按钮成功完成分享操作（次数/人数）</li>
+                    </ul>
+                </li>
+            </ul>
+        </footer>
+    </present>
+</div>
+
+<script>
+var query = {$query};
+var chartMap = {:json_encode($chartMap)};
+var chartXAxis = {:json_encode($xAxis)};
+</script>
+
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />
+<js href="/Public/Js/stat/user-share.js" />

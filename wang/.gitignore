@@ -1,0 +1,6 @@
+*.svn
+*.idea
+composer.lock
+.user.ini
+vendor/
+logs/

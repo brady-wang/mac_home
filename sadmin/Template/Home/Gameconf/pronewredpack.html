@@ -1,0 +1,245 @@
+
+<css href="/Public/Lib/bootstrap-datetimepicker-2.4.4/css/bootstrap-datetimepicker.min.css" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/bootstrap-datetimepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/locales/bootstrap-datetimepicker.zh-cn.js" />
+<div class="header"> 
+    <h1 class="page-header">新手红包</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-3 control-label request">活动标题</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="title" name="title" type="text" value="{$title}" />
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-3 control-label request"">完成局数</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="finishrecord" name="finishrecord" type="text" value="{$finishrecord}" />
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-3 control-label request"">对应公众号</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="publiccode" name="publiccode" type="text" value="{$publiccode}" />
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-3 control-label request"">限制地区文字</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="limitarea" name="limitarea" type="text" value="{$limitarea}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">前端是否显示时间</label>
+                                <div class="col-sm-3">                                    
+                                    <label class="radio-inline">
+                                        <input type="radio" id="displayshow" name="displaytime" value="1" {$displaytime1} /> 显示
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="displayhide" name="displaytime" value="0" {$displaytime0}/> 隐藏
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-3 control-label request"">起始时间</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="starttime" name="starttime" type="text" value="{$starttime}" />
+                                    <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-3 control-label request"">结束时间</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="endtime" name="endtime" type="text" value="{$endtime}" />
+                                    <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">活动是否结束</label>
+                                <div class="col-sm-3">                                    
+                                    <label class="radio-inline">
+                                        <input type="radio" id="activeopen" name="active" value="1" onclick="activeityClick(1);" {$active1} /> 开启
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="activeclose" name="active" value="0" onclick="activeityClick(0);" {$active0}/> 结束
+                                    </label>
+                                </div>
+                            </div>
+                            <present name="pronewredpackFlag">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">&nbsp;</label>
+                                    <button class="btn btn-success" type="button" onclick="return saveNewRedPack();">保存</button>
+                                </div>
+                            </present>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+<script>
+    function activeityClick(val) {
+        if (val == 1) {
+            $('#activeopen').prop('checked', true);  
+            $('#title').prop('disabled', false); 
+            $('#finishrecord').prop('disabled', false); 
+            $('#limitarea').prop('disabled', false); 
+            $('#displayshow').prop('disabled', false); 
+            $('#displayhide').prop('disabled', false);
+            $('#starttime').prop('disabled', false); 
+            $('#endtime').prop('disabled', false);
+        } else {
+            $('#activeclose').prop('checked', true); 
+            $('#title').prop('disabled', true);
+            $('#finishrecord').prop('disabled', true); 
+            $('#limitarea').prop('disabled', true); 
+            $('#displayshow').prop('disabled', true); 
+            $('#displayhide').prop('disabled', true);
+            $('#starttime').prop('disabled', true); 
+            $('#endtime').prop('disabled', true);
+        }
+    }
+    function saveNewRedPack() {
+        var data = {};
+        var tipinfo = [];
+        var stime = $("#starttime").val();
+        var etime = $("#endtime").val();
+        
+        var val = $("#title").val();
+        if (val == "") {
+            $.zmsg.error("必须输入活动标题");
+            return false;
+        }
+        data.title = val;
+        tipinfo.push({title: '活动标题', value: val});
+        val = $("#finishrecord").val();
+        if (val == "") {
+            $.zmsg.error("必须输入完成局数");
+            return false;
+        }
+        var reg = /^[0-9]*$/;
+        if (!reg.test(val) || parseInt(val) <= 0) {
+            $.zmsg.error("完成局数必须为整数且大于0");
+            return false;
+        }
+        data.record = val;
+        tipinfo.push({title: '完成局数', value: val});
+        val = $("#publiccode").val();
+        if (val == "") {
+            $.zmsg.error("必须输入对应公众号");
+            return false;
+        }
+        data.code = val;
+        tipinfo.push({title: '对应公众号', value: val});
+        val = $("#limitarea").val();
+        if (val == "") {
+            $.zmsg.error("必须输入限制地区文字");
+            return false;
+        }
+        data.area = val;
+        tipinfo.push({title: '限制地区文字', value: val});
+        data.display = $("input[name=displaytime]:checked").val();
+        tipinfo.push({title: '前端是否显示时间', value: (data.display==1?'显示':'隐藏')});
+        if (stime == "") {
+            $.zmsg.error("必须选择起始日期");
+            return false;
+        } 
+        if (etime == "") {
+            $.zmsg.error("必须选择结束时间");
+            return false;
+        }
+        if (stime) {
+            stime = Date.parse(new Date(stime));
+            stime = stime / 1000;
+        }
+        if (etime) {
+            etime = Date.parse(new Date(etime));
+            etime = etime / 1000;
+        }
+        if (stime >= etime) {
+            $.zmsg.error("结束时间必须大于开始时间");
+            return false;            
+        }
+        data.stime = $("#starttime").val();
+        data.etime = $("#endtime").val();
+        tipinfo.push({title: '起始时间', value: data.stime});
+        tipinfo.push({title: '结束时间', value: data.etime});
+        data.active = $("input[name=active]:checked").val();
+        tipinfo.push({title: '活动是否开启', value: (data.active==1?'开启':'结束')});
+        
+        var tip = '<table style="width: 80%; margin: auto;">';
+        for (var idx = 0; idx < tipinfo.length; idx++) {
+            tip += '<tr class="text-danger"><td class="text-success">'+tipinfo[idx].title+'</td><td>'+tipinfo[idx].value+'</td></tr>';
+        }
+        tip += '</table>';
+        $.Zebra_Dialog(tip, {
+            'title': '更改配置确认',
+            'animation_speed_show': 500,
+            'center_buttons': true,
+            'type': '',
+            'buttons': ['取消', '确定'],
+            'onClose': function(caption) {
+                if ('取消' == caption) {
+                } else if ('确定' == caption) {
+                    // 开始 loading 遮盖
+                    $.loading.show("saveConfLoading");
+                    $.ajax({
+                        url: "/Gameconf/ajaxSaveNewRedPack",
+                        type: "POST",
+                        data: data,
+                        dataType: "json",
+                        success: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            if (0 == data.code) {
+                                $.zmsg.success('/Gameconf/project/third/pronewredpack');//$.zmsg.info('保存成功');
+                            } else {
+                                $.zmsg.error(data.msg);
+                            }
+                        },
+                        error: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            $.zmsg.fatal(data.responseText);
+                        }
+                    });
+                }
+            }
+        });
+        return false;
+    }
+$(document).ready(function() {
+    $("input[name=starttime]").datetimepicker({
+        language: "zh-CN",
+        autoclose: true,
+        clearBtn: true,
+        //endDate: new Date(),//new Date(new Date().valueOf() - 24 * 3600 * 1000),
+        //todayBtn: true,
+        format: "yyyy-mm-dd hh:ii:00"
+    });
+    $("input[name=endtime]").datetimepicker({
+        language: "zh-CN",
+        autoclose: true,
+        clearBtn: true,
+        //endDate: new Date(),//new Date(new Date().valueOf() - 24 * 3600 * 1000),
+        format: "yyyy-mm-dd hh:ii:00"
+    });
+    var active = {:intval($active)};
+    if (active)
+        activeityClick(1);
+    else
+        activeityClick(0);
+});
+</script>

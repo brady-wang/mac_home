@@ -1,0 +1,60 @@
+
+<div class="header">
+    <h1 class="page-header">角色配置</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <form id="gameConfigForm">
+                        <div class="form-horizontal">
+                            <div class="modal-body" style="padding-right:50px;">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label request" for="gameInitDiamond">初始钻石数量</label>
+                                    <div class="col-sm-4">
+                                        <if condition="$config['initdiamond'] === false ">
+                                            <input class="form-control"  type="text" disabled ='disabled' />
+                                            <span class='text-danger'> 后端未查询到相关配置项，请确定该功能是否上线 </span>
+                                        <else />
+                                            <input class="form-control" id="gameInitDiamond" type="text" name="initdiamond" value='{$config.initdiamond}' />
+                                        </if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label request" for="gameInitGold">初始元宝数量</label>
+                                    <div class="col-sm-4">
+                                        <if condition="$config['initgold'] === false ">
+                                            <input class="form-control"  type="text" disabled ='disabled' />
+                                            <span class='text-danger'> 后端未查询到相关配置项，请确定该功能是否上线</span>
+                                        <else />
+                                            <input class="form-control" id="gameInitGold" type="text" name="initgold" value='{$config.initgold}' />
+                                        </if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-7">
+                                        <button class="btn btn-success" type="button" id='saveGameConfig' style="margin: 0 auto ;display: block;width: 150px;" <if condition="$config['initgold'] === false && $config['initdiamond'] === false  "> disabled ='disabled' </if> >保存修改</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+<script type="text/javascript">
+    var gameConfig = <if condition="$config"> {$config|json_encode} <else /> {} </if>;
+</script>
+<js href="/Public/Js/gameconfig/setting.js?v={:time()}" />

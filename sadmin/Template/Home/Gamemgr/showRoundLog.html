@@ -1,0 +1,161 @@
+<div class="header">
+    <h1 class="page-header">牌局日志</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-sm-12">
+                       
+<!--                            <button type="button" class="btn btn-default btn-sm">导出excel</button>-->
+                            <!-- 导出回放文件 -->
+                            <button type="button" class="btn btn-default btn-sm" 
+                                    data-toggle="modal"
+                                    data-target="#downloadMod"
+                                    id="downloadBtn">导出回放文件</button>
+                        
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <present name="errMsg">
+    <div class="row">
+        <div class="col-sm-12 well">
+            <p class="text-danger">{$errMsg}</p>
+        </div>
+    </div>
+    <else />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                            <thead>
+                                <tr role="row">
+                                    <th><div style="width: 80px;">ID</div></th>
+                                    <th><div style="width: 80px;">局数</div></th>
+                                    <th><div style="width: 130px;">参与者1</div></th>
+                                    <th><div style="width: 80px;">参与者1_ID</div></th>
+                                    <th><div style="width: 80px;">得分</div></th>
+                                    <th><div style="width: 130px;">参与者2</div></th>
+                                    <th><div style="width: 80px;">参与者2_ID</div></th>
+                                    <th><div style="width: 80px;">得分</div></th>
+                                <if condition="$roominfo['userCount'] gt 2"> 
+                                    <th><div style="width: 130px;">参与者3</div></th>
+                                    <th><div style="width: 80px;">参与者3_ID</div></th>
+                                    <th><div style="width: 80px;">得分</div></th>
+                                </if>
+                                <if condition="$roominfo['userCount'] gt 3"> 
+                                    <th><div style="width: 130px;">参与者4</div></th>
+                                    <th><div style="width: 80px;">参与者4_ID</div></th>
+                                    <th><div style="width: 80px;">得分</div></th>
+                                </if>
+                                    <th><div style="width: 140px;">开始时间</div></th>
+                                    <th><div style="width: 140px;">结束时间</div></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <if condition="!empty($list)">
+                                <volist name="list" id="vo">
+                                    <tr>
+                                        <td>{$vo.id}</td>
+                                        <td>{$i}/{$gameCount}</td>
+                                        <td>{$vo.userName1}</td>
+                                        <td>{$vo.userId1}</td>
+                                        <td>{$vo.userCashDiff1}</td>
+                                        <td>{$vo.userName2}</td>
+                                        <td>{$vo.userId2}</td>
+                                        <td>{$vo.userCashDiff2}</td>
+                                        <if condition="$roominfo['userCount'] gt 2"> 
+                                            <td>{$vo.userName3}</td>
+                                            <td>{$vo.userId3}</td>
+                                            <td>{$vo.userCashDiff3}</td>
+                                        </if>
+                                        <if condition="$roominfo['userCount'] gt 3"> 
+                                            <td>{$vo.userName4}</td>
+                                            <td>{$vo.userId4}</td>
+                                            <td>{$vo.userCashDiff4}</td>
+                                        </if>
+                                        <td>{$vo.gameStartTime}</td>
+                                        <td>{$vo.date}</td>
+                                    </tr>
+                                </volist>
+                                <else />
+                                <tr>
+                                    <td colspan="16" class="text-center">无相关战绩记录</td>
+                                </tr>
+
+                            </if>
+                            </tbody>
+                            <!-- 统计信息 -->
+                            <tfoot>
+                                <tr>
+                                    <td colspan="16"  style="padding:20px; "> 
+                                        牌局总计：（{$roominfo.gameStartTime}  —— {$roominfo.gameStopTime} ）<br />
+                                        <if condition=" $roominfo['showFreeUser'] eq 'club' ">
+                                            俱乐部付费：(俱乐部ID:{$roominfo.clubId},付费:{$roominfo.roomFee}钻)<br />
+                                        </if>
+                                        
+                                        用户1：<if condition="($roominfo['showFreeUser'] eq $roominfo['userId1']) || $roominfo['showFreeUser'] eq 'AA' ">({$roominfo.roomFreeType}：{$roominfo.roomFee}钻)</if> {$roominfo.userName1} &nbsp; 得分：{$roominfo.userCashDiff1} <br />
+                                        用户2：<if condition="($roominfo['showFreeUser'] eq $roominfo['userId2']) || $roominfo['showFreeUser'] eq 'AA' ">({$roominfo.roomFreeType}：{$roominfo.roomFee}钻)</if> {$roominfo.userName2} &nbsp; 得分：{$roominfo.userCashDiff2} <br />
+                                        <if condition="$roominfo['userCount'] gt 2"> 
+                                        用户3：<if condition="($roominfo['showFreeUser'] eq $roominfo['userId3']) || $roominfo['showFreeUser'] eq 'AA' ">({$roominfo.roomFreeType}：{$roominfo.roomFee}钻)</if> {$roominfo.userName3} &nbsp; 得分：{$roominfo.userCashDiff3} <br />
+                                        </if>
+                                        <if condition="$roominfo['userCount'] gt 3"> 
+                                        用户4：<if condition="($roominfo['showFreeUser'] eq $roominfo['userId4']) || $roominfo['showFreeUser'] eq 'AA' ">({$roominfo.roomFreeType}：{$roominfo.roomFee}钻)</if> {$roominfo.userName4} &nbsp; 得分：{$roominfo.userCashDiff4}
+                                        </if>
+                                    </td>
+                                </tr>
+                                
+                            </tfoot>
+                            
+                            
+                            
+                            
+                        </table>
+                        {$pagination}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</present>
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-primary btn-sm" style="margin: 0px auto;padding: 10px 40px ;display: block;" onclick="window.history.back()">返回</button>   
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Add Goods Start -->
+<div class="modal fade" id="downloadMod" tabindex="-1" role="dialog" aria-labelledby="downloadModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addModalLabel">点击下载回放文件</h4>
+            </div>
+            <div class="modal-body" style="padding-right:50px;">
+                <volist name="roominfo['playBackNames']" id="vo">
+                    <p>回放文件({$i})：<if condition="$resource_url"><a href="{$resource_url}{$vo}" target="_blank">{$vo}</a><else /> {$vo}</if> </p>
+                </volist>
+            </div>
+           
+        </div>
+    </div>
+</div>
+<!-- Add Goods End -->
+

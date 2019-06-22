@@ -1,0 +1,188 @@
+
+<div class="header">
+    <h1 class="page-header">黑名单设置</h1>
+</div>
+<div id="page-inner">
+    <!-- 查询栏 -->
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" role="form" method="get" action="/Gameconf/gameAppBlackList">
+                        <!-- 类型 -->
+                        <div class="form-group">
+                            <label class="sr-only">type</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">类型</div>
+                                <select class="form-control" id="blackType" name="black_type">
+                                    <option value="0">全部</option>
+                                    <foreach name="typeMap" item="v">
+                                        <option value="{$key}">{$v.name}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 黑名单 -->
+                        <div class="form-group">
+                            <label class="sr-only">blacklist</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">黑名单</div>
+                                <input class="form-control" id="blackVal" name="black_val" type="text" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-query">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-8 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>类型</th>
+                                        <th>黑名单</th>
+                                        <th>备注</th>
+                                        <th>
+                                            <present name="mgrFlag">
+                                                <button
+                                                    class="btn btn-sm btn-success"
+                                                    type="button"
+                                                    data-toggle="modal"
+                                                    data-target="#addMod"
+                                                >添加
+                                                </button>
+                                            </present>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <td>{$v.id}</td>
+                                            <td>
+                                                <span class="label {$typeMap[$v['black_type']]['label']}">
+                                                    {$typeMap[$v['black_type']]['name']}
+                                                </span>
+                                            </td>
+                                            <td>{$v.black_val}</td>
+                                            <td>{$v.remark}</td>
+                                            <td>
+                                                <present name="mgrFlag">
+                                                    <button
+                                                        class="btn btn-sm btn-danger"
+                                                        type="button"
+                                                        data-toggle="modal"
+                                                        data-target="#delMod"
+                                                        data-id="{$v.id}"
+                                                        data-blackval="{$v.black_val}"
+                                                    >删除
+                                                    </button>
+                                                </present>
+                                            </td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addMod" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addModalLabel">添加黑名单</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addModForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request">类型</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="addModBlackType" name="black_type">
+                                <foreach name="typeMap" item="v">
+                                    <option value="{$key}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModBlackVal">黑名单</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModBlackVal" type="text" name="black_val" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="addModRemark">备注</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModRemark" type="text" name="remark" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" onclick="submitAddBlackList();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete modal -->
+<div class="modal fade" id="delMod" tabindex="-1" role="dialog" aria-labelledby="delModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="delModalLabel">删除黑名单</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">是否确定删除黑名单
+                                <span class='text-danger' id='delModBlackVal'></span>
+                            </p>
+                            <input type="hidden" id="delModId" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="submitDelBlackList();">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+var query = {$query};
+var userList = {:json_encode($list)};
+</script>
+
+<js href="/Public/Js/gameconfig/game-app-blacklist.js" />

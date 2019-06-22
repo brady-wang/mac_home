@@ -1,0 +1,315 @@
+
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload-ui.css" />
+
+<style>
+.ver-no-border { border-top: none !important; }
+.ver-head-background { background: #B0B0B0; }
+.ver-pagination-top { margin-top: 0px; }
+</style>
+
+<div class="header">
+    <h1 class="page-header">版本管理</h1>
+</div>
+<div id="page-inner">
+    <!-- 查询栏 -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" role="form" method="get" action="/Gameconf/gameAppVersion">
+                        <!-- 渠道号 -->
+                        <div class="form-group">
+                            <label class="sr-only">code</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">渠道号</div>
+                                <input class="form-control" id="channelCode" name="channel_code" type="text" />
+                            </div>
+                        </div>
+                        <!-- 渠道名 -->
+                        <div class="form-group has-feedback">
+                            <label class="sr-only">channel name</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">渠道名</span>
+                                <input class="form-control" id="channelName" name="channel_name_like" type="text" />
+                            </div>
+                            <span class="glyphicon glyphicon-option-horizontal form-control-feedback" aria-hidden="true"></span>
+                        </div>
+                        <button type="submit" class="btn btn-query">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>渠道号</th>
+                                        <th>渠道名</th>
+                                        <th>包名</th>
+                                        <th>最新版本</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr class="ver-border-color text-danger" id="channelTr{$v.code}">
+                                            <td class="td-valign-middle">{$v.code}</td>
+                                            <td class="td-valign-middle">{$v.name}</td>
+                                            <td class="td-valign-middle">{$v.package_name}</td>
+                                            <td class="td-valign-middle">{$v.latest_version}</td>
+                                            <td>
+                                                <eq name="mgrFlag" value="1">
+                                                    <button
+                                                        class="btn btn-sm btn-success"
+                                                        type="button"
+                                                        data-chncode="{$v.code}"
+                                                        data-chnname="{$v.name}"
+                                                        data-lver="{$v.latest_version}"
+                                                        onclick="clickAddVersion($(this));"
+                                                    >提交版本
+                                                    </button>
+                                                </eq>
+                                            </td>
+                                            <td class="td-valign-middle">
+                                                <!-- 展开/收起 icon -->
+                                                <a href="javascript:void(0)" onclick="clickTogglePlane({$v.code}, $(this));">
+                                                    <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr id="plane{$v.code}" hidden>
+                                            <td class="ver-no-border" colspan="5">
+                                                <div id="planeDiv{$v.code}" hidden>
+                                                    <table class="table table-hover table-condensed well">
+                                                        <thead>
+                                                            <tr class="ver-head-background">
+                                                                <th>序号</th>
+                                                                <th>版本号</th>
+                                                                <th>上线状态</th>
+                                                                <th>更新时间</th>
+                                                                <th>版本备注</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="planeBody{$v.code}">
+                                                        </tbody>
+                                                    </table>
+                                                    <div id="planePage{$v.code}">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="ver-no-border"></td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addMod" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addModalLabel">提交版本</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addModForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">渠道名</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="addModChnName"></p>
+                            <input id="addModChnCode" type="hidden" name="channel_code" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">最新版本号</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="addModLatestVersion"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label text-info request">
+                            <span class="tiptip" title="游戏版本号必须大于当前最新版本号，且仅能填以点号分隔的纯数字，提交后不能修改">游戏版本号</span>
+                        </label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="addModUpdateVersion" type="text" name="update_version" placeholder="游戏版本号必须大于当前最新版本号" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label text-info request">
+                            <span class="tiptip" title="提交后不能修改">更新方式</span>
+                        </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="addModUpdateMode" name="update_mode">
+                                <foreach name="modeMap" item="v">
+                                    <option value="{$key}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <fieldset id="addModRepFS">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label request" for="addModFourceUrl">强更地址</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="addModFourceUrl" type="text" name="update_url" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset id="addModPacFS" hidden>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label text-info request">
+                                <span class="tiptip" title="仅支持Zip压缩文件">资源文件</span>
+                            </label>
+                            <div class="col-sm-6">
+                                <span class="btn btn-success fileinput-button" id="addModUpResBtn" data-tag="add">
+                                    <span>上传</span>
+                                    <span class="badge" id="addModUpResBadge">
+                                        <span class="glyphicon glyphicon-arrow-up"></span>
+                                    </span>
+                                    <input type="file" name="resource_file" id="addModUpResInput" />
+                                </span>&nbsp;&nbsp;
+                                <span class="text-success" id="addModUpFileView"></span>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="addModRemark">备注</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" id="addModRemark" type="text" name="remark" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" onclick="submitAddVersion();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edt Modal -->
+<div class="modal fade" id="edtMod" tabindex="-1" role="dialog" aria-labelledby="edtModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="edtModalLabel">修改信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="edtModForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">序号</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="edtModId"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">渠道名</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="edtModChnName"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">最新版本号</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="edtModLatestVersion"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">游戏版本号</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="edtModUpdateVersion"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">更新方式</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static" id="edtModUpdateMode"></p>
+                        </div>
+                    </div>
+                    <fieldset id="edtModRepFS">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label request" for="edtModFourceUrl">强更地址</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="edtModFourceUrl" type="text" name="update_url" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset id="edtModPacFS">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label text-info request">
+                                <span class="tiptip" title="仅支持Zip压缩文件">资源文件</span>
+                            </label>
+                            <div class="col-sm-6">
+                                <span class="btn btn-primary fileinput-button" id="edtModUpResBtn" data-tag="edit">
+                                    <span>上传</span>
+                                    <span class="badge" id="edtModUpResBadge">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </span>
+                                    <input type="file" name="resource_file" id="edtModUpResInput" />
+                                </span>&nbsp;&nbsp;
+                                <span class="text-success" id="edtModUpFileView"></span>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="edtModRemark">备注</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" id="edtModRemark" type="text" name="remark" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" onclick="submitEdtVersion();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 操作权限
+var mgrFlag = {$mgrFlag};
+var pubFlag = {$pubFlag};
+
+// 参数
+var query = {$query};
+
+// 相关 map
+var modeMap = {:json_encode($modeMap)};
+var statusMap = {:json_encode($statusMap)};
+</script>
+
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/vendor/jquery.ui.widget.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.iframe-transport.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.fileupload.js" />
+<js href="/Public/Js/gameconfig/game-app-version.js" />

@@ -1,0 +1,156 @@
+
+<style>
+#setting-box input::-webkit-outer-spin-button, #setting-box input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+}
+.game-config-feed > thead > tr > th {
+    border-bottom-width: 1px;
+}
+</style>
+
+<div class="header">
+    <h1 class="page-header">房费配置</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <div class="panel panel-default">
+                                    <ul class="list-unstyled show-game-list" id="gamelist-box">
+                                        <volist name="gamelist" id="vo">
+                                            <li class="gameList" <if condition="$vo['placeID'] eq $placeid && $vo['gameId'] eq $gid"> style="background:#eee;" </if> ><a href="/Gameconf/game/third/gamefeed/gid/{$vo.gameId}/placeid/{$vo.placeID}"><span class="tree-leaf-selected">{$vo.gameName}</span></a> </li>
+                                        </volist>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-xs-10">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"></div>
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered game-config-feed">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="10%" class="text-center" style="vertical-align: middle;" rowspan="2">局数</th>
+                                                        <th width="27%" colspan='3' class="text-center">房主付费</th>
+                                                        <th width="27%" colspan='3' class="text-center">AA付费</th>
+                                                        <th width="26%" colspan='3' class="text-center">大赢家付费</th>
+                                                        <th width="10%" class="text-center" style="vertical-align: middle;" rowspan="2">操作</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center">2人</th>
+                                                        <th class="text-center">3人</th>
+                                                        <th class="text-center">4人</th>
+                                                        <th class="text-center">2人</th>
+                                                        <th class="text-center">3人</th>
+                                                        <th class="text-center">4人</th>
+                                                        <th class="text-center">2人</th>
+                                                        <th class="text-center">3人</th>
+                                                        <th class="text-center">4人</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="setting-box">
+                                                    <foreach name="setting" item="vo" key="k" >
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-control settingInput" type="number" id="code{$k}" data-item="{$k}" name="code" value="{$k}" maxlength ="3" <if condition="in_array($k,array(4,8,16) )"> disabled ="disabled" </if> />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInput commonInput" type="number" id="commonInput{$k}-2" data-item="{$k}" data-gameuser="2" data-itemtype="common" data-oldvalue="{$vo['common']['2']}"  name="common[2]" value="{$vo['common']['2']}" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInput commonInput" type="number" id="commonInput{$k}-3" data-item="{$k}" data-gameuser="3" data-itemtype="common" data-oldvalue="{$vo['common']['3']}"  name="common[3]" value="{$vo['common']['3']}" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInput commonInput" type="number" id="commonInput{$k}-4" data-item="{$k}" data-gameuser="4" data-itemtype="common" data-oldvalue="{$vo['common']['4']}"  name="common[4]" value="{$vo['common']['4']}" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInput" type="number" id="aaInput{$k}-2" data-item="{$k}"  data-itemtype="AA" data-gameuser="2" data-oldvalue="{$vo['AA']['2']}"  name="AA[2]" value="{$vo['AA']['2']}" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInput" type="number" id="aaInput{$k}-3" data-item="{$k}" data-itemtype="AA" data-gameuser="3" data-oldvalue="{$vo['AA']['3']}"   name="AA[3]" value="{$vo['AA']['3']}" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInput" type="number" id="aaInput{$k}-4" data-item="{$k}" data-itemtype="AA" data-gameuser="4" data-oldvalue="{$vo['AA']['4']}"   name="AA[4]" value="{$vo['AA']['4']}" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInput" type="number" id="ownerInput{$k}-2" data-item="{$k}" data-itemtype="owner" data-gameuser="2" data-oldvalue="{$vo['common']['2']}"   name="owner[2]" value="{$vo['common']['2']}" disabled ="disabled" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInput" type="number" id="ownerInput{$k}-3" data-item="{$k}" data-itemtype="owner" data-gameuser="3" data-oldvalue="{$vo['common']['2']}"   name="owner[3]" value="{$vo['common']['3']}" disabled ="disabled" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInput" type="number" id="ownerInput{$k}-4" data-item="{$k}" data-itemtype="owner" data-gameuser="4" data-oldvalue="{$vo['common']['2']}"   name="owner[4]" value="{$vo['common']['4']}" disabled ="disabled"/>
+                                                        </td>
+                                                        <td>
+                                                            <if condition="!in_array($k,array(4,8,16) )">
+                                                            <button style="display: none;" class="btn btn-default setting-delete" type="button">删除</button>
+                                                            </if>
+                                                        </td>
+                                                    </tr>
+                                                    </foreach>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-control settingInputNew" type="number" id="codeNew" name="code" data-item="" value="" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInputNew commonInput" type="number" id="commonInputNew-2" data-item="New-2"  name="code" value="" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInputNew commonInput" type="number" id="commonInputNew-3" data-item="New-3"  name="code" value="" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInputNew commonInput" type="number" id="commonInputNew-4" data-item="New-4"  name="code" value="" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInputNew" type="number" id="aaInputNew-2"  name="code" value="" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInputNew" type="number" id="aaInputNew-3"  name="code" value="" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInputNew" type="number" id="aaInputNew-4"  name="code" value="" />
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInputNew" type="number" id="ownerInputNew-2"  name="code" value="" disabled ="disabled"/>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInputNew" type="number" id="ownerInputNew-3"  name="code" value="" disabled ="disabled"/>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control settingInputNew" type="number" id="ownerInputNew-4"  name="code" value="" disabled ="disabled"/>
+                                                        </td>
+                                                        <td>
+                                                            <button style="display: none;" class="btn btn-default" id="setting-add" type="button">新增</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <button class="btn btn-success" type="button" id='saveSetting' style="margin: 0 auto ;display: block;width: 150px;">保存修改</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+<script type="text/javascript">
+    var PLACEID = '{$palceId}'; //地区ID
+    var GAMEIDS = '{$gid}'; //玩法ID
+    var IS_CHANGE = false ; //是否修改
+</script>
+<js href="/Public/Js/gameconfig/setting.js?v={:time()}" />

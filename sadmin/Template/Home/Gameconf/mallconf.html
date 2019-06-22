@@ -1,0 +1,348 @@
+
+<css href="/Public/Lib/bootstrap-datetimepicker-2.4.4/css/bootstrap-datetimepicker.min.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload-ui.css" />
+
+<style>
+.fixed-width-td {
+    width: 110px;
+}
+</style>
+
+<div class="header">
+    <h1 class="page-header">兑换商城</h1>
+</div>
+<div id="page-inner">
+    <!-- 查询栏 -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-pills switchBar fixed-width-200 pull-left">
+                        <li<if condition="$tabthird eq 'mallconf'"> class="active" </if>>
+                            <a href="/Gameconf/mall/third/mallconf" style="padding: 7px 15px;">已上架</a>
+                        </li>
+                        <!--
+                        <li<if condition="$tabthird eq 'malllist'"> class="active" </if>>
+                            <a href="/Gameconf/mall/third/malllist" style="padding: 7px 15px;">已下架</a>
+                        </li>
+                        -->
+                    </ul>
+                    <form class="form-inline" role="form" method="get" action="/Gameconf/mall/third/mallconf">
+                        <div class="form-group">
+                            <label class="sr-only">proince</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">兑换类型</div>
+                                <select class="form-control" id="proinceCode" name="type">
+                                    <option value="0">全部分类</option>
+                                    <option value="1">钻石区</option>
+                                    <option value="2">兑换券区</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-query">搜索</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-lg-10 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">商品id</th>
+                                        <th width="30%">商品名称</th>
+                                        <th width="15%">类型</th>
+                                        <th width="15%">商品图标</th>
+                                        <th width="15%">兑换价格</th>
+                                        <th class="fixed-width-td">
+                                            <button
+                                                class="btn btn-sm btn-success"
+                                                type="button"
+                                                data-toggle="modal"
+                                                data-target="#addMod"
+                                                id="addBtn"
+                                            >添加</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <volist name="list" id="v">
+                                        <tr>
+                                            <td>
+                                                <a class="text-primary" href="javascript:void(0)" >
+                                                    {$v.id}
+                                                </a>
+                                            </td>
+                                            <td>{$v.name}</td>
+                                            <td>红包</td>
+                                            <td>
+                                                <if condition="$v['image'] ">
+                                                    <img src ="{$v.image}" style="width:50px;height: 50px;" />
+                                                </if>
+                                            </td>
+                                            <td>
+                                            <switch name="v['priceType']">
+                                                <case value="10008">{$v.priceNumber} 钻石</case>
+                                                <case value="10009">{$v.priceNumber} 元宝</case>
+                                                <default />{$v.priceNumber} 
+                                            </switch>
+                                            </td>
+                                            <td>
+                                                <if condition="$v['status'] eq 0">
+                                                    <a class="btn btn-sm btn-default editBtn" data-id="{$v.id}"  data-toggle="modal" data-target="#editMod">上架</a>
+                                                    <a class="btn btn-sm btn-danger deleteBtn"   data-id="{$v.id}">删除</a>
+                                                <else />
+                                                        <!--<a class="btn btn-sm btn-default offGoodsBtn"  data-id="{$v.id}">下架</a>-->
+                                                    <a class="btn btn-sm btn-danger deleteBtn"   data-id="{$v.id}">删除</a>
+                                                    <a class="btn btn-sm btn-primary editBtn"   data-id="{$v.id}" data-toggle="modal" data-target="#editMod">编辑</a>
+                                                </if>
+                                            </td>
+                                        </tr>
+                                    </volist>
+                                </tbody>
+                            </table>
+                            {$pagehtml}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<!-- Add Goods Start -->
+<div class="modal fade" id="addMod" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addModalLabel">添加物品</h4>
+            </div>
+            <div class="modal-body" style="padding-right:50px;">
+                <form class="form-horizontal" id="addModForm">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="addModType">物品类型</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="addModType" name="type">
+                                <option value="0">红包</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-2 control-label request" for="addModId">物品编号</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="addModId" type="text" name="code" value="{$insertId}" disabled ="disabled" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="addModName">物品名称</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="addModName" type="text" name="name" />
+                        </div>
+                        <label class="col-sm-2 control-label request" >物品属性</label>
+                        <div class="col-sm-4">
+                            <div class="checkbox3 checkbox-round checkbox-check checkbox-light">
+                                <input type="checkbox" id="checkboxIsHot" value="1" name="isHot">
+                                <label for="checkboxIsHot">热门</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="addModImgBtn">选择图片</label>
+                        <div class="col-sm-4">
+                            <span class="btn btn-success fileinput-button" id="addModImgBtn" data-tag="add">
+                                <span>上传图片</span>
+                                <span class="badge" id="addModImgBadge">
+                                    <span class="glyphicon glyphicon-arrow-up"></span>
+                                </span>
+                                <input type="file" name="image" id="addModImgInput" />
+                            </span>
+                        </div>
+                        <input  id="addModImages" type="hidden"  />
+                        <label class="col-sm-2 control-label request" for="addGoodsProba">红包概率设置</label>
+                        <div class="col-sm-4">
+                            <button class="btn btn-default editGoodsProbaBtn" type="button"  data-id="addGoodsProba" data-model="addGoodsProba" >编辑概率</button>
+                        </div>
+                    </div>
+                    <div class="form-group mallImgPreviewDiv" id="addModImgPreviewDiv" hidden>
+                        <div class="col-sm-8 col-sm-offset-3">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="addModPriceType">货币类型</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="addModPriceType" name="type">
+                                <option value="10009">元宝</option>
+                                <option value="10008">钻石</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-2 control-label request" for="addModPrice">物品价格</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="addModPrice" type="number" name="price" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">退出</button>
+                <button class="btn btn-success" type="button" id="addMallGoodsBtn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add Goods End -->
+
+<!-- Edit Goods Start -->
+<div class="modal fade" id="editMod" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="editModalLabel">编辑物品</h4>
+            </div>
+            <div class="modal-body" style="padding-right:50px;">
+                <form class="form-horizontal" id="editModForm">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="editModType">物品类型</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="editModType" name="type">
+                                <option value="0">红包</option>
+                            </select>
+                            <input class="form-control" id="id" type="hidden" name="id" value="" />
+                            <input class="form-control" id="rewardid" type="hidden" name="rewardid" value="" />
+                        </div>
+                        <label class="col-sm-2 control-label request" for="editModId">物品编号</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="editModId" type="text" name="code" value="" disabled ="disabled" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="editModName">物品名称</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="editModName" type="text" name="name" />
+                        </div>
+                        <label class="col-sm-2 control-label request" >物品属性</label>
+                        <div class="col-sm-4">
+                            <div class="checkbox3 checkbox-round checkbox-check checkbox-light" id="editcheckbox">
+                                <input type="checkbox" id="editcheckboxIsHot" value="1" name="isHot">
+                                <label for="checkboxIsHot">热门</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="editModImgBtn">选择图片</label>
+                        <div class="col-sm-4">
+                            <span class="btn btn-success fileinput-button" id="editModImgBtn" data-tag="add">
+                                <span>上传图片</span>
+                                <span class="badge" id="editModImgBadge">
+                                    <span class="glyphicon glyphicon-arrow-up"></span>
+                                </span>
+                                <input type="file" name="image" id="editModImgInput" />
+                            </span>
+                        </div>
+                        <input  id="editModImages" type="hidden"  />
+                        <label class="col-sm-2 control-label request" for="editGoodsProba">红包概率设置</label>
+                        <div class="col-sm-4">
+                            <button class="btn btn-default editGoodsProbaBtn" type="button"  data-id="editGoodsProba"  data-model="editGoodsProba"  >编辑概率</button>
+                        </div>
+                    </div>
+                    <div class="form-group mallImgPreviewDiv" id="editModImgPreviewDiv" hidden>
+                        <div class="col-sm-8 col-sm-offset-3">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label request" for="addModPriceType">货币类型</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="editModPriceType" name="type">
+                                <option value="10009">元宝</option>
+                                <option value="10008">钻石</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-2 control-label request" for="editModPrice">物品价格</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="editPrice" type="number" name="price" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">退出</button>
+                <button class="btn btn-success" type="button" id="editModMallGoodsBtn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Goods End -->
+
+<!-- Edit Goods Proba -->
+<div class="modal fade" id="editGoodsProba" tabindex="1" role="dialog" aria-labelledby="editGoodsProba">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="editModalLabel">红包概率设置</h4>
+            </div>
+            <div class="modal-body" style="padding-right:50px; max-height: 600px; overflow-y: scroll;">
+                <form class="form-horizontal" id="probaBox">
+                    <div class="form-group" style="border-bottom: 1px solid #eee;margin-left: 20px;">
+                        <div class="col-sm-2"> <span style="padding:20px; font-size: 26px; display: block;text-align: center;" class="listNumber">1</span> </div>
+                        <div class="col-sm-4">
+                            <div  style="clear:both;height:45px;">
+                                <label class="control-label request pull-left">红包下限 ：</label>
+                                <input class="form-control proba-price-down proba-input-check" data-oldvalue="" type="text" name="proba-price-down" value="" style="width:50%;float:left" /> 
+                                <label class="control-label request" >元</label>
+                            </div>
+                            <div style="height:45px;">
+                                <label class="control-label request pull-left">红包上限 ：</label>
+                                <input class="form-control proba-price-up proba-input-check" data-oldvalue="" type="text" name="proba-price-up" value="" style="width:50%;float:left" /> 
+                                <label class="control-label request" >元</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div style="height:45px; margin: 20px 0 0 0;">
+                                <label class="control-label request pull-left">获得概率 ：</label> 
+                                <input class="form-control proba-percent proba-input-check" data-oldvalue="" type="text" name="proba-percent" value="" style="width:50%;float:left" /> 
+                                <label class="control-label request" >%</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-warning proba-delete-btn" type="button"  style=" margin: 20px 0 0 0;" >删除</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="form-group text-center">
+                    <button class="btn btn-default" type="button" id="proba-add-btn" >新增</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-model="" id="cancelProbaBtn">退出</button>
+                <button class="btn btn-success" type="button" id="saveProbaBtn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Goods End -->
+
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/bootstrap-datetimepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/locales/bootstrap-datetimepicker.zh-cn.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/vendor/jquery.ui.widget.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.iframe-transport.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.fileupload.js" />
+<js href="/Public/Js/gameconfig/mall.js?v={:time()}" />

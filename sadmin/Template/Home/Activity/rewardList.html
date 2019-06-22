@@ -1,0 +1,139 @@
+
+<css href="/Public/Lib/ui-choose/ui-choose.css"/>
+
+<div class="header">
+    <h2 class="page-header">活动管理</h1>
+</div>
+<!-- 查询栏 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-inline" role="form" method="get" action="/Activity/actList">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">活动名称</div>
+                            <input class="form-control" name="name" type="text" />
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <div class="input-group">
+                            <div class="input-group-addon">开始时间</div>
+                            <input class="form-control" name="stime" type="text" readonly="readonly"/>
+                        </div>
+                        <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <div class="input-group">
+                            <div class="input-group-addon">结束时间</div>
+                            <input class="form-control" name="stime" type="text" readonly="readonly"/>
+                        </div>
+                        <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                    </div>
+                    <button type="submit" name="search" class="btn btn-query">查询</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <button class="btn btn-sm btn-success" type="button" data-toggle="modal" data-target="#addMod">添加</button>
+            </div>
+
+            <div class="panel-body">
+                <table class="table table-striped table-bordered table-hover dataTable no-footer td-align-middle td-valign-middle">
+                    <thead>
+                        <tr role="row" class="td-align-middle">
+                            <th>序号</th>
+                            <th>名称</th>
+                            <th>上线产品</th>
+                            <th>活动时间</th>
+                            <th>更新信息</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="rewardData" id="vo">
+                            <tr>
+                                <td>{$vo.Id}</td>
+                                <td>{$vo.name}</td>
+                                <td>{$vo.pName}</td>
+                                <td>{$vo.actTime}</td>
+                                <td>{$vo.updateInfo}</td>
+                                <td>{$vo.status}</td>
+                                <td>
+                                    <a href="#" class="btn btn-default dataButton" data-items="brokeTimes">配置活动</a>
+                                    <a href="#" class="btn btn-default dataButton" data-items="brokeTimes">运营统计</a>
+                                </td>
+                            </tr>
+                        </volist>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addMod" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+    <div class="modal-dialog" role="document" style="width:800px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addModalLabel">添加活动</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addModForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 request">活动名称</label>
+                        <div class="col-sm-6 input-group">
+                            <input class="form-control" type="text" name="name" />
+                        </div>
+                    </div>
+
+                    <div class="form-group check-dotted">
+                        <label class="col-sm-3 request">上线产品</label>
+                        <div class="input-group">
+                            <ul class="ui-choose" name="pid[]" id="gameId">
+                                <li value=0>全部</li>
+                                <foreach name="gameData" item="vo" key="k">
+                                    <li value="{$k}">{$vo}</li>
+                                </foreach>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 request">活动开始时间</label>
+                        <div class="col-sm-6 input-group">
+                            <input class="form-control" type="text" name="stime" readonly="readonly"/>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 request">活动结束时间</label>
+                        <div class="col-sm-6 input-group">
+                            <input class="form-control" type="text" name="etime" readonly="readonly"/>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" onclick="submitAddAct();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Lib/ui-choose/ui-choose.js" />
+<js href="/Public/Js/activity/activity.js" />

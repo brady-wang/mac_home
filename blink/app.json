@@ -1,0 +1,22 @@
+{
+  "pages" : [
+    "pages/classic/classic"
+  ],
+
+  "window": {
+    "navigationBarBackgroundColor":"#fff",
+    "navigationBarTextStyle":"black",
+    "navigationBarTitleText":"风行天下",
+    "backgroundColor":"#fff",
+    "enablePullDownRefresh":false
+  },
+
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "debug": true,
+  "navigateToMiniProgramAppIdList": [
+    "wxe5f52902cf4de896"
+  ]
+}

@@ -1,0 +1,145 @@
+
+<css href="/Public/Lib/bootstrap-datetimepicker-2.4.4/css/bootstrap-datetimepicker.min.css" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/bootstrap-datetimepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/locales/bootstrap-datetimepicker.zh-cn.js" />
+<div class="header"> 
+    <h1 class="page-header">限时免钻</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-3 control-label request">起始时间</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="starttime" name="starttime" type="text" value="{$starttime}" />
+                                    <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="col-sm-3 control-label request">结束时间</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" id="endtime" name="endtime" type="text" value="{$endtime}" />
+                                    <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">活动是否结束</label>
+                                <div class="col-sm-3">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="active" value="1" {$active1} /> 开启
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="active" value="0" {$active0}/> 结束
+                                    </label>
+                                </div>
+                            </div>
+                            <present name="profreeFlag">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">&nbsp;</label>
+                                    <button class="btn btn-success" type="button" onclick="return saveFreeDio();">保存</button>
+                                </div>
+                            </present>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+<script>
+    function saveFreeDio() {
+        var data = {};
+        var tipinfo = [];
+        var stime = data.starttime = $("#starttime").val();
+        var etime = data.endtime = $("#endtime").val();
+        if (stime == "") {
+            $.zmsg.error("必须选择起始日期");
+            return false;
+        } 
+        if (etime == "") {
+            $.zmsg.error("必须选择结束时间");
+            return false;
+        }
+        if (stime) {
+            stime = Date.parse(new Date(stime));
+            stime = stime / 1000;
+        }
+        if (etime) {
+            etime = Date.parse(new Date(etime));
+            etime = etime / 1000;
+        }
+        if (stime >= etime) {
+            $.zmsg.error("结束时间必须大于开始时间");
+            return false;            
+        }
+        data.active = $("input[name=active]:checked").val();
+        
+        tipinfo.push({title: '起始时间', value: data.starttime});
+        tipinfo.push({title: '结束时间', value: data.endtime});
+        tipinfo.push({title: '活动是否开启', value: (data.active==1?'开启':'结束')});
+        var tip = '<table style="width: 80%; margin: auto;">';
+        for (var idx = 0; idx < tipinfo.length; idx++) {
+            tip += '<tr class="text-danger"><td class="text-success">'+tipinfo[idx].title+'</td><td>'+tipinfo[idx].value+'</td></tr>';
+        }
+        tip += '</table>';
+        $.Zebra_Dialog(tip, {
+            'title': '更改配置确认',
+            'animation_speed_show': 500,
+            'center_buttons': true,
+            'type': '',
+            'buttons': ['取消', '确定'],
+            'onClose': function(caption) {
+                if ('取消' == caption) {
+                } else if ('确定' == caption) {
+                    $.loading.show("saveConfLoading");
+                    $.ajax({
+                        url: "/Gameconf/ajaxSaveProDio",
+                        type: "POST",
+                        data: data,
+                        dataType: "json",
+                        success: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            if (0 == data.code) {
+                                $.zmsg.success('/Gameconf/project/third/profreedio');//$.zmsg.info('保存成功');
+                            } else {
+                                $.zmsg.error(data.msg);
+                            }
+                        },
+                        error: function(data) {
+                            $.loading.hide('saveConfLoading');
+                            $.zmsg.fatal(data.responseText);
+                        }
+                    });
+                }
+            }
+        });
+        return false;
+    }
+$(document).ready(function() {
+    $("input[name=starttime]").datetimepicker({
+        language: "zh-CN",
+        autoclose: true,
+        clearBtn: true,
+        //endDate: new Date(),//new Date(new Date().valueOf() - 24 * 3600 * 1000),
+        //todayBtn: true,
+        format: "yyyy-mm-dd hh:ii:00"
+    });
+    $("input[name=endtime]").datetimepicker({
+        language: "zh-CN",
+        autoclose: true,
+        clearBtn: true,
+        //endDate: new Date(),//new Date(new Date().valueOf() - 24 * 3600 * 1000),
+        format: "yyyy-mm-dd hh:ii:00"
+    });
+});
+</script>

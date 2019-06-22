@@ -1,0 +1,183 @@
+<css href="/Public/Lib/zTree/zTreeStyle.css" />
+<css href="/Public/Css/system/role.css" />
+
+<div class="header">
+    <h1 class="page-header">权限查询</h1>
+</div>
+<div id="page-inner">
+    <!-- 角色信息 -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-sm-4 role-box">
+                            <div class="show-title">角色列表</div>
+
+                            <ul class="list-unstyled show-role">
+                                <volist name="rodeList" id="vo">
+                                    <li data-id ="{$vo.id}" class="roleItem"> 
+                                        {$vo.role_name} 
+                                        <if condition="$vo['userlist']">
+                                        <ul id="userlist-{$vo.id}" style="display:none">
+                                            <volist name="vo['userlist']" id="user">
+                                            <li>{$user.username}</li>
+                                            </volist>
+                                        </ul>
+                                        </if>
+                                    </li>
+                                </volist>
+                            </ul>
+                        </div>
+                        <div class="col-sm-4 role-node-box">
+                            <div class="show-title">权限操作 [<a id="closeAll">全部收起</a> / <a id="openAll">全部展开</a> ] </div>
+                            <div class="zTreeDemoBackground left">
+                                <ul class="ztree" id="rolelist-box">
+                                    <li class="roleTextTips">请选择左侧的权限组查看</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 role-game-box">
+                            <div class="show-title">授权游戏</div>
+                            <ul class="list-unstyled show-role" id="gamelist-box">
+                                <empty name="roleGame">
+                                    <li class="roleTextTips"> 请选择左侧的权限组查看 </li>
+                                    <else />
+                                    <volist name="roleGame" id="vo">
+                                        <li> {$vo.role_name} </li>
+                                    </volist>
+                                </empty>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 提示信息 -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="card-title">
+                        <div class="title">页面提示：</div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ul class="text-success">
+                        <li><span class='tree-leaf-selected'>已选择</span> 表示已授权，无背景色表示未授权</li>
+                        <li>访问权限若选择子级权限，那对应的父级默认拥有权限</li>
+                        <li>若访问权限未选择，对应的操作权限便无法选择</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<js href="/Public/Lib/zTree/jquery.ztree.core-3.5.js" />
+<SCRIPT type="text/javascript">
+
+    var curMenu = null, zTree_Menu = null;
+    var setting = {
+        view: {
+            showLine: false,
+            showIcon: false,
+            selectedMulti: false,
+            dblClickExpand: false,
+            addDiyDom: addDiyDom,
+            fontCss: getFont,
+            nameIsHTML: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            beforeClick: beforeClick
+        }
+    };
+
+    //DIY节点，用于自定义ICO
+    function addDiyDom(treeId, treeNode) {
+        var spaceWidth = 5;
+        var switchObj = $("#" + treeNode.tId + "_switch"),
+                icoObj = $("#" + treeNode.tId + "_ico");
+        switchObj.remove();
+        icoObj.before(switchObj);
+
+        if (treeNode.level > 1) {
+            var spaceStr = "<span style='display: inline-block;width:" + (spaceWidth * treeNode.level) + "px'></span>";
+            switchObj.before(spaceStr);
+        }
+    }
+    //点击之后回调，用于设置单机收缩
+    function beforeClick(treeId, treeNode) {
+        if (treeNode.level < 4) {
+            var zTree = $.fn.zTree.getZTreeObj("rolelist-box");
+            zTree.expandNode(treeNode);
+            return false;
+        }
+        return true;
+    }
+    //自定义字体样式
+    function getFont(treeId, node) {
+        return node.font ? node.font : {};
+    }
+    //全收，全开
+    function expandNode(e) {
+        var zTree = $.fn.zTree.getZTreeObj("rolelist-box");
+        var type = e.data.type;
+        if (type == "expandAll") {
+            zTree.expandAll(true);
+        } else if (type == "collapseAll") {
+            zTree.expandAll(false);
+        }
+    }
+    //节点点击事件。
+    function onMouseDown(event, treeId, treeNode) {
+        // showLog("[ "+getTime()+" onMouseDown ]&nbsp;&nbsp;" + (treeNode?treeNode.name:"root"), "down" );
+    }
+
+    $(document).ready(function() {
+        var treeObj = $("#rolelist-box");
+
+        treeObj.hover(function() {
+            if (!treeObj.hasClass("showIcon")) {
+                treeObj.addClass("showIcon");
+            }
+        }, function() {
+            treeObj.removeClass("showIcon");
+        });
+        $("#openAll").bind("click", {type: "expandAll"}, expandNode);
+        $("#closeAll").bind("click", {type: "collapseAll"}, expandNode);
+
+        //权限组点击事件
+        $('.roleItem').click(function() {
+            var roleId = $(this).attr('data-id');
+            var url = '/System/showRole';
+
+            $('.roleItem > ul').hide();
+            $('#userlist-'+roleId).show();
+
+            $.post(url, {roleId: roleId}, function(result) {
+                if (result.code != 0) { //操作失败
+                    $.zmsg.error(result.msg);
+                } else {
+                    $.fn.zTree.init(treeObj, setting, result.data.roleData);
+
+                    var html = '';
+                    $.each(result.data.gameInfo, function(index, gameitem) {
+                        if(gameitem.is_auth == true){
+                            html += '<li><span class="tree-leaf-selected">' + gameitem.game_name + '</span></li>';
+                        }else{
+                            html += '<li>' + gameitem.game_name + '</li>';
+                        }
+                    });
+
+                    $('#gamelist-box').html(html);
+                }
+            });
+        });
+    });
+</SCRIPT>

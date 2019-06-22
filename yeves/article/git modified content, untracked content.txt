@@ -1,0 +1,26 @@
+title:git modified content, untracked content
+category:35
+tag:git
+create_time:2018-03-11 16:18:37
+
+============================
+
+无论怎么提交推送,git服务器目录都是空的
+
+```
+brady.wang@PC112 MINGW64 /d/www/my (master)
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+
+        modified:   blog.yeves/themes/next (modified content, untracked content)
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+```
+
+解决方案:next目录下有个.git文件,将其删除后,解决
+

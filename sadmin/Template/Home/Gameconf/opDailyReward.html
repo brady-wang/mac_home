@@ -1,0 +1,155 @@
+<css href="/Public/Lib/bootstrap-treeview-1.2.0/dist/bootstrap-treeview.min.css"/>
+<div class="header">
+    <h1 class="page-header">每日分享奖励配置</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="panel panel-defalut">
+                    <div class="panel-body" id="placeTreeDiv"></div>
+                </div>
+                <div class="text-success">
+                    <span><strong class="text-info">蓝色字体</strong>表示该地区有配置内容</span><br>
+                    <span><strong class="text-muted">灰色字体</strong>表示该地区无配置内容</span><br>
+                    <span>编辑中地区用图标 <span class="glyphicon glyphicon-edit text-danger"></span> 标注</span>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {$pageHead}
+                        <present name="deleteFlag">
+                            <button class="btn btn-sm btn-danger pull-right hori-gap" id="deleteBtn">删除</button>
+                        </present>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <h4><b>亲友圈玩家奖励</b></h4>
+                                        <br>
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-3 text-center">
+                                                    <input class="open-check club-diamond-check" type="checkbox" <if condition='!empty($validPlaceInfo[$curPlaceId][clubUser][diamond])'>checked</if>>
+                                                    开启
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    奖励类型: <b>钻石</b>
+                                                </div>
+                                                <div class="form-inline">
+                                                    <label class="sr-only"></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">数量</div>
+                                                        <input class="form-control num" id="club-diamond-num" name="acer_number" type="text"
+                                                        <if condition='empty($validPlaceInfo[$curPlaceId][clubUser][diamond])'>value="" disabled
+                                                            <else /> value="{$validPlaceInfo[$curPlaceId][clubUser][diamond]}"</if>/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-3 text-center">
+                                                    <input class="open-check club-yuanbao-check" type="checkbox" <if condition='!empty($validPlaceInfo[$curPlaceId][clubUser][yuanbao])'>checked</if>>
+                                                    开启
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    奖励类型: <b>元宝</b>
+                                                </div>
+                                                <div class="form-inline">
+                                                    <label class="sr-only"></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">数量</div>
+                                                        <input class="form-control num" id="club-yuanbao-num" name="acer_number" type="text"
+                                                        <if condition='empty($validPlaceInfo[$curPlaceId][clubUser][yuanbao])'>value="" disabled
+                                                            <else /> value="{$validPlaceInfo[$curPlaceId][clubUser][yuanbao]}"</if>/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <h4><b>非亲友圈玩家奖励</b></h4>
+                                        <br>
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-3 text-center">
+                                                    <input class="open-check no-club-diamond-check" type="checkbox" <if condition='!empty($validPlaceInfo[$curPlaceId][notClubUser][diamond])'>checked</if>>
+                                                    开启
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    奖励类型: <b>钻石</b>
+                                                </div>
+                                                <div class="form-inline">
+                                                    <label class="sr-only"></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">数量</div>
+                                                        <input class="form-control num" id="no-club-diamond-num" name="acer_number" type="text"
+                                                        <if condition='empty($validPlaceInfo[$curPlaceId][notClubUser][diamond])'>value="" disabled
+                                                            <else /> value="{$validPlaceInfo[$curPlaceId][notClubUser][diamond]}"</if>/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-3 text-center">
+                                                    <input class="open-check no-club-yuanbao-check" type="checkbox" <if condition='!empty($validPlaceInfo[$curPlaceId][notClubUser][yuanbao])'>checked</if>>
+                                                    开启
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    奖励类型: <b>元宝</b>
+                                                </div>
+                                                <div class="form-inline">
+                                                    <label class="sr-only"></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">数量</div>
+                                                        <input class="form-control num" id="no-club-yuanbao-num" name="acer_number" type="text"
+                                                        <if condition='empty($validPlaceInfo[$curPlaceId][notClubUser][yuanbao])'>value="" disabled
+                                                            <else /> value="{$validPlaceInfo[$curPlaceId][notClubUser][yuanbao]}"</if>/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <present name="dailyRewardEditFlag">
+                                <label class="col-sm-5 control-label"></label>
+                                <button class="btn btn-primary" type="button"
+                                        id="edtModSubmitBtn">保存
+                                </button>
+                            </present>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<script>
+    var pageHead = "{$pageHead}";
+    var curFirstId = {$curFirstId};
+    var curPlaceId = {$curPlaceId};
+    var validPlace = {:json_encode($validPlace)};
+    var validPlaceInfo = {:json_encode($validPlaceInfo)};
+    var topTree = {:json_encode($placeTree)};
+</script>
+
+<js href="/Public/Lib/bootstrap-treeview-1.2.0/dist/bootstrap-treeview.min.js"/>
+<js href="/Public/Js/gameconfig/op-daily-reward.js"/>

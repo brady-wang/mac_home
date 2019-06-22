@@ -1,0 +1,117 @@
+
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload-ui.css" />
+
+<div class="header">
+    <h1 class="page-header">房间配置</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="list-unstyled show-game-list">
+                        <foreach name="playMap" item="v">
+                            <li>
+                                <a href="/Gameconf/confRoom/playId/{$key}">
+                                    <span class="text-info">{$v.playName}</span>
+                                    <eq name="key" value="$playId">
+                                        <span class="glyphicon glyphicon-edit text-danger"></span>
+                                    </eq>
+                                </a>
+                            </li>
+                        </foreach>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {$playMap[$playId]['playName']}
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" id="roomForm">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">玩法 id</label>
+                            <div class="col-sm-4">
+                                <p class="form-control-static" id="playId">{$playId}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label request" for="initScore">初始分数</label>
+                            <div class="col-sm-4">
+                                <input class="form-control" id="initScore" name="init_score" type="number" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label request" for="expiredTime">解散时间</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input class="form-control" id="expiredTime" name="expired_time" type="number" />
+                                    <span class="input-group-addon">秒</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label request" for="shareTitle">标题</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="shareTitle" name="title" type="text" />
+                                <span class="text-danger">必须包含一个参数 "d"</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label request" for="shareDesc">描述</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="shareDesc" name="desc" type="text" />
+                                <span class="text-danger">至少包含一个参数"dd"</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label text-info">
+                                <span class="tiptip" title="仅支持小于32KB的JPG图片，宽或高不能超过300像素">缩略图</span>
+                            </label>
+                            <div class="col-sm-6">
+                                <span class="btn btn-success fileinput-button" id="uploadImgBtn" data-tag="add">
+                                    <span>上传</span>
+                                    <span class="badge" id="uploadImgBadge">
+                                        <span class="glyphicon glyphicon-arrow-up"></span>
+                                    </span>
+                                    <input type="file" name="thumb_image" id="uploadImgInput" />
+                                </span>&nbsp;&nbsp;
+                                <a class="text-danger" id="uploadImgRemoveIcon" href="javascript:void(0);" hidden>
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="form-group" id="uploadImgPreviewDiv" hidden>
+                            <div class="col-sm-8 col-sm-offset-3">
+                            </div>
+                        </div>
+                        <present name="mgrFlag">
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-4">
+                                    <button class="btn btn-primary" id="saveBtn" type="button">保存</button>
+                                </div>
+                            </div>
+                        </present>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var gameInfo = {:json_encode($gameInfo)};
+var shareInfo = {:json_encode($shareInfo)};
+var curPlaceId = {$placeId};
+var imgUrlPrefix = '{$imgUrlPrefix}';
+</script>
+
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/vendor/jquery.ui.widget.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.iframe-transport.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.fileupload.js" />
+<js href="/Public/Js/gameconfig/conf-room.js" />

@@ -1,0 +1,27 @@
+<?php
+
+
+namespace app\controller;
+
+
+
+class index extends \core\base
+{
+	public function index()
+	{
+		$model = new \core\lib\model;
+		$sql = "select * from user limit 2";
+		$query = $model->query($sql);
+		$res = $query->fetchAll();
+		dump($res);
+	}
+
+	public function hello()
+	{
+		$data = ['name'=>'wang'];
+		$title = '标题';
+		$this->assign('data',$data);
+		$this->assign('title',$title);
+		$this->display('index/hello');
+	}
+}

@@ -1,0 +1,94 @@
+
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+
+<div class="header">
+    <h1 class="page-header">用户留存</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal" method="post" onsubmit="return checkSelDay();" action="/Stat/user/third/remain">
+                        <div class="form-group has-feedback">
+                            <!-- 开始日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">开始日期</div>
+                                    <input class="form-control" id="stime" name="stime" type="text" readonly="readonly" value="{$stime}" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <!-- 结束日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">结束日期</div>
+                                    <input class="form-control" id="etime" name="etime" type="text" readonly="readonly" value="{$etime}" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <button type="submit" name="search" class="btn btn-query">查询</button>
+                            <button type="submit" name="export" class="btn btn-operate tiptip" title="需选定起止日期才可导出文件" onclick="return onExport();">导出</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="divChart"  class="stat-chart"></div>
+                        <div class="text-center div-button-sel">
+                            <foreach name="titleLink" item="vo" key="k">
+                                <a href="#" class="btn btn-default dataButton" data-items="{$k}">
+                                    {$vo}
+                                </a> &nbsp;
+                            </foreach>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                <thead>
+                                    <tr role="row"><th>日期</th><th>新增注册</th><th>次日留存</th><th>3日留存</th>
+                                        <th>7日留存</th><th>15日留存</th><th>30日留存</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <volist name="list" id="vo">
+                                    <tr><td>{$vo.data_time|date="Y-m-d",###}</td><td>{$vo.add_register}</td>
+                                        <td>{$vo.keep_day1}</td>
+                                    <td>{$vo.keep_day3}</td>
+                                    <td>{$vo.keep_day7}</td>
+                                    <td>{$vo.keep_day15}</td>
+                                    <td>{$vo.keep_day30}</td>
+                                    </tr>
+                                </volist>
+                                </tbody>
+                            </table>
+                            {$pageshow}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<script>
+var chartData = {:json_encode($chartData)};
+</script>
+
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />
+<js href="/Public/Js/stat/user-remain.js" />

@@ -1,0 +1,87 @@
+<css href="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css?ver={$fileVersion}" />
+<css href="/Public/Lib/bootstrap-select-1.12.4/css/bootstrap-select.min.css" />
+
+<div class="header">
+    <h1 class="page-header">新增注册 </h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-sm-12">
+                        <form class="form-inline form-filter" id="searchForm" method="get" action="/Stat/realtimeRegister">
+                            <!-- 查看方式-->
+                            <div class="form-group has-feedback">
+                                <div class="input-group">
+                                    <div class="input-group-addon">查看方式</div>
+                                    <select class="form-control" id="viewType" name="viewType">
+                                        <option value="0">默认展示</option>
+                                        <option value="1">对比展示</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="divDiff" class="form-group" style="display: none;">
+                                <!-- 开始日期 -->
+                                <div class="form-group has-feedback">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">开始日期</div>
+                                        <input class="form-control" id="start" name="start" type="text" readonly="readonly" value="{$start}" />
+                                    </div>
+                                    <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                </div>
+                                <!-- 选择日期 -->
+                                <div class="form-group has-feedback">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">选择日期</div>
+                                        <select class="form-control selectpicker" id="select_days" name="select_days[]" multiple>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- 查询 -->
+                                <button type="submit" id="searchBtn" class="btn btn-primary btn-sm">查询</button>
+                            </div>
+                        </form>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    <!-- 绘图区 start -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default" style="color: ">
+                <div class="panel-body">
+                    <div id="stat-line-chart" style="left: 'center'; width: auto;height:600px;"></div>
+                    <div class="text-center">
+                        <volist name="createDate" id="vo">
+                        <a href="javascript:;" class="btn   btn-default dateButton" data-times="{$vo}">
+                            {$vo}
+                        </a> &nbsp;
+                        </volist>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 绘图区 end -->
+</div>
+
+<js href="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js?ver={$fileVersion}" />
+<js href="__PUBLIC__/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js?ver={$fileVersion}" />
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />
+<js href="/Public/Lib/bootstrap-select-1.12.4/js/bootstrap-select.min.js" />
+<js href="/Public/Lib/bootstrap-select-1.12.4/js/i18n/defaults-zh_CN.min.js" />
+
+<script>
+    var startDay = "{$start}";
+    var selView = {$selView|default="0"};
+    var selDay = {:json_encode($selDays)};
+    var legendStatus = {$legendShowStatus|json_encode};
+    var legendData = {$titleBt|json_encode};
+    var xVal = {$hours|json_encode};
+    var onlineData = {$statData|json_encode};
+</script>
+<js href="/Public/Js/stat/realtime-register.js" />

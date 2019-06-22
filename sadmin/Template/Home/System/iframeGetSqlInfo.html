@@ -1,0 +1,78 @@
+
+<include file="./Template/Common/header.html" />
+
+<style>
+body {
+    background: #fff;
+}
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10">
+            <present name="errMsg">
+                <p class="text-danger well">{$errMsg}</p>
+            <else />
+                <table class="table table-hover table-condensed">
+                    <tbody>
+                        <tr>
+                            <td class="text-danger col-sm-2">id</td>
+                            <td class="text-info col-sm-4">{$info.id}</td>
+                            <td class="text-danger col-sm-2">状态</td>
+                            <td class="text-info col-sm-4">
+                                <label class="label {$statusMap[$info['status']]['label']}">
+                                    {$statusMap[$info['status']]['name']}
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">申请人</td>
+                            <td class="text-info">{$info.requester}</td>
+                            <td class="text-danger">申请时间</td>
+                            <td class="text-info">{:date('Y-m-d H:i:s', $info['request_time'])}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">表名</td>
+                            <td class="text-info">{$info.table_name}</td>
+                            <td class="text-danger">申请原因</td>
+                            <td class="text-info">{$info.sql_describe}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">语句信息</td>
+                            <td colspan="3">
+                                <pre class="pre-dis-border"><php>
+                                    $echoStr = "";
+                                    foreach ($info['statement'] as $v) {
+                                        $echoStr .= "<span class=\"".$stmStatusMap[$v['status']]['text']."\">";
+                                        $echoStr .= $v['sql_statement'];
+                                        $echoStr .= "</span>\n\n";
+                                    }
+                                    echo trim($echoStr);
+                                </php></pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">执行者</td>
+                            <td class="text-info">{$info.executor}</td>
+                            <td class="text-danger">执行时间</td>
+                            <td class="text-info">
+                                <gt name="info.execute_time" value="0">
+                                    {:date('Y-m-d H:i:s', $info['execute_time'])}
+                                </gt>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-danger">备注</td>
+                            <td class="text-info" colspan="3">{$info.remark}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </present>
+        </div>
+    </div>
+</div>
+
+<include file="./Template/Common/footer.html" />

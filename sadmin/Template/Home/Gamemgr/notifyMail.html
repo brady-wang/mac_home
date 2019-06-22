@@ -1,0 +1,379 @@
+
+<css href="/Public/Lib/bootstrap-datetimepicker-2.4.4/css/bootstrap-datetimepicker.min.css" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/bootstrap-datetimepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/locales/bootstrap-datetimepicker.zh-cn.js" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload-ui.css" />
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<style>
+    .x-hide {display:none;}
+    .table-list td {word-break:break-all;}
+    th {text-align:center;}
+</style>
+
+<div class="header">
+    <h1 class="page-header">邮件信息</h1>
+    <ul class="nav nav-tabs chart-tab">
+        <li class="" id="li_send"><a href="/Gamemgr/notify/third/mail/tab/send">发送邮件</a></li>
+        <li class="" id="li_log"><a href="/Gamemgr/notify/third/mail/tab/log">邮件记录</a></li>
+    </ul>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class='tab-content'>
+                        <div class='tab-pane fade' id='mail_send'>
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label request">邮件标题</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" id="mail_subj" name="mail_subj" type="text" value="" />
+                                    </div>
+                                </div>
+                                <div class="form-group has-feedback">
+                                    <label class="col-sm-3 control-label request">邮件内容</label>
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control"  id="mail_cont" name="mail_cont" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">发送玩家</label>
+                                    <div class="input-group" style="padding-left:15px;">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="mail_player" id="custom_player" value="0" onclick="mail_user_click(0)" /> 指定玩家（玩家ID可以输入多个，以半角逗号分隔）
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="mail_player" id="all_player" value="1" onclick="mail_user_click(1)" /> 全服玩家
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="mail_player" id="channel_player" value="2" onclick="mail_user_click(2)" {$channel_radio} /> 根据渠道选择
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="mail_player" id="batch_player" value="3" onclick="mail_user_click(3)" /> 批量上传 
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group x-hide">
+                                    <label class="col-sm-3 control-label request">玩家ID</label>
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control"  id="mail_users" name="mail_users" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div id="page_channel" class="x-hide">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label request">玩家渠道</label>
+                                        <div class="input-group" style="padding-left:15px;">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="channel_users" id="channel_users" onclick="mail_channel_click()" {$nochannel_users} /> 无渠道玩家<br>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label"></label>
+                                        <div class="col-sm-3">
+                                            <label class="sr-only">os</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">平台</div>
+                                                <select class="form-control" id="os_type" name="os_type" onchange="osChange(this);">
+                                                    <option value="0">全部</option>
+                                                    <foreach name="osTypeMap" item="v">
+                                                        <option value="{$key}" >{$v}</option>
+                                                    </foreach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="sr-only">code</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">游戏</div>
+                                                <select class="form-control" id="code_type" name="code_type">
+                                                    <foreach name="codeTypeMap" item="v">
+                                                        <option value="{$key}" >{$v}</option>
+                                                    </foreach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="pageBatchUser" class="form-group x-hide">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-4">
+                                        <span class="btn btn-success fileinput-button" id="btnBatchUsers" data-tag="add" title="上传文件">
+                                            <span>上传文件</span>
+                                            <span class="badge" id="badgeBatchUsers">
+                                                <span class="glyphicon glyphicon-arrow-up"></span>
+                                            </span>
+                                            <input type="file" name="image" id="iptBatchUsers" />
+                                        </span>
+                                        <input id="hdnBatchUsers" type="hidden"  />
+                                        <a class="btn btn-info fileinput-button tiptip" href="/Gamemgr/downloadTemplate" data-tag="down" title="导入文件格式说明：<br /><br />上传文件必须为csv格式，玩家ID不能重复，第一行为格式说明，玩家数据从第二行开始。<br /><br />文件内容举例如下：
+                                                <br />玩家ID,钻石数量<br />13354343,10<br />34312412,20<br />56586595,20">
+                                            <span>下载模板</span>
+                                            <span class="badge">
+                                                <span class="glyphicon glyphicon-arrow-down"></span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="form-group has-feedback">  
+                                    <label class="col-sm-3 control-label">发送方式</label>
+                                    <div class="input-group" style="padding-left:15px;">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="sender_time" id="imme_send" value="0" onclick="mail_timer_click(0)" /> 立即发送
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="sender_time" id="timer_send" value="1" onclick="mail_timer_click(1)" /> 定时发送
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group has-feedback x-hide">
+                                    <label class="col-sm-3 control-label request">定时时间</label>
+                                    <div class="col-sm-3">
+                                        <input class="form-control" id="starttime" name="starttime" type="text" value="" />
+                                        <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group has-feedback">
+                                    <label class="col-sm-3 control-label request">失效时间</label>
+                                    <div class="col-sm-3">
+                                        <input class="form-control" id="endtime" name="endtime" type="text" value="{$endtime}" />
+                                        <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <present name="mailattFlag">
+                                    <div id="divPay" class="form-group">
+                                        <label class="col-sm-3 control-label">补偿物品</label>
+                                        <div class="col-sm-3">
+                                            <label class="sr-only">pay_type</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">物品类型</div>
+                                                <select class="form-control" id="pay_type" name="pay_type">
+                                                    <foreach name="payTypeMap" item="v">
+                                                        <option value="{$key}" >{$v}</option>
+                                                    </foreach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="sr-only">uid</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">物品数量</div>
+                                                <input class="form-control" id="pay_numbers" name="pay_numbers" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </present>
+                                <present name="mailsendFlag">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">&nbsp;</label>
+                                        <button class="btn btn-operate" type="button" onclick="return sendMail();" id="btnSendMail">发送</button>
+                                    </div>
+                                </present>
+                            </form>
+                        </div>
+                        <div class='tab-pane fade' id='mail_log'>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <form class="form-horizontal" role="form" method="get" action="/Gamemgr/notify/third/mail/tab/log" id="mailForm">
+                                                <div class="form-group has-feedback">
+                                                    <!-- 审核状态 -->
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">状态</div>
+                                                            <select class="form-control" id="mailStatus" name="mailStatus">
+                                                                <option value="0">全部</option>
+                                                                <option value="1">待审核</option>
+                                                                <option value="2">待发送</option>
+                                                                <option value="3">审核拒绝</option>
+                                                                <option value="4">已取消</option>
+                                                                <option value="5">已发送</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 玩家类型 -->
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">发送玩家</div>
+                                                            <select class="form-control" id="userQuery" name="userQuery">
+                                                                <option value="0">全部</option>
+                                                                <option value="1">全服玩家</option>
+                                                                <option value="2">指定玩家</option>
+                                                                <foreach name="channelTypeMap" item="v">
+                                                                    <option value="{$key}" >{$v}</option>
+                                                                </foreach>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 补偿物品 -->
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">是否有补偿物品</div>
+                                                            <select class="form-control" id="attQuery" name="attQuery">
+                                                                <option value="0">全部</option>
+                                                                <option value="1">有</option>
+                                                                <option value="2">无</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 操作员 -->
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">申请人</div>
+                                                            <input class="form-control" id="operator" name="operator" type="text" value="{$operator}" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group has-feedback">
+                                                    <!-- 发送时间 -->
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">开始时间</div>
+                                                            <input class="form-control" id="stime" name="stime" type="text" value="{$stime}" />
+                                                        </div>
+                                                        <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">结束时间</div>
+                                                            <input class="form-control" id="etime" name="etime" type="text" value="{$etime}" />
+                                                        </div>
+                                                        <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <!-- 查询按钮 -->
+                                                        <button class="btn btn-query" name="search" id="querySubmitBtn" type="submit">查询</button>
+                                                        <!--导出按钮-->
+                                                        <button class="btn btn-operate" name="export" id="queryExportBtn" onclick="return onExportBtn();">导出</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover dataTable no-footer table-list">
+                                    <thead>
+                                        <tr role="row">
+                                            <th width="60px" >id</th>
+                                            <th>申请人</th>
+                                            <th>邮件标题</th>
+                                            <th>邮件内容</th>
+                                            <th>发送玩家</th>
+                                            <th width="90px">补偿物品</th>
+                                            <th width="160px">发送时间</th>
+                                            <th width="80px">状态</th>
+                                            <th width="120px">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="senderlist" id="vo">
+                                        <tr>
+                                            <td>
+                                                <a class="text-primary" href="javascript:void(0);" onclick="clickMailInfo({$vo.id});">
+                                                    {$vo.id}
+                                                </a>
+                                            </td>
+                                            <td>{$vo.username}</td>
+                                            <td>{$vo.subj}</td>
+                                            <td id="tdShowCont{$vo.id}"></td>
+                                            <td id="tdShowUser{$vo.id}">
+                                                <php>
+                                                    $txt = '';
+                                                    if ($vo['user_type'] == 1) {
+                                                        $txt = '全服玩家';
+                                                    } else if ($vo['user_type'] == 2) {
+                                                        if (!empty($vo['channel_code'])) {
+                                                            foreach ($codeTypeMap as $cv) {
+                                                                if ($cv['code'] == $vo['channel_code']) {
+                                                                    $txt = $cv['name'];
+                                                                    break;
+                                                                }
+                                                            }
+                                                        } else {
+                                                            $txt = '无渠道玩家';
+                                                        }
+                                                    } else if ($vo['user_type'] == 3) {
+                                                        $txt = '<a href="#" class="text-primary" data-id="'.$vo['id'].'" onclick="return showUserDetail(this);">玩家详情</a>';
+                                                    } else {
+                                                        //$txt = $vo['users'];
+                                                    }
+                                                    echo $txt;
+                                                </php>
+                                            </td>
+                                            <td>
+                                                <php>echo empty($vo['pay'])?'无':$vo['pay'];</php>
+                                            </td>
+                                            <td>{$vo.stime|date="Y-m-d H:i:s",###}</td>
+                                            <td>
+                                                <php>
+                                                    $txt = '';
+                                                    if ($vo['send_flag'] == 1) {
+                                                        $txt = '<span class="label label-success">已发送</span>';
+                                                    } else if ($vo['mail_status'] == 3) {
+                                                        $txt = '<span class="label label-danger">已取消</span>';
+                                                    } else if ($vo['mail_status'] == 2) {
+                                                        $txt = '<span class="label label-danger">审核拒绝</span>';
+                                                    } else if ($vo['mail_status'] == 1) {
+                                                        $txt = '<span class="label label-info">待发送</span>';
+                                                    } else if ($vo['mail_status'] == 0) {
+                                                        $txt = '<span class="label label-info">待审核</span>';
+                                                    }
+                                                    echo $txt;
+                                                </php>
+                                            </td>
+                                            <td>
+                                                <php>
+                                                    $txt = '';
+                                                    if ($vo['mail_status'] == 0) {
+                                                        if (isset($mailverifyFlag)) {
+                                                            $txt = '<button class="btn btn-sm btn-operate" type="button" data-id="'.$vo['id'].'" onclick="return verifyMail(this, 1);">通过</button>';
+                                                            $txt .= '&nbsp;&nbsp;<button class="btn btn-sm btn-danger" type="button" data-id="'.$vo['id'].'" onclick="return verifyMail(this, 2);">拒绝</button>';
+                                                        } else if (isset($mailsendFlag)) {
+                                                            $txt = '<button class="btn btn-sm btn-danger" type="button" data-id="'.$vo['id'].'" onclick="return delMailTimer(this);">取消</button>';
+                                                        }
+                                                    } else if ($vo['send_flag'] == 0 && $vo['mail_status'] == 1) {
+                                                        if (isset($maildeleteFlag)) {
+                                                            $txt = '<button class="btn btn-sm btn-danger" type="button" data-id="'.$vo['id'].'" onclick="return delMailTimer(this);">取消</button>';
+                                                        } else {
+                                                            $txt = '';
+                                                        }
+                                                    }
+                                                    echo $txt;
+                                                </php>
+                                            </td>
+                                        </tr>
+                                    </volist>
+                                    </tbody>
+                                </table>
+                                {$pageshow}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/vendor/jquery.ui.widget.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.iframe-transport.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.fileupload.js" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+
+<script>
+    var tab = '{$tab}';
+    var senderlist = {:json_encode($senderlist)};
+    var query  = {:json_encode($query)};
+    var codeTypeMap = {:json_encode($codeTypeMap)};
+    var codeType1 = {:json_encode($codeTypeMap1)}; 
+    var codeType2 = {:json_encode($codeTypeMap2)}; 
+    var codeType3 = {:json_encode($codeTypeMap3)}; 
+    var codeType = {:json_encode($codeTypeMap)}; 
+</script>
+<js href="/Public/Js/gamemgr/notify-mail.js" />

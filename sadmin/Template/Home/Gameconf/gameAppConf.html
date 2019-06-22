@@ -1,0 +1,176 @@
+
+<css href="/Public/Lib/bootstrap-datetimepicker-2.4.4/css/bootstrap-datetimepicker.min.css" />
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<div class="header">
+    <h1 class="page-header">维护控制</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" id="confForm" role="form">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label request">产品ID</label>
+                                <div class="col-sm-8">
+                                    <p class="form-control-static" id="gameId">{$gameId}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label text-info request">
+                                    <php>
+                                        $statusTitle = "正常运行：白名单不生效，APP无维护提示。<br/>";
+                                        $statusTitle .= "维护中：白名单立即生效，APP将出现维护提示。<br/>";
+                                        $statusTitle .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                        $statusTitle .= "（前端遗留了维护期间强制更新app的bug，待问题修复后才允许使用本选项）<br/>";
+                                        $statusTitle .= "准备维护：向玩家推送维护信息，到达指定时间后服务器关闭，并且启用白名单。";
+                                    </php>
+                                    <span class="tiptip" title="{$statusTitle}">游戏状态</span>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="radio3 radio-check radio-success radio-inline">
+                                        <input id="gameStatus1" type="radio" name="game_status" value="1" />
+                                        <label for="gameStatus1">正常运行</label>
+                                    </div>
+                                    <div class="radio3 radio-check radio-danger radio-inline">
+                                        <input id="gameStatus2" type="radio" name="game_status" value="2" disabled />
+                                        <label class="text-muted" for="gameStatus2">维护中</label>
+                                    </div>
+                                    <div class="radio3 radio-check radio-warning radio-inline">
+                                        <input id="gameStatus3" type="radio" name="game_status" value="3" />
+                                        <label for="gameStatus3">准备维护</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <fieldset id="configFS" hidden>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label text-info request" for="upgradeTime">
+                                        <span class="tiptip" title="可双击输入框，直接编辑内容设置精确时间">系统维护时间</span>
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <div class="has-feedback">
+                                            <input class="form-control" id="upgradeTime" name="upgrade_time" type="text" />
+                                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label text-info">
+                                        <span class="tiptip" title="维护前提前多久解散房间，默认15分钟，不能配置">房间解散时间</span>
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" value="15" readonly />
+                                            <div class="input-group-addon">分钟</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label text-info">
+                                        <span class="tiptip" title="系统默认会在剩余30分钟和15分钟分别提醒一次">提醒时间点</span>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <div class="checkbox3 checkbox-inline checkbox-primary checkbox-check checkbox-light">
+                                            <input type="checkbox" id="upgradeNotifyRule10" value="10" name="upgrade_notify_rule" />
+                                            <label for="upgradeNotifyRule10">剩余10分钟</label>
+                                        </div>
+                                        <div class="checkbox3 checkbox-inline checkbox-primary checkbox-check checkbox-light">
+                                            <input type="checkbox" id="upgradeNotifyRule5" value="5" name="upgrade_notify_rule" />
+                                            <label for="upgradeNotifyRule5">剩余5分钟</label>
+                                        </div>
+                                        <div class="checkbox3 checkbox-inline checkbox-primary checkbox-check checkbox-light">
+                                            <input type="checkbox" id="upgradeNotifyRule1" value="1" name="upgrade_notify_rule" />
+                                            <label for="upgradeNotifyRule1">剩余1分钟</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label text-info" for="upgradeMsg">
+                                        <span class="tiptip" title="不能超过100个字符">维护提示</span>
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <!-- 维护提示限制只能输入100字符 -->
+                                        <textarea class="form-control" id="upgradeMsg" name="upgrade_msg" onkeyup="widthCheck(this, 100);"></textarea>
+                                        <div class="text-danger">
+                                            Tips：%s代表距离维护剩余时间,必须有且仅能包含一个%s。
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label request">维护公告面板</label>
+                                    <div class="col-sm-4">
+                                        <div class="radio3 radio-check radio-success radio-inline">
+                                            <input id="notifyStatus1" type="radio" name="upgrade_notify_status" value="1" />
+                                            <label for="notifyStatus1">开启</label>
+                                        </div>
+                                        <div class="radio3 radio-check radio-warning radio-inline">
+                                            <input id="notifyStatus9" type="radio" name="upgrade_notify_status" value="9" />
+                                            <label for="notifyStatus9">关闭</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <fieldset id="notifyFS" hidden>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label text-info request" for="upgradeNotifyLaunch">
+                                            <span class="tiptip" title="距离维护前开始展示面板的时间，维护开始后会一直展示">开始展示时间</span>
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <div class="input-group">
+                                                <input class="form-control" id="upgradeNotifyLaunch" type="number" name="upgrade_notify_launch" />
+                                                <div class="input-group-addon">分钟</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label request" for="upgradeNotifyTitle">公告标题</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control" id="upgradeNotifyTitle" name="upgrade_notify_title" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label request" for="upgradeNotifyContent">公告内容</label>
+                                        <div class="col-sm-6">
+                                            <textarea class="form-control" id="upgradeNotifyContent" name="upgrade_notify_content" rows="5"></textarea>
+                                            <div class="text-danger">
+                                                Tips：公告内容填写前需与项目负责人确认
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </fieldset>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <empty name="conf">
+                                        <button class="btn btn-success" type="button" onclick="submitAddConf();">保存</button>
+                                    <else/>
+                                        <button class="btn btn-primary" type="button" onclick="submitEditConf();">保存</button>
+                                    </empty>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<script>
+var gameConf = {:json_encode($conf)};
+var gameStatusMap = {:json_encode($gameStatusMap)};
+var notifyStatusMap = {:json_encode($notifyStatusMap)};
+</script>
+
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/bootstrap-datetimepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/locales/bootstrap-datetimepicker.zh-cn.js" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Js/gameconfig/game-app-conf.js" />

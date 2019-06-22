@@ -1,0 +1,155 @@
+
+<style>
+.none-margin {
+    margin: 0px;
+}
+.none-padding {
+    padding: 0px !important;
+}
+.hide-border {
+    border-top: 0px hidden #fff;
+}
+.fixed-width-td {
+    width: 110px;
+}
+</style>
+
+<div class="header">
+    <h1 class="page-header">角色管理</h1>
+</div>
+<div id="page-inner">
+    <!-- 查询栏 -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" role="form" method="get" action="/System/role">
+                        <div class="form-group has-feedback">
+                            <label class="sr-only" for="username">username</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">用户名</div>
+                                <input class="form-control" id="username" name="username" type="text" />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
+                        </div>
+                        <button type="submit" class="btn btn-query">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 角色列表 -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>角色名</th>
+                                    <th>用户列表</th>
+                                    <th>排序</th>
+                                    <th class="fixed-width-td">
+                                        <present name="addFlag">
+                                            <a class="btn btn-sm btn-success" href="/System/addRole">添加</a>
+                                        </present>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <foreach name="list" item="v" key="k">
+                                    <tr>
+                                        <td class="td-valign-middle">{$k}</td>
+                                        <td class="td-valign-middle">
+                                            <!-- 点击展示角色权限详情 todo -->
+                                            <a href="/System/viewRole/id/{$k}">{$v.role_name}</a>
+                                        </td>
+                                        <td>
+                                            <notempty name="v.user">
+                                                <table class="table table-condensed none-margin">
+                                                    <php>
+                                                        $colNum = 5;
+                                                        echo "<tr class=\"hide-border\">";
+                                                        $tdCount = 0;
+                                                        foreach ($v['user'] as $u) {
+                                                            if ($colNum == $tdCount) {
+                                                                $tdCount = 0;
+                                                                echo "</tr><tr class=\"hide-border\">";
+                                                            }
+                                                            echo "<td class=\"none-padding\">".$u['username']."</td>";
+                                                            $tdCount++;
+                                                        }
+                                                        for ($i = $tdCount; $i < $colNum; $i++) {
+                                                            echo "<td></td>";
+                                                        }
+                                                        echo "</tr>";
+                                                    </php>
+                                                </table>
+                                            </notempty>
+                                        </td>
+                                        <td class="td-valign-middle">
+                                            <!-- 排序上移下移 todo -->
+                                            {$v.sort}
+                                        </td>
+                                        <td class="td-valign-middle">
+                                            <present name="updateFlag">
+                                                <a class="btn btn-sm btn-primary" href="/System/editRole/id/{$k}">修改</a>
+                                            </present>
+                                            <present name="deleteFlag">
+                                                <button
+                                                    class="btn btn-sm btn-danger"
+                                                    type="button"
+                                                    data-toggle="modal"
+                                                    data-target="#delMod"
+                                                    data-id="{$k}"
+                                                    data-role="{$k} {$v.role_name}"
+                                                >删除</button>
+                                            </present>
+                                        </td>
+                                    </tr>
+                                </foreach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delMod" tabindex="-1" role="dialog" aria-labelledby="delModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="delModalLabel">删除角色</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">是否确定删除角色
+                                <span class='text-danger' id='delModRoleName'></span>
+                            </p>
+                            <input type="hidden" id="delModRoleId" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="submitDelRole();">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var query = {$query};
+</script>
+
+<js href="/Public/Js/system/role.js" />

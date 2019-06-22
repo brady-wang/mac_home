@@ -1,0 +1,78 @@
+title:centos下搭建svn
+category:13
+tag:centos,svn,linux
+create_time:2017-12-08 11:00:00
+
+============================
+
+# 一 SVN简介
+
+* SVN是Subversion的简称，是一个开放源代码的版本控制系统，相较于RCS、CVS，它采用了分支管理系统，它的设计目标就是取代CVS。互联网上很多版本控制服务已从CVS迁移到Subversion。说得简单一点SVN就是用于多个人共同开发同一个项目，共用资源的目的。
+
+* SVN服务器有2种运行方式：独立服务器和借助apache运行。两种方式各有利弊，用户可以自行选择。
+
+下载网址：https://subversion.apache.org/packages.html
+
+本文主要对Centos进行SVN服务器搭建，持续集成Jenkins常需要SVN命令方式执行一些操作。
+
+&lt;!-- more --&gt;
+# 二 安装SVN（Linux）
+
+1. 安装SVN
+    yum -y install subversion
+    注：想快速安装就用Root用户
+2. 查看安装内容与位置
+    rpm -ql subversion
+3. 建立SVN根目录
+    mkdir /data/svn
+4. 新建版本库:TestCode
+    svnadmin create /data/svn/TestCode
+        注: 执行完后，/data/svn/TestCode目录下文件说明
+        README.txt   版本库的说明文件
+        conf              配置文件件夹（后续操作最多的文件夹）
+        db                SVN数据文件文件夹
+        format          当前版本库的版本号
+        hooks           SVN的钩子脚本文件夹
+        locks            SVN的文件锁相关的文件夹
+5. blog库添加用户、分配权限
+
+    A. 配置SVN
+        vim /data/svn/blog/conf/svnserve.conf
+        anon-access=none     #去除文件前的注释，将read改为none,防止匿名访问#
+        auth-access=write    #去除文件前的注释
+        password-db=passwd   #去除文件前的注释
+        authz-db = authz
+    B. 添加访问TestCode用户
+        vim /data/svn/blog/conf/passwd
+            [users]
+            test=123456
+    注:添加了一个测试用户  登陆密码为 123456
+    C. 设置添加的用户权限
+
+        vim /data/svn/TestCode/conf/authz
+        [groups]
+        me=test
+        [blog:/]
+        @test=rw
+    注：test为我新建的账号可读可写
+    D. 防火墙开放SVN端口通行
+        iptables -A INPUT -p tcp --dport 3690 -j ACCEPT  如果是阿里云的服务器,还要再安全策略里面开放3690端口
+    E.开启SVN服务
+        svnserve -d -r /data/svn
+        注：命令写入脚本，开机执行，如需要停止SVN，用 “ps -ef|grep svn”  查找到进程;再 " kill -9 进程号 " 即可。
+    F. SVN客户端访问
+    svn://IP/blog
+6. 启动服务器
+    svnserve -d -r /home/svn
+7. 测试服务器
+    svn co svn://192.168.33.30/<repo>
+    以blog为例:
+    svn co svn://192.168.33.30/blog
+8. 注意
+    我们的svn是以独立服务器形式运行的,没有和apache做整合,
+    因为地址svn://xxx/xxx,不是http或https
+9. 重启
+    如果修改了svn配置,需要重启svn服务,步骤如下:
+    ps -aux|grep svnserve
+    kill -9 ID号
+    svnserve -d -r /home/svn

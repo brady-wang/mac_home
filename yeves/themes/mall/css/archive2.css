@@ -1,0 +1,48 @@
+.post-body{
+    font-size:1.1em;
+    padding:0.5em 1em 1px 2px;
+    line-height:1.8;
+    color:#666;
+    text-align:justify;
+    word-wrap:break-word;
+    word-break:break-all;
+}
+
+ .hk-archives h3 {
+    font-weight: bold;
+}
+
+.hk-archives ul {
+    margin-left: 20px;
+}
+
+.hk-archives ul ul {
+    margin-left: 30px;
+}
+
+.hk-archives span {
+    line-height: 32px;
+    font-size: 16px;
+}
+
+.hk-archives a {
+    color: #428bca;
+}
+
+.hk-archives a:hover {
+    color: #5EB309;
+}
+
+.hk-archives span {
+    line-height: 32px;
+    font-size: 16px;
+}
+
+li{list-style:none;}
+
+/*内容*/
+.content-wrap {
+    width: 100%;
+    float: left;
+    min-height: 805px;
+}

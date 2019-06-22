@@ -1,0 +1,140 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+
+<div class="header">
+    <h1 class="page-header">接口流水</h1>
+</div>
+<div id="page-inner">
+    <!-- 查询栏 -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!-- 查询栏 -->
+                    <form class="form-horizontal" role="form" method="get" action="/System/logApi">
+                        <!-- 第一行 -->
+                        <div class="form-group has-feedback">
+                            <!-- 类型 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">类型</div>
+                                    <select class="form-control" id="apiType" name="api_type">
+                                        <option value="0">全部</option>
+                                        <foreach name="typeCodeMap" key="t" item="v">
+                                            <option value="{$t}">{$v.name}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- 接口 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">接口</div>
+                                    <select class="form-control" id="apiCode" name="api_code">
+                                        <option value="0">全部</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- request -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">request</div>
+                                    <input class="form-control" id="requestKey" name="request_key" type="text" aria-describedby="requestDesc" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
+                                <span id="requestDesc" class="sr-only">(icon)</span>
+                            </div>
+                        </div>
+                        <!-- 第二行 -->
+                        <div class="form-group has-feedback">
+                            <!-- 开始日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">开始日期</div>
+                                    <input class="form-control" id="startDate" name="start_date" type="text" autocomplete="off" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <!-- 结束日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">结束日期</div>
+                                    <input class="form-control" id="endDate" name="end_date" type="text" autocomplete="off" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <!-- response -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">response</div>
+                                    <input class="form-control" id="responseKey" name="response_key" type="text" aria-describedby="responseDesc" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
+                                <span id="responseDesc" class="sr-only">(icon)</span>
+                            </div>
+                            <!-- 查询按钮 -->
+                            <div class="col-sm-1">
+                                <button class="btn btn-query" id="querySubmitBtn" type="submit">查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-10 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>类型</th>
+                                        <th>接口</th>
+                                        <th>request</th>
+                                        <th>response</th>
+                                        <th>时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <td>{$v['id']}</td>
+                                            <td>{$typeCodeMap[$v['type']]['name']}</td>
+                                            <td>{$typeCodeMap[$v['type']]['code'][$v['api_code']]}</td>
+                                            <td class="fixed-width-30p">
+                                                <pre class="pre-dis-border">{$v.request}</pre>
+                                            </td>
+                                            <td class="fixed-width-30p">
+                                                <pre class="pre-dis-border">{$v.response}</pre>
+                                            </td>
+                                            <td>{$v.create_time}</td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<script>
+var query = {$query};
+var typeCodeMap = {:json_encode($typeCodeMap)};
+</script>
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Js/system/log-api.js" />

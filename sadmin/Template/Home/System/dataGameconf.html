@@ -1,0 +1,342 @@
+
+<div class="header">
+    <h1 class="page-header">游戏配置</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-lg-10 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>产品ID</th>
+                                        <th>游戏名</th>
+                                        <th>IOS包名</th>
+                                        <th>安卓包名</th>
+                                        <th>相关服务地址</th>
+                                        <th>状态</th>
+                                        <th>
+                                            <present name="mgrFlag">
+                                                <button
+                                                    class="btn btn-sm btn-success"
+                                                    type="button"
+                                                    data-toggle="modal"
+                                                    data-target="#addMod"
+                                                >添加
+                                                </button>
+                                            </present>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <td class="td-valign-middle">{$v.id}</td>
+                                            <td class="td-valign-middle">{$v.game_id}</td>
+                                            <td class="td-valign-middle">{$v.game_name}</td>
+                                            <td class="td-valign-middle">{$v.ios_package_name}</td>
+                                            <td class="td-valign-middle">{$v.android_package_name}</td>
+                                            <td id="tdShowSvr{$v.id}"></td>
+                                            <td class="td-valign-middle">
+                                                <span class="label {$statusMap[$v['game_status']]['label']}">
+                                                    {$statusMap[$v['game_status']]['name']}
+                                                </span>
+                                            <td class="td-valign-middle">
+                                                <present name="mgrFlag">
+                                                    <button
+                                                        class="btn btn-sm btn-primary"
+                                                        type="button"
+                                                        data-toggle="modal"
+                                                        data-target="#edtMod"
+                                                        data-id="{$v.id}"
+                                                        data-game_id="{$v.game_id}"
+                                                        data-game_name="{$v.game_name}"
+                                                        data-ios_package_name="{$v.ios_package_name}"
+                                                        data-android_package_name="{$v.android_package_name}"
+                                                        data-api_ip="{$v.api_ip}"
+                                                        data-api_port="{$v.api_port}"
+                                                        data-activity_api="{$v.activity_api}"
+                                                        data-activity_api_port="{$v.activity_api_port}"
+                                                        data-game_status="{$v.game_status}"
+                                                        data-resource_ip="{$v.resource_ip}"
+                                                        data-resource_port="{$v.resource_port}"
+                                                    >修改
+                                                    </button>
+                                                    <button
+                                                        class="btn btn-sm btn-danger"
+                                                        type="button"
+                                                        data-toggle="modal"
+                                                        data-target="#delMod"
+                                                        data-id="{$v.id}"
+                                                        data-game_id="{$v.game_id}"
+                                                        data-game_name="{$v.game_name}"
+                                                    >删除
+                                                    </button>
+                                                </present>
+                                            </td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addMod" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addModalLabel">添加游戏</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addModForm">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModId">产品ID</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModId" type="text" name="game_id" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModName">游戏名称</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModName" type="text" name="game_name" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModIosPackageName">IOS包名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModIosPackageName" type="text" name="ios_package_name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModAndroidPackageName">安卓包名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModAndroidPackageName" type="text" name="android_package_name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModApiIp">游戏服地址</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModApiIp" type="text" name="api_ip" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModApiPort">web端口</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModApiPort" type="text" name="api_port" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModActivityApiIp">活动服地址</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModActivityApiIp" type="text" name="activity_api" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModActivityApiPort">活动服端口</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModActivityApiPort" type="text" name="activity_api_port" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModResourceIp">战绩文件地址</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModResourceIp" type="text" name="resource_ip" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="addModResourcePort">战绩文件端口</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModResourcePort" type="text" name="resource_port" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request">状态</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="addModStatus" name="game_status">
+                                <foreach name="statusMap" item="v">
+                                    <option value="{$key}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" onclick="submitAddConf();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edt Modal -->
+<div class="modal fade" id="edtMod" tabindex="-1" role="dialog" aria-labelledby="edtModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="edtModalLabel">修改游戏配置</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="edtModForm">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request">id</label>
+                        <div class="col-sm-6">
+                            <p class="form-control-static" id="edtModId"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModGameId">产品ID</label>
+                        <div class="col-sm-6">
+                            <p class="form-control-static" id="edtModGameId"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModName">游戏名称</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModName" type="text" name="game_name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModIosPackageName">IOS包名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModIosPackageName" type="text" name="ios_package_name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModAndroidPackageName">安卓包名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModAndroidPackageName" type="text" name="android_package_name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModApiIp">游戏服地址</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModApiIp" type="text" name="api_ip" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModApiPort">web端口</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModApiPort" type="text" name="api_port" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModActivityApiIp">活动服地址</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModActivityApiIp" type="text" name="activity_api" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModActivityApiPort">活动服端口</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModActivityApiPort" type="text" name="activity_api_port" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModResourceIp">战绩文件地址</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModResourceIp" type="text" name="resource_ip" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request" for="edtModResourcePort">战绩文件端口</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModResourcePort" type="text" name="resource_port" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label request">状态</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="edtModStatus" name="game_status">
+                                <foreach name="statusMap" item="v">
+                                    <option value="{$key}">{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" onclick="submitEdtConf();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete modal -->
+<div class="modal fade" id="delMod" tabindex="-1" role="dialog" aria-labelledby="delModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="delModalLabel">删除游戏</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <p class="form-control-static text-danger">是否确定删除游戏？删除游戏会同时删除该游戏的所有外库配置</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">ID：
+                                <span class='text-danger' id='delModId'></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">产品ID：
+                                <span class='text-danger' id='delModGameId'></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">游戏名：
+                                <span class='text-danger' id='delModName'></span>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="submitDelConf();">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 游戏列表数据
+var glist = {:json_encode($list)};
+</script>
+
+<js href="/Public/Js/system/data-gameconf.js" />

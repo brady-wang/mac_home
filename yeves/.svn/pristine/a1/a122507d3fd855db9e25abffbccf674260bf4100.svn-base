@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>管理后台</title>
+
+    <link href="lib/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="lib/jquery/jquery-3.3.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/bootstrap-3.3.7/js/html5shiv.min.js"></script>
+    <script src="lib/bootstrap-3.3.7/js/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+        }
+        body{
+            padding-top:50px;
+            padding-bottom: 50px;
+        }
+
+        .carousel{
+            height:400px;
+            background-color:#000;
+            margin-bottom:25px;
+        }
+        .carousel .item{
+            height:400px;
+            background-color:#000;
+        }
+        .carousel img{
+            width:100%;
+        }
+        .carousel-caption p{
+            line-height:1.5em;
+            margin-bottom:10px;
+            font-size:20px
+        }
+        .face_img img{
+            weight:100px;
+            height:100px;
+            border-radius: 50px
+        }
+
+        .summary_container{
+            text-align:center;
+        }
+
+        hr .divider{
+            margin:30px 0;
+        }
+
+        .container_center > .row{
+            text-align:center;
+            margin:30px 0;
+        }
+        .tabl-list{
+            margin-bottom: 20px;
+        }
+
+        .glyphicon {
+            float:right;
+        }
+
+        #menu{
+            padding-left:0px;
+            padding-top: 24px;
+            line-height: 30px;
+        }
+        .sub_menu{
+            text-indent:2em;
+        }
+
+
+        #main .panel{
+            margin-top:12px;
+        }
+    </style>
+</head>
+
+<body>
+<!--header开始-->
+<div id="header">
+    <!--导航开始-->
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse ">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-bar" aria-expanded="true">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">bs管理系统</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="top-bar">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">首页</a></li>
+
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a>欢迎您:brady</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">设置 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">登出</a></li>
+                            <li><a href="/change_pwd.html">密码修改</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <!--导航结束-->
+</div>
+<!--header结束-->
+
+<div  class="container-fluid">
+    <div class="row">
+        <!--左边菜单开始-->
+        <div id="menu" class="col-md-2">
+            <a href="index.html" class="list-group-item">首页</a>
+            <a href="#" class="list-group-item">文章管理</a>
+            <a href="#" class="list-group-item">类别管理</a>
+            <a href="#" class="list-group-item">标签管理</a>
+            <a href="#" class="list-group-item">前台</a>
+        </div>
+        <!--左边菜单结束-->
+
+        <!--主体内容开始-->
+        <div id="main" class="col-md-10">
+            <div class="page-header">
+                <h2>首页 <small>index</small></h2>
+            </div>
+        </div>
+        <!--主体内容结束-->
+
+    </div>
+</div>
+
+
+</body>
+</html>

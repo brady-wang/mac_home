@@ -1,0 +1,1087 @@
+
+<css href="/Public/Lib/bootstrap-datetimepicker-2.4.4/css/bootstrap-datetimepicker.min.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload.css" />
+<css href="/Public/Lib/jquery-file-upload-9.19.1/css/jquery.fileupload-ui.css" />
+<div class="header"> 
+    <h1 class="page-header">运营配置</h1>
+</div>
+<div id="page-inner">
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body" id="area_list">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edtMod" tabindex="-1" role="dialog" aria-labelledby="edtModalLabel">
+    <div class="modal-dialog" role="document" style="width:1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="edtModalLabel">配置编辑</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs chart-tab">
+                    <li class=""><a href="#ope_horse" data-toggle="tab">跑马灯配置</a></li>
+                    <li class="" style="display:none;"><a href="#ope_paytip" data-toggle="tab">充值提示语配置</a></li>
+                    <li class=""><a href="#ope_adv" data-toggle="tab">广告配置</a></li>
+                    <li class=""><a href="#ope_cms" data-toggle="tab">客服界面信息配置</a></li>
+                    <li class=""><a href="#ope_callagent" data-toggle="tab">招募代理配置</a></li>
+                </ul>
+                <div class='tab-content'>
+                    <div class='tab-pane fade' id='ope_horse'>  
+                        <form class="form-horizontal" id="formModHorse" style="padding:10px;">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="edtModHorseTime">跑马灯延迟时间</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" id="edtModHorseTime" type="text" name="horsetime" placeholder="未添加跑马灯内容时不保存时间" />
+                                </div>
+                                <span style="color:red;">(秒)</span>
+                                <button class="btn btn-success btn-sm" type="button" onclick="addHorse();">添加跑马灯</button>
+                                <span id="alertHorse"></span>
+                            </div>
+                            <div id="dv-horse-cont"></div>
+                            <present name="horseFlag">
+                                <div class="form-group" style="margin-top:30px;">
+                                    <label class="col-sm-3 control-label" for="edtModSubmitBtn"> </label>
+                                    <div class="col-sm-4">
+                                        <button class="btn btn-primary" type="button" id="edtModSubmitBtn" onclick="submitHorse();">保存</button>
+                                    </div>
+                                </div>
+                            </present>
+                        </form>
+                    </div>
+                    <div class='tab-pane fade' id='ope_paytip'>    
+                        <form class="form-horizontal" style="padding:10px;">                
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label request" for="edtModPay">充值提示</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" id="edtModPay" type="text" name="paytip" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top:30px;">
+                                <label class="col-sm-3 control-label" for="edtModSubmitBtn"> </label>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-primary" type="button" id="edtModSubmitBtn" onclick="submitPayTip();">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class='tab-pane fade' id='ope_adv'>    
+                        <form class="form-horizontal" style="padding:10px;">       
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label request" style="width:22%;padding-left:3px;">图片轮播时间：</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" id="edtModPicTime" type="text" name="edtModPicTime" placeholder="以秒为单位" />
+                                </div>
+                                <span style="color:red;">(秒)</span>
+                                <button class="btn btn-success btn-sm" type="button" onclick="addAdvPic();">添加广告图</button>
+                                <span id="alertAdvPic"></span>
+                            </div>
+                            <div id="dv-advpic-cont"></div>
+                            <present name="advFlag">
+                                <div class="form-group" style="margin-top:30px;">
+                                    <label class="col-sm-3 control-label" for="edtModUpimgBtn"> </label>
+                                    <div class="col-sm-8">
+                                        <button class="btn btn-primary" type="button" id="edtModUpimgBtn" onclick="submitAdvImage();">保存</button>
+                                        <span style="color:red;">（推荐：展开图尺寸611*795，缩略图尺寸652*287）</span>
+                                    </div>
+                                </div>
+                            </present>
+                        </form>
+                    </div>
+                    <div class='tab-pane fade' id='ope_cms'>    
+                        <form class="form-horizontal" style="padding:10px;"> 
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label request" for="edtModWeixinTime">轮播时间</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" id="edtModWeixinTime" type="text" name="weixintime" placeholder="以秒为单位" />
+                                </div>
+                                <span style="color:red;">(秒)</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label request" for="edtModWeixinCont">微信公众号-说明文字</label>
+                                <div class="col-sm-7">
+                                    <input class="form-control" id="edtModWeixinCont" type="text" name="weixincont" />
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                    <thead><tr><th style='vertical-align:middle;text-align:center;'>微信公众号内容 <span id='alertWeixinCont' style='color:red;'></span></th>
+                                            <th style='width:60px;'><button class="btn btn-success btn-sm" type="button" onclick="addCmsLine('tbWeixin','alertWeixinCont');">添加</button></th></tr></thead>
+                                    <tbody id="tbWeixin"></tbody>
+                                </table>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label request" for="edtModProxyCont">代理招募-说明文字</label>
+                                <div class="col-sm-7">
+                                    <input class="form-control" id="edtModProxyCont" type="text" name="proxycont" />
+                                </div>
+                            </div> 
+                            <div class="form-group" style='display:none;'>
+                                <label class="col-sm-4 control-label request" for="edtModProxyTime">代理招募-轮播时间</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" id="edtModProxyTime" type="text" name="proxytime" placeholder="以秒为单位" />
+                                </div>
+                                <span style="color:red;position: relative; top:6px;">(秒)</span>
+                            </div>
+                            <div class="form-group">
+                                <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                    <thead><tr><th style='vertical-align:middle;text-align:center;'>代理招募号内容 <span id='alertProxyCont' style='color:red;'></span></th>
+                                            <th style='width:60px;'><button class="btn btn-success btn-sm" type="button" onclick="addCmsLine('tbProxy','alertProxyCont');">添加</button></th></tr></thead>
+                                    <tbody id='tbProxy'></tbody>
+                                </table>
+                            </div>
+                            <present name="cmsFlag">
+                                <div class="form-group" style="margin-top:30px;">
+                                    <label class="col-sm-3 control-label" for="edtModSubmitBtn"> </label>
+                                    <div class="col-sm-4">
+                                        <button class="btn btn-primary" type="button" id="edtModSubmitBtn" onclick="submitCms();">保存</button>
+                                    </div>
+                                </div>     
+                            </present>
+                        </form>
+                    </div>
+                    <div class='tab-pane fade' id='ope_callagent'>    
+                        <form class="form-horizontal" style="padding:10px;">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <span id='alertCallAgentCont' style='color:red;'></span>
+                                </div>
+                            </div>     
+                            <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                <thead><tr><th>招募弹窗标题</th><th>招募客服微信 <button class="btn btn-success btn-sm" type="button" onclick="addCallAgentWx();">添加</button>
+                                        </th><th>轮播间隔<span style="color:red;">（秒）</span></th><th>招募宣传图</th></tr></thead>
+                                <tbody><tr><td><input type="text" id="callAgentTitle" value="" /></td>
+                                        <td id='tbCallAgent'></td>
+                                        <td><input type="text" id="callAgentTime" value="" /></td>
+                                        <td>
+                                            <div style="display:inline-block;">
+                                                <span class="btn btn-success fileinput-button" id="edtModImgBtnCallAgent" data-tag="add">
+                                                    <span>上传图片</span>
+                                                    <span class="badge" id="edtModImgBadgeCallAgent">
+                                                        <span class="glyphicon glyphicon-arrow-up"></span>
+                                                    </span>
+                                                    <input type="file" name="image" id="edtModImgInputCallAgent" />
+                                                </span>
+                                                <input name="callagentpic" id="edtModImagesCallAgent" type="hidden"  />
+                                            </div>
+                                            <div style="display:inline-block;" id="edtModImgPreviewDivCallAgent" hidden><div style="display:inline-block;"></div></div>
+                                        </td></tr></tbody>
+                            </table>
+                            <present name="callAgentFlag">
+                                <div class="form-group" style="margin-top:30px;">
+                                    <label class="col-sm-3 control-label" for="edtModSubmitBtn"> </label>
+                                    <div class="col-sm-8">
+                                        <button class="btn btn-primary" type="button" id="edtModSubmitBtn" onclick="submitCallAgent();">保存</button>
+                                        <span style="color:red;">（推荐宣传图图片尺寸：竖版尺寸621*808，横版尺寸884*390）</span>
+                                    </div>
+                                </div>  
+                            </present>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/bootstrap-datetimepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/locales/bootstrap-datetimepicker.zh-cn.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/vendor/jquery.ui.widget.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.iframe-transport.js" />
+<js href="/Public/Lib/jquery-file-upload-9.19.1/js/jquery.fileupload.js" />
+<style>
+    .ph-line {clear:both;}
+    .ph-sub {padding-left:20px;}
+    .ph-left {cursor:pointer;}
+    .ph-right {float: right;}
+    .btn-sm {margin: 0 10px;}
+    .ph-hide {display:none;}
+    .btn-sel {background-color: #449d44 !important;} 
+    .btn-copy {visibility: hidden;}
+    .btn-paste {visibility: hidden;}
+    .btn-del {visibility: hidden;}
+    .btn-edit {visibility: hidden;}
+    .ph-conf .btn-copy {visibility: visible;}
+    .ph-conf .btn-del {visibility: visible;}
+    .ph-conf .btn-edit {visibility: visible;}
+    #alertHorse,#alertAdvPic {color: red;}
+    .x-hide {display:none;}
+    .dv-wechat {vertical-align:middle;display:inline-block;border:1px solid #ddd;padding:3px;}
+    .dv-wechat td {padding:2px;}
+    .dv-wechat .btn {padding:3px 6px;}
+</style>
+<script>
+    var intreg = /^[0-9]{1,}$/;
+    var wxreg = /^[a-zA-Z0-9_-]{5,19}$/;
+    var g_pic_idx = 1;
+    var g_logadv_idx = 1;
+    var g_copy_conf_id = 0;
+    var g_edit_conf_id = 0;
+    var opeconf = {:json_encode($opeConf)};
+    var conflist = {:json_encode($confList)};
+	var packVer = {:intval($packVer)};
+    $(document).ready(function() {
+        show_conf();
+        show_tab();
+        imgUploadSetup('edtMod', 'CallAgent');
+        $(".ph-folder").on('click', function(event) {
+            var target = $(event.currentTarget);
+            var line = target.closest('.ph-line');
+            if (line.hasClass('ph-exp')) {
+                line.next('.ph-sub').addClass('ph-hide');
+                line.find('i').removeClass('fa-folder-open-o').addClass('fa-folder-o');
+            } else {
+                line.next('.ph-sub').removeClass('ph-hide');
+                line.find('i').removeClass('fa-folder-o').addClass('fa-folder-open-o');
+            }
+            line.toggleClass('ph-exp');
+        });
+        $(".btn-copy").on('click', function(event) {
+            var target = $(event.currentTarget);
+            if (target.hasClass('btn-sel')) {
+                target.removeClass('btn-sel');
+                g_copy_conf_id = 0;
+                $(".btn-paste").css("visibility", "hidden");
+            } else {
+                $(document.body).find('.btn-copy').removeClass('btn-sel');
+                target.addClass('btn-sel');
+                g_copy_conf_id = target.data('id');
+                $(".btn-paste").css("visibility", "visible");
+                $(target).siblings(".btn-paste").css("visibility", "hidden");
+            }
+        });
+        $(".btn-edit").on('click', function(event) {
+            var target = $(event.currentTarget);
+            $('#alertHorse').text('');
+            $('#alertAdvPic').text('');
+            $('#alertWeixinCont').text('');
+            $('#alertProxyCont').text('');
+            $('#alertLogAdvCont').text('');
+            $('#alertCallAgentCont').text('');
+            g_edit_conf_id = target.data('id');
+            if (conflist.hasOwnProperty(target.data('id'))) {
+                var conf = conflist[target.data('id')];
+                if (conf.horsetime)
+                    $('#edtModHorseTime').val(conf.horsetime);
+                else
+                    $('#edtModHorseTime').val('');
+                $('#dv-horse-cont').empty();
+                for (var i = 0; i < conf.horsecont.length; i++) {
+                    addHorse(conf.horsecont[i]);
+                }
+                $('#edtModWeixinCont').val(conf.weixincont);
+                $('#edtModWeixinTime').val(conf.weixintime);
+                $('#tbWeixin').empty();
+                for (var i = 0; i < conf.weixin.length; i++) {
+                    addCmsLine('tbWeixin', 'alertWeixinCont', conf.weixin[i]);
+                }
+                $('#edtModProxyCont').val(conf.proxycont);
+                $('#edtModProxyTime').val(conf.proxytime);
+                $('#tbProxy').empty();
+                for (var i = 0; i < conf.proxy.length; i++) {
+                    addCmsLine('tbProxy', 'alertProxyCont', conf.proxy[i]);
+                }
+                $('#edtModPay').val(conf.paytip);
+                $('#edtModPicTime').val('');
+                $('#dv-advpic-cont').empty();
+                if(conf.image){
+                    for (var i = 0; i < conf.image.length; i++) {
+                        $('#edtModPicTime').val(conf.image[i].delay);
+                        addAdvPic(conf.image[i]);
+                    }
+                }
+                $('#tbCallAgent').empty();
+                if (conf.callagent) {
+                    $('#callAgentTitle').val(conf.callagent.winTitle);
+                    if (conf.callagent.banner) {
+                        var imgHtml = '<span class="imgListItem">' +//<i class="fa fa-times imgListItem-close"></i>
+                            '<img class="addGoodsImg" src="' +  conf.callagent.banner + '?t=' + new Date() + '" style="box-shadow: rgb(86, 86, 86) 0px 0px 3px; width: 100px; max-width: 100%;">' +
+                            '</span>';
+                        $('#edtModImgPreviewDivCallAgent').children("div").html(imgHtml);
+                        $('#edtModImagesCallAgent').val(conf.callagent.banner);
+                        $('#edtModImgPreviewDivCallAgent').fadeIn("slow");
+                    } else {
+                        $('#edtModImgPreviewDivCallAgent').children("div").html('');
+                        $('#edtModImagesCallAgent').val('');
+                    }
+                    for (var i = 0; i < conf.callagent.wxid.length; i++) {
+                        addCallAgentWx(conf.callagent.wxid[i]);
+                    }  
+                    $('#callAgentTime').val(conf.callagent.wxtime);
+                } else {
+                    $('#callAgentTitle').val('');
+                    $('#callAgentTime').val('');
+                    $('#edtModImgPreviewDivCallAgent').children("div").html('');
+                    $('#edtModImagesCallAgent').val('');
+                }
+                $('[name=dailyReward]').eq(0).attr('checked', 'true');
+                if (conf.dailyreward) {
+                    $('[name=dailyReward]').each(function(idx, el){
+                        if (this.value == conf.dailyreward.reward) {
+                            $(this).attr('checked','true');
+                        }
+                    });
+                    if (conf.dailyreward.reward == 10009) {
+                        $("#acer_number").val(conf.dailyreward.number);
+                    }
+                }
+            } else {
+                $.zmsg.warning("必须粘贴其它地区配置后才可以编辑");
+                return false;
+                $('#edtModHorseTime').val('');
+                $('#dv-horse-cont').empty();
+                $('#edtModPay').val('');
+                $('#edtModWeixinCont').val('');
+                $('#edtModWeixinTime').val('');
+                $('#tbWeixin').empty();
+                $('#edtModProxyCont').val('');
+                $('#edtModProxyTime').val('');
+                $('#tbProxy').empty();
+                $('#edtModPicTime').val('');
+                $('#dv-advpic-cont').empty();
+                $('#logadv_close').prop('checked', true); 
+                $("#tbLogAdv").empty();
+                $('#callAgentTitle').val('');
+                $('#callAgentTime').val('');
+                $('#edtModImgPreviewDivCallAgent').children("div").html('');
+                $('#edtModImagesCallAgent').val('');
+                $('#tbCallAgent').empty();
+                $('[name=dailyReward]').eq(0).attr('checked', 'true');
+            }
+            $('#edtMod').modal();
+        });
+        $(".btn-paste").on('click', function(event) {
+            var target = $(event.currentTarget);
+            if (g_copy_conf_id == 0) {
+                $.zmsg.info('请先复制配置！');
+                return;
+            }
+            var msg = '<p class="text-center text-danger">确认要粘贴到“'+target.data('name')+'”配置吗？</p>'; 
+            $.Zebra_Dialog(msg, {
+                'title': '粘贴配置',
+                'animation_speed_show': 500,
+                'center_buttons': true,
+                'type': '',
+                'width': "300px",
+                'max_height': "200",
+                'buttons': ['取消', '确定'],
+                'onClose': function(caption) {
+                    if ('取消' == caption) {
+                    } else if ('确定' == caption) {
+                        var data = {};
+                        data.sourceid = g_copy_conf_id;
+                        data.destid = target.data('id');
+
+                        // 开始 loading 遮盖
+                        $.loading.show("delMsgLoading");
+
+                        $.ajax({
+                            url: "/Gameconf/ajaxPasteOperate",
+                            type: "POST",
+                            data: data,
+                            dataType: "json",
+                            success: function(data) {
+                                $.loading.hide('delMsgLoading');
+                                if (0 == data.code) {
+                                    $.zmsg.success('/Gameconf/operate/third/opeconf');
+                                } else {
+                                    $.zmsg.error(data.msg);
+                                }
+                            },
+                            error: function(data) {
+                                $.loading.hide('delMsgLoading');
+                                $.zmsg.fatal(data.responseText);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+        $(".btn-del").on('click', function(event) {
+            var target = $(event.currentTarget);
+            var msg = '<p class="text-center text-danger">确认删除“'+target.data('name')+'”配置吗？</p>'; 
+            $.Zebra_Dialog(msg, {
+                'title': '删除配置',
+                'animation_speed_show': 500,
+                'center_buttons': true,
+                'type': '',
+                'width': "300px",
+                'max_height': "200",
+                'buttons': ['取消', '确定'],
+                'onClose': function(caption) {
+                    if ('取消' == caption) {
+                    } else if ('确定' == caption) {
+                        var data = {};
+                        data.id = target.data('id');
+
+                        // 开始 loading 遮盖
+                        $.loading.show("delMsgLoading");
+
+                        $.ajax({
+                            url: "/Gameconf/ajaxDelOperate",
+                            type: "POST",
+                            data: data,
+                            dataType: "json",
+                            success: function(data) {
+                                $.loading.hide('delMsgLoading');
+                                if (0 == data.code) {
+                                    $.zmsg.success('/Gameconf/operate/third/opeconf');
+                                } else {
+                                    $.zmsg.error(data.msg);
+                                }
+                            },
+                            error: function(data) {
+                                $.loading.hide('delMsgLoading');
+                                $.zmsg.fatal(data.responseText);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+    var show_tab = function() {
+        var acttab = false;
+        var horsetab = {:intval($horseFlag)};
+        var advtab = {:intval($advFlag)};
+        var cmstab = {:intval($cmsFlag)};
+        var logadvtab = {:intval($logadvFlag)};
+        var callagenttab = {:intval($callAgentFlag)};
+        if (horsetab) {
+            $("a[href='#ope_horse']").closest('li').css({'display':''});
+            if (!acttab) {
+                $("a[href='#ope_horse']").click();
+                acttab = true;   
+            }
+        } else {
+            $("a[href='#ope_horse']").closest('li').css({'display':'none'});
+        }
+        if (advtab) {
+            $("a[href='#ope_adv']").closest('li').css({'display':''});
+            if (!acttab) {
+                $("a[href='#ope_adv']").click();
+                acttab = true;     
+            }
+        } else {
+            $("a[href='#ope_adv']").closest('li').css({'display':'none'});
+        }
+        if (cmstab) {
+            $("a[href='#ope_cms']").closest('li').css({'display':''});
+            if (!acttab) {
+                $("a[href='#ope_cms']").click();
+                acttab = true;   
+            }
+        } else {
+            $("a[href='#ope_cms']").closest('li').css({'display':'none'});
+        }
+        if (logadvtab) {
+            $("a[href='#ope_logadv']").closest('li').css({'display':''});
+            if (!acttab) {
+                $("a[href='#ope_logadv']").click();
+                acttab = true;      
+            }
+        } else {
+            $("a[href='#ope_logadv']").closest('li').css({'display':'none'});
+        }
+        if (callagenttab) {
+            $("a[href='#ope_callagent']").closest('li').css({'display':''});
+            if (!acttab) {
+                $("a[href='#ope_callagent']").click();
+                acttab = true;   
+            }
+        } else {
+            $("a[href='#ope_callagent']").closest('li').css({'display':'none'});
+        }
+    }
+    var show_conf = function(){
+        var rolepaste = {:intval($pasteFlag)};
+        var roledelete = {:intval($deleteFlag)};
+        var html = "";
+        var lineHtml = "<div class='panel panel-default ph-line {css}'><div class='panel-heading'><span class='ph-left {line_css}'><i class='fa {ico} fa-fw'></i>";
+        lineHtml += "<span style='padding-left:10px;font-weight:normal;'>{name}</span></span>";
+        lineHtml += "<span class='ph-right'><a class='btn btn-operate btn-sm btn-copy' data-id='{id}' data-name='{name}'>复制配置</a>";
+        if (rolepaste) {
+            lineHtml += "<a class='btn btn-primary btn-sm btn-paste' data-id='{id}' data-name='{name}'>粘贴配置</a>";
+        }
+        lineHtml += "<a class='btn btn-primary btn-sm btn-edit' data-id='{id}' data-name='{name}'>编辑配置</a>";
+        if (roledelete) {
+            lineHtml += "<a class='btn btn-sm btn-danger btn-del' data-id='{id}' data-name='{name}' style='visibility:{css_del}'>删除配置</a>";
+        }
+        lineHtml += "</span></div></div>";
+        for (var i = 0; i < opeconf.length; i++) {
+            var css = " ph-exp ";
+            if (opeconf[i].conf)
+                css += " ph-conf ";
+            var ico = "fa-folder-open-o";
+            var line_css = 'ph-folder';
+            html += str_format(lineHtml, {'css': css, 'line_css':line_css, 'ico': ico, 'id': opeconf[i].id, 'name': opeconf[i].name, 'css_del': 'hidden'});
+            html += "<div class='ph-sub'>";
+            for (var j = 0; j < opeconf[i].sub.length; j++) {
+                css = " ph-exp ";
+                if (opeconf[i].sub[j].conf)
+                    css += " ph-conf ";
+                ico = "fa-folder-open-o";
+                line_css = 'ph-folder';
+                html += str_format(lineHtml, {'css': css, 'line_css':line_css, 'ico': ico, 'id': opeconf[i].sub[j].id, 'name': opeconf[i].sub[j].name});
+                html += "<div class='ph-sub'>";
+                for (var k = 0; k < opeconf[i].sub[j].sub.length; k++) {
+                    css = "";
+                    if (opeconf[i].sub[j].sub[k].conf)
+                        css += " ph-conf ";
+                    ico = "fa-file-o";
+                    line_css = 'ph-file';
+                    html += str_format(lineHtml, {'css': css,'line_css':line_css, 'ico': ico, 'id': opeconf[i].sub[j].sub[k].id, 'name': opeconf[i].sub[j].sub[k].name});
+                }
+                html += "</div>";
+            }
+            html += "</div>";
+        }
+        $("#area_list").html(html);
+    }
+    var str_format = function(str, obj) {
+        if (!str) return "";
+        return str.replace(/\{(\\w+)\\}/g, function(m, i) {
+            if (obj[i] != undefined)
+                return "" + obj[i];
+            return "";
+        });
+    }
+    // 招募代理配置
+    function delCallAgentWx(obj) {
+        var target = $(obj).closest('div');
+        if (target)
+            target.remove();        
+    }
+    function addCallAgentWx(cont) {
+        var td = $("#tbCallAgent");
+        var lines = td.children('div').size();
+        if (lines >= 5) {
+            $('#alertCallAgentCont').text('微信不能多于5个');
+            return;
+        }
+        if (!cont) {
+            cont = '';
+        }
+        if (td) {
+            var html = '<div style="height:40px;"><input type="text" name="callAgentWxid" value="'+cont+'" /> '+
+                '<button class="btn btn-danger" type="button" onclick="delCallAgentWx(this);">删除</button></div>';        
+            td.append(html);
+        }
+    }
+    function submitCallAgent() {
+        $('#edtMod').modal('hide');
+		if (packVer == 2) {
+            $.zmsg.errorShowModal('竖版游戏不支持此功能', 'edtMod');
+            return false;
+		}
+        var data = {};
+        data.confid = g_edit_conf_id;  
+        data.wxtitle = $('#callAgentTitle').val();
+        if (data.wxtitle == '') {
+            $.zmsg.errorShowModal('必须输入招募弹窗标题', 'edtMod');
+            return false;
+        }
+        if (data.wxtitle.length > 10) {
+            $.zmsg.errorShowModal('招募弹窗标题不能超过10个字', 'edtMod');
+            return false;
+        }
+        data.wxtime = $('#callAgentTime').val();
+        if (data.wxtime == '') {
+            $.zmsg.errorShowModal('必须输入招募微信轮播时间', 'edtMod');
+            return false;
+        }
+        if (!intreg.test(data.wxtime)) {
+            $.zmsg.errorShowModal('微信轮播时间必须为整数', 'edtMod');
+            return false;
+        }
+        if (parseInt(data.wxtime) <= 0) {
+            $.zmsg.errorShowModal('微信轮播时间必须大于0', 'edtMod');
+            return false;
+        }
+        data.wxid = [];
+        var count = $('input[name=callAgentWxid]').size();
+        for (var i = 0; i < count; i++) {
+            var wxid = $('input[name=callAgentWxid]').eq(i).val();
+            if (wxid == '') {
+                $.zmsg.errorShowModal('微信号不能为空', 'edtMod');
+                return false;
+            }
+            if (!wxreg.test(wxid)) {
+                $.zmsg.errorShowModal('必须输入正确的微信号', 'edtMod');
+                return false;
+            }
+            data.wxid.push(wxid);
+        }
+        if (data.wxid.length <= 0) {
+            $.zmsg.errorShowModal('必须输入至少一个微信号', 'edtMod');
+            return false;
+        }
+        data.banner = $('#edtModImagesCallAgent').val();
+        if (data.banner == '' || typeof (data.banner) == 'undefined') {
+            $.zmsg.errorShowModal('必须上传招募代理宣传图', 'edtMod');
+            return false;
+        }
+        $.ajax({
+            url: "/Gameconf/ajaxSubmitCallAgent",
+            type: "POST",
+            data: data,
+            dataType: "json",
+            success: function(data) {
+                if (0 == data.code) {
+                    $.zmsg.success('/Gameconf/operate/third/opeconf');//$.zmsg.info('保存成功');
+                } else {
+                    $.zmsg.error(data.msg);
+                }
+            },
+            error: function(data) {
+                $.zmsg.fatal(data.responseText);
+            }
+        });
+    }
+    function addHorse(cont) {
+        var horseCount = $('input[name=horseCont]').size();
+        if (horseCount >= 5) {
+            $('#alertHorse').text('跑马灯不能多于5个');
+            return;
+        }
+        if (!cont)
+            cont = '';
+        var dv = $('#dv-horse-cont');
+        if (dv) {
+            var html = '<div class="form-group">'+
+                '<label class="col-sm-3 control-label" for="horseCont">跑马灯内容</label>'+
+                '<div class="col-sm-6">'+
+                '<input class="form-control" id="horseCont" type="text" name="horseCont" value="'+texttohtml(cont)+'" /></div>'+
+                '<button class="btn btn-danger" type="button" id="delHorseCont" onclick="delHorse(this);">删除</button></div>';
+            dv.append(html);
+        }
+    }
+    function delHorse(obj) {
+        var target = $(obj).closest('div.form-group');
+        if (target)
+            target.remove();
+    }
+    //////////////////////////////////////广告配置
+    function addWechat(obj, wechat) {
+        var tbody = $(obj).closest('table').find('tbody').eq(0);
+        var count = tbody.find('tr').size();
+        if (count >= 3) {
+            return;
+        }
+        var wx1 = wx2 = '';
+        if (wechat) {
+            wx1 = wechat[0];
+            wx2 = wechat[1];
+        }
+        if (tbody) {
+            var trhtml = '<tr><td><input type="text" name="adwechatid1" value="'+wx1+'" />&nbsp;'+
+                '<input type="text" name="adwechatid2" value="'+wx2+'" /></td>'+
+                '<td><button class="btn btn-danger" type="button" onclick="delWechat(this);">删除</button></td></tr>';
+            tbody.append(trhtml);
+        }
+    }
+    function delWechat(obj) {
+        var target = $(obj).closest('tr');
+        if (target)
+            target.remove();
+    }
+    function addAdvPic(cont) {
+        var count = $('input[name=advpics]').size();
+        if (count >= 5) {
+            $('#alertAdvPic').text('广告图不能多于5个');
+            return;
+        }
+        if (!cont)
+            cont = {};
+        var dv = $('#dv-advpic-cont');
+        if (dv) {
+            var html = '<div class="form-group">'+
+                            '<div style="display:inline-block;padding-left:15px;">'+
+                                '<span class="btn btn-success fileinput-button" id="edtModImgBtnS'+g_pic_idx+'" data-tag="add">'+
+                                    '<span>上传展开图</span>'+
+                                    '<span class="badge" id="edtModImgBadgeS'+g_pic_idx+'">'+
+                                        '<span class="glyphicon glyphicon-arrow-up"></span>'+
+                                    '</span>'+
+                                    '<input type="file" name="image" id="edtModImgInputS'+g_pic_idx+'" />'+
+                                '</span>'+
+                                '<input name="advpics" id="edtModImagesS'+g_pic_idx+'" type="hidden"  />'+
+                            '</div>'+
+                            '<div style="display:inline-block;width:120px;" id="edtModImgPreviewDivS'+g_pic_idx+'" hidden><div style="display:inline-block;"></div></div>'+
+                            '<div style="display:inline-block;">'+
+                                '<span class="btn btn-success fileinput-button" id="edtModImgBtnB'+g_pic_idx+'" data-tag="add">'+
+                                    '<span>上传缩略图</span>'+
+                                    '<span class="badge" id="edtModImgBadgeB'+g_pic_idx+'">'+
+                                        '<span class="glyphicon glyphicon-arrow-up"></span>'+
+                                    '</span>'+
+                                    '<input type="file" name="image" id="edtModImgInputB'+g_pic_idx+'" />'+
+                                '</span>'+
+                                '<input name="advpicb" id="edtModImagesB'+g_pic_idx+'" type="hidden"  />'+
+                            '</div>'+
+                            '<div style="display:inline-block;width:120px;" id="edtModImgPreviewDivB'+g_pic_idx+'" hidden><div style="display:inline-block;"></div></div>'+
+                            '<div class="dv-wechat"><table name="adwechat"><thead><tr>'+
+                            '<th>轮播时间：<input type="text" name="adwechattime" id="adwechattime'+g_pic_idx+'" value="" /><span style="color:red;font-weight:normal;">（秒）</span></th>'+
+                            '<th><button class="btn btn-success" type="button" id="btnwechat'+g_pic_idx+'" onclick="addWechat(this);">添加微信</button></div></th></tr></thead><tbody></tbody></table></div>'+
+                            '&nbsp;&nbsp;<button class="btn btn-danger" type="button" onclick="delAdvPic(this);">删除</button></div>'+
+                        '</div>';
+            dv.append(html);
+            if (cont.imgSmall) {
+                var imgHtml = '<span class="imgListItem">' +//<i class="fa fa-times imgListItem-close"></i>
+                                    '<img class="addGoodsImg" src="' +  cont.imgSmall + '?t=' + new Date() + '" style="box-shadow: rgb(86, 86, 86) 0px 0px 3px; width: 100px; max-width: 100%;">' +
+                                    '</span>';
+                $('#edtModImgPreviewDivS'+g_pic_idx).children("div").html(imgHtml);
+                $('#edtModImagesS'+g_pic_idx).val(cont.imgSmall);
+                $('#edtModImgPreviewDivS'+g_pic_idx).fadeIn("slow");
+            }  
+            if (cont.imgName) {
+                imgHtml = '<span class="imgListItem">' +//<i class="fa fa-times imgListItem-close"></i>
+                        '<img class="addGoodsImg" src="' +  cont.imgName + '?t=' + new Date() + '" style="box-shadow: rgb(86, 86, 86) 0px 0px 3px; width: 100px; max-width: 100%;">' +
+                        '</span>';
+                $('#edtModImgPreviewDivB'+g_pic_idx).children("div").html(imgHtml);
+                $('#edtModImagesB'+g_pic_idx).val(cont.imgName);
+                $('#edtModImgPreviewDivB'+g_pic_idx).fadeIn("slow"); 
+            }
+            if (cont.wechatids) {
+                for (var iwx = 0; iwx < cont.wechatids.length; iwx++) {
+                    if ($.isArray(cont.wechatids[iwx])) {
+                        addWechat($("#btnwechat"+g_pic_idx), cont.wechatids[iwx]);
+                    } else if (cont.wechatids[iwx].indexOf('&') != -1) {
+                        var wxchatids = cont.wechatids[iwx].split('&');
+                        addWechat($("#btnwechat"+g_pic_idx), wxchatids);
+                    } else {
+                        addWechat($("#btnwechat"+g_pic_idx), [cont.wechatids[iwx], cont.wechatids[iwx+1]]);
+                        iwx++;
+                    }
+                }
+            }
+            if (cont.wechattime) {
+                $("#adwechattime" + g_pic_idx).val(cont.wechattime);
+            }
+            imgUploadSetup('edtMod', 'S'+g_pic_idx); 
+            imgUploadSetup('edtMod', 'B'+g_pic_idx); 
+            g_pic_idx++;
+        }
+    }
+    function delAdvPic(obj) {
+        var target = $(obj).closest('div.form-group');
+        if (target)
+            target.remove();
+    }
+    function submitAdvImage() {
+        $('#edtMod').modal('hide');
+		if (packVer == 1) {
+            $.zmsg.errorShowModal('横版游戏不支持此功能', 'edtMod');
+            return false;
+		}
+        var data = {};
+        data.confid = g_edit_conf_id;        
+        data.pictime = $('#edtModPicTime').val();
+        /*if (data.pictime == '') {
+            $.zmsg.errorShowModal('图片轮播时间不能为空', 'edtMod');
+            return false;
+        }
+        if (!intreg.test(parseInt(data.pictime))) {
+            $.zmsg.errorShowModal('图片轮播时间必须为整数', 'edtMod');
+            return false;
+        }*/
+        data.imgsmall = [];
+        data.imgname = [];
+        data.wechat = [];
+        var count = $('input[name=advpics]').size();
+        for (var i = 0; i < count; i++) {
+            var is = $('input[name=advpics]').eq(i).val();
+            var ib = $('input[name=advpicb]').eq(i).val();
+            if (is == '' || typeof (is) == 'undefined' || ib == '' || typeof (ib) == 'undefined') {
+                $.zmsg.errorShowModal('有图片未上传，请上传', 'edtMod');
+                return false;
+            }
+            data.imgsmall.push(is);
+            data.imgname.push(ib);
+            var wx = {};
+            var time = $('input[name=adwechattime]').eq(i).val();
+            if (!intreg.test(time)) {
+                $.zmsg.errorShowModal('微信轮播时间必须为整数', 'edtMod');
+                return false;
+            }
+            if (parseInt(time) <= 0) {
+                $.zmsg.errorShowModal('微信轮播时间必须大于0', 'edtMod');
+                return false;
+            }
+            wx.time = time;
+            wx.ids = [];
+            var tbody = $("[name=adwechat]").eq(i).find('tbody').eq(0);
+            var chatcount = tbody.find('tr').size();
+            for (var j = 0; j < chatcount; j++) {
+                var chat1 = tbody.find('tr').eq(j).find('input[type=text]').eq(0).val();
+                var chat2 = tbody.find('tr').eq(j).find('input[type=text]').eq(1).val();
+                if (chat1 == '' || chat2 == '') {
+                    $.zmsg.errorShowModal('微信内容不能为空', 'edtMod');
+                    return false;
+                }
+                if (!wxreg.test(chat1) || !wxreg.test(chat2)) {
+                    $.zmsg.errorShowModal('必须输入正确的微信号', 'edtMod');
+                    return false;
+                }
+                wx.ids.push([chat1, chat2]);
+            }
+            data.wechat.push(wx);
+        }
+        $.ajax({
+            url: "/Gameconf/ajaxSubmitAdvImg",
+            type: "POST",
+            data: data,
+            dataType: "json",
+            success: function(data) {
+                $.loading.hide('delMsgLoading');
+                if (0 == data.code) {
+                    $.zmsg.success('/Gameconf/operate/third/opeconf');//$.zmsg.info('保存成功');
+                } else {
+                    $.zmsg.error(data.msg);
+                }
+            },
+            error: function(data) {
+                $.loading.hide('delMsgLoading');
+                $.zmsg.fatal(data.responseText);
+            }
+        });        
+    }
+    //////////////////////////////////////客服界面配置
+    function delCmsLine(obj) {
+        var target = $(obj).closest('tr');
+        if (target)
+            target.remove();        
+    }
+    function addCmsLine(tbody, tip, cont) {
+        var td = $("#"+tbody);
+        var lines = td.children('tr').size();
+        if (lines >= 5) {
+            $('#'+tip).text('内容不能多于5个');
+            return;
+        }
+        if (!cont)
+            cont = '';
+        var html = '<tr><td><input class="form-control" type="text" name="cmdLine" value="'+texttohtml(cont)+'" /></td>'+
+                '<td><button class="btn btn-danger" type="button" onclick="delCmsLine(this);">删除</button></div></td></tr>';
+        if (td) {
+            td.append(html);
+        }
+    }
+    function submitCms() {
+        $('#edtMod').modal('hide');
+        var reg = /[(\|)(\<)(\>)(\,)]+/;
+        var data = {};
+        data.confid = g_edit_conf_id;
+        data.weixincont = $("#edtModWeixinCont").val();
+        data.weixintime = $("#edtModWeixinTime").val();
+        data.proxycont = $("#edtModProxyCont").val();
+        data.proxytime = $("#edtModWeixinTime").val();//$("#edtModProxyTime").val();
+        data.weixin = [];
+        data.proxy = [];
+        if (data.weixintime == '') {
+            $.zmsg.errorShowModal('轮播时间必须填写', 'edtMod');
+            return false;
+        }
+        if (!intreg.test(data.weixintime)) {
+            $.zmsg.errorShowModal('轮播时间必须为整数', 'edtMod');
+            return false;
+        }
+        if (parseInt(data.weixintime) <= 0) {
+            $.zmsg.errorShowModal('轮播时间必须大于0', 'edtMod');
+            return false;
+        }
+        if (data.weixincont == '') {
+            $.zmsg.errorShowModal('微信公众号-说明文字必须填写', 'edtMod');
+            return false;
+        }
+        if (data.proxycont == '') {
+            $.zmsg.errorShowModal('代理招募-说明文字必须填写', 'edtMod');
+            return false;
+        }
+        var invalid = false;
+        if (reg.test(data.weixincont) || reg.test(data.proxycont))
+            invalid = true;
+        $('input[name=cmdLine]').each(function() {
+            var val = $(this).val();
+            if (reg.test(val)) {
+                invalid = true;
+            }
+            if (val) {
+                if ($(this).closest('#tbWeixin').length > 0)
+                    data.weixin.push(val);
+                else
+                    data.proxy.push(val);
+            }
+        });
+        if (invalid) {
+            $.zmsg.errorShowModal('微信公众号和代理招募不能存在"|"、"<"、">"、","字符', 'edtMod');
+            return;
+        }
+        if (data.weixin.length <= 0) {
+            $.zmsg.errorShowModal('微信公众号内容必须至少添加一条', 'edtMod');
+            return false;            
+        }
+        if (data.proxy.length <= 0) {
+            $.zmsg.errorShowModal('代理招募号内容必须至少添加一条', 'edtMod');
+            return false;            
+        }
+        $.ajax({
+            url: "/Gameconf/ajaxSubmitCms",
+            type: "POST",
+            data: data,
+            dataType: "json",
+            success: function(data) {
+                $.loading.hide('delMsgLoading');
+                if (0 == data.code) {
+                    $.zmsg.success('/Gameconf/operate/third/opeconf');//$.zmsg.info('保存成功');
+                } else {
+                    $.zmsg.error(data.msg);
+                }
+            },
+            error: function(data) {
+                $.loading.hide('delMsgLoading');
+                $.zmsg.fatal(data.responseText);
+            }
+        });
+    }
+    function submitHorse() {
+        $('#edtMod').modal('hide');
+        var data = {};
+        data.confid = g_edit_conf_id;
+        data.horsetime = $("#edtModHorseTime").val();
+        data.horse = [];
+        var reg = /[(\|)]+/;
+        var invalid = false;
+        $('input[name=horseCont]').each(function() {
+            var horseval = $(this).val();
+            if (reg.test(horseval)) {
+                invalid = true;
+            }
+            if (horseval) {
+                data.horse.push(horseval);
+            }
+        });
+        if (invalid) {
+            $.zmsg.errorShowModal('跑马灯内容不能存在"|"字符', 'edtMod');
+            return;
+        }
+        $.ajax({
+            url: "/Gameconf/ajaxSubmitHorse",
+            type: "POST",
+            data: data,
+            dataType: "json",
+            success: function(data) {
+                $.loading.hide('delMsgLoading');
+                if (0 == data.code) {
+                    $.zmsg.success('/Gameconf/operate/third/opeconf');//$.zmsg.info('保存成功');
+                } else {
+                    $.zmsg.error(data.msg);
+                }
+            },
+            error: function(data) {
+                $.loading.hide('delMsgLoading');
+                $.zmsg.fatal(data.responseText);
+            }
+        });        
+    }
+    function submitPayTip() {
+        $('#edtMod').modal('hide');
+        var data = {};
+        data.confid = g_edit_conf_id;
+        data.paytip = $("#edtModPay").val();
+        $.ajax({
+            url: "/Gameconf/operate/action/submitPay",
+            type: "POST",
+            data: data,
+            dataType: "json",
+            success: function(data) {
+                $.loading.hide('delMsgLoading');
+                if (0 == data.code) {
+                    $.zmsg.success('/Gameconf/operate/third/opeconf');//$.zmsg.info('保存成功');
+                } else {
+                    $.zmsg.error(data.msg);
+                }
+            },
+            error: function(data) {
+                $.loading.hide('delMsgLoading');
+                $.zmsg.fatal(data.responseText);
+            }
+        });        
+    }
+    
+    function imgUploadSetup(mod, suff) {
+        $('#' + mod + 'ImgInput' + suff).fileupload({
+            url: "/Gameconf/ajaxAdvUploadImages"
+        }).on('fileuploadstart', function(e, data) {
+            // 上传 input,提交input disabled
+            $('#' + mod + 'ImgInput' + suff).prop('disabled', true);
+            $('#' + mod + 'UpimgBtn').prop('disabled', true);
+            // 图片上传按钮切换为进度样式
+            $('#' + mod + 'ImgBadge' + suff).empty().append($('<span/>').text("0%"));
+        }).on('fileuploadprogress', function(e, data) {
+            // 更新进度值
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#' + mod + 'ImgBadge' + suff).children().text(progress + "%");
+        }).on('fileuploadalways', function(e, data) {
+            // 上传 input enabled
+            $('#' + mod + 'ImgInput' + suff).prop('disabled', false);
+            $('#' + mod + 'UpimgBtn').prop('disabled', false);
+
+            if (0 == data.result.code) {
+                // 先隐藏预览框
+                $('#' + mod + 'ImgPreviewDiv' + suff).fadeOut("fast", function() {
+                    var imgHtml = '<span class="imgListItem">' +
+                            //'<i class="fa fa-times imgListItem-close"></i>' +
+                            '<img class="addGoodsImg" src="' + data.result.data.imgUrl + '?t=' + new Date() + '" style="box-shadow: rgb(86, 86, 86) 0px 0px 3px; width: 100px; max-width: 100%;">' +
+                            '</span>';
+                    $('#' + mod + 'ImgPreviewDiv' + suff).children("div").html(imgHtml);
+                    $('#' + mod + 'Images' + suff).val(data.result.data.imgUrl);
+
+                    $('#' + mod + 'ImgPreviewDiv' + suff).fadeIn("slow");
+                });
+
+                // 添加后将图片上传按钮的样式改为修改样式
+                setTimeout(function() {
+                    $('#' + mod + 'ImgBtn' + suff).fadeOut('slow', function() {
+                        if ("add" == $('#' + mod + 'ImgBtn' + suff).data('tag')) {
+                            $('#' + mod + 'ImgBtn' + suff).removeClass('btn-success').addClass('btn-primary').data('tag', 'edit');
+                        }
+                        $('#' + mod + 'ImgBadge' + suff).empty().append(
+                                $('<span/>').addClass("glyphicon glyphicon-edit")
+                                );
+                        $('#' + mod + 'ImgBtn' + suff).fadeIn('slow');
+                    });
+                }, 1000);
+            } else {
+                $('#' + mod).modal('hide');
+                // 弹出错误信息
+                if (data.result.msg) {
+                    $.zmsg.errorShowModal(data.result.msg, mod);
+                } else {
+                    $.zmsg.fatalShowModal(data.result, mod);
+                }
+            }
+        });
+    }
+    
+    //字符转换
+    function texttohtml(text) {
+        if (text)
+            return text.replace(/&/gi, '&amp;').replace(/\s/gi, "&nbsp;").replace(/>/gi, '&gt;').replace(/</gi, '&lt;').replace(/\"/gi, '&quot;');
+        return text;
+    }
+</script>

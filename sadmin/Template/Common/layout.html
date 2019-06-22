@@ -1,0 +1,138 @@
+
+<include file="./Template/Common/header.html" />
+
+<div id="wrapper">
+    <!-- 顶部导航栏 -->
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- brand -->
+            <a class="navbar-brand" href="/"><strong>大圣游戏管理后台</strong></a>
+            <!-- 顶部关于侧边导航栏隐藏的 icon -->
+            <div id="sideNav" href=""><i class="fa fa-bars icon"></i></div>
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+            <!-- 选择游戏地区下拉菜单 -->
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <span>{$regionMap[$gameId]}</span> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <php>
+                        $regionCount = count($regionMap);
+                        $forCount = 1;
+                    </php>
+                    <foreach name="regionMap" item="v">
+                        <!-- 将当前地区 disabled -->
+                        <eq name="key" value="$gameId">
+                            <li class="disabled">
+                                <a href="javascript:void(0);"><div class="disabled">{$v}</div></a>
+                            </li>
+                        <else/>
+                            <li>
+                                <a href="/Auth/switchRegion/gameId/{$key}"><div>{$v}</div></a>
+                            </li>
+                        </eq>
+                        <!-- 最后一个地区下面不要加分隔线 -->
+                        <lt name="forCount" value="$regionCount">
+                            <li class="divider"></li>
+                            <assign name="forCount" value="$forCount + 1" />
+                        </lt>
+                    </foreach>
+                </ul>
+            </li>
+            <!-- 用户信息设置、注销下拉菜单 -->
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <!-- 用户名 -->
+                    <li><span><i class="fa fa-user fa-fw"></i> {$Think.config.G_USER.username}</span></li>
+                    <!-- 用户角色 -->
+                    <li><span><i class="fa fa-user-circle fa-fw"></i> {$Think.config.G_USER.rolename}</span></li>
+                    <!-- 用户信息设置 -->
+                    <li><a href="/Auth/userSet"><i class="fa fa-gear fa-fw"></i> 修改密码</a></li>
+                    <li class="divider"></li>
+                    <!-- 退出 -->
+                    <li>
+                        <a href="javascript:void(0)" id="userLogoutBtn">
+                            <i class="fa fa-sign-out fa-fw"></i> 注销
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <!-- 侧边导航栏 -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <foreach name="nav" item="main" key="m">
+                    <eq name="m" value="$mCode">
+                        <assign name='mActiveClass' value=' class="active"' />
+                        <assign name='mActiveExpand' value=' aria-expanded="true"' />
+                    <else/>
+                        <assign name='mActiveClass' value='' />
+                        <assign name='mActiveExpand' value='' />
+                    </eq>
+                    <li{$mActiveClass}>
+                        <a href="javascript:void(0);"{$mActiveExpand}>
+                            <i class="fa {$main.icon}"></i> {$main.name}<span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level"{$mActiveExpand}>
+                            <foreach name="main.sublevel" item="sublevel" key="s">
+                                <eq name="s" value="$sCode">
+                                    <assign name='sActiveClass' value=' class="active"' />
+                                    <assign name='sActiveExpand' value=' aria-expanded="true"' />
+                                    <assign name='sActiveMenu' value=' class="active-menu"' />
+                                <else/>
+                                    <assign name='sActiveClass' value='' />
+                                    <assign name='sActiveExpand' value='' />
+                                    <assign name='sActiveMenu' value='' />
+                                </eq>
+                                <empty name="sublevel.third">
+                                    <li><a href="{$sublevel.url}"{$sActiveMenu}>{$sublevel.name}</a></li>
+                                <else/>
+                                    <li{$sActiveClass}>
+                                        <a href="javascript:vlid(0);"{$sActiveExpand}>
+                                            {$sublevel.name}<span class="fa arrow"></span>
+                                        </a>
+                                        <ul class="nav nav-third-level"{$sActiveExpand}>
+                                            <foreach name="sublevel.third" item="third" key="t">
+                                                <eq name="t" value="$tCode">
+                                                    <li>
+                                                        <a class="active-menu" href="{$third.url}">
+                                                            {$third.name}
+                                                        </a>
+                                                    </li>
+                                                <else/>
+                                                    <li>
+                                                        <a href="{$third.url}">
+                                                            {$third.name}
+                                                        </a>
+                                                    </li>
+                                                </eq>
+                                            </foreach>
+                                        </ul>
+                                    </li>
+                                </empty>
+                            </foreach>
+                        </ul>
+                    </li>
+                </foreach>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="page-wrapper">
+        {__CONTENT__}
+    </div>
+</div>
+
+<include file="./Template/Common/footer.html" />

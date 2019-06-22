@@ -1,0 +1,389 @@
+
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<div class="header">
+    <h1 class="page-header">外库配置</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" role="form" method="get" action="/System/data/third/dbconf">
+                        <div class="form-group">
+                            <label class="sr-only" for="gameId">game id</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">游戏</div>
+                                <select class="form-control" id="gameId" name="game_id">
+                                    <option value='0'>全部</option>
+                                    <foreach name="gameMap" item="v">
+                                        <option value='{$key}'>{$v}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-query">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-lg-10 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>游戏</th>
+                                        <th>类型</th>
+                                        <th>地址</th>
+                                        <th>用户</th>
+                                        <th>密码</th>
+                                        <th>库名</th>
+                                        <th>主从</th>
+                                        <th>备注</th>
+                                        <th>
+                                            <present name="mgrFlag">
+                                                <button
+                                                    class="btn btn-sm btn-success"
+                                                    type="button"
+                                                    data-toggle="modal"
+                                                    data-target="#addMod"
+                                                >添加
+                                                </button>
+                                            </present>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <td>{$v.id}</td>
+                                            <td>{$gameMap[$v['game_id']]}</td>
+                                            <td>{$dbTypeMap[$v['db_type']]}</td>
+                                            <td>{$v.host}:{$v.port}</td>
+                                            <td>{$v.user}</td>
+                                            <td>{$v.pwd}</td>
+                                            <td class="text-info">
+                                                <span class="tiptip" title="编码：{$v.charset}">
+                                                    {$v.db_name}
+                                                </span>
+                                            </td>
+                                            <td>{$masterMap[$v['is_master']]}</td>
+                                            <td>{$v.remark}</td>
+                                            <td>
+                                                <present name="mgrFlag">
+                                                    <button
+                                                        class="btn btn-sm btn-primary"
+                                                        type="button"
+                                                        data-toggle="modal"
+                                                        data-target="#edtMod"
+                                                        data-id="{$v.id}"
+                                                        data-game_id="{$v.game_id}"
+                                                        data-db_type="{$v.db_type}"
+                                                        data-host="{$v.host}"
+                                                        data-port="{$v.port}"
+                                                        data-user="{$v.user}"
+                                                        data-pwd="{$v.pwd}"
+                                                        data-db_name="{$v.db_name}"
+                                                        data-charset="{$v.charset}"
+                                                        data-is_master="{$v.is_master}"
+                                                        data-remark="{$v.remark}"
+                                                    >修改
+                                                    </button>
+                                                    <button
+                                                        class="btn btn-sm btn-danger"
+                                                        type="button"
+                                                        data-toggle="modal"
+                                                        data-target="#delMod"
+                                                        data-id="{$v.id}"
+                                                        data-name="{$gameMap[$v['game_id']]}"
+                                                        data-db_type="{$dbTypeMap[$v['db_type']]}"
+                                                        data-host="{$v.host}"
+                                                        data-db_name="{$v.db_name}"
+                                                    >删除
+                                                    </button>
+                                                </present>
+                                            </td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addMod" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addModalLabel">添加外库配置</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addModForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request">游戏</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="addModGame" name="game_id">
+                                <foreach name="gameMap" item="v">
+                                    <option value="{$key}">{$v}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request">类型</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="addModType" name="db_type">
+                                <foreach name="dbTypeMap" item="v">
+                                    <option value="{$key}">{$v}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModHost">服务器地址</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModHost" type="text" name="host" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModPort">端口</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModPort" type="text" name="port" value="3306" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModUser">用户名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModUser" type="text" name="user" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModPwd">密码</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModPwd" type="text" name="pwd" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModDbName">库名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModDbName" type="text" name="db_name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="addModCharset">库编码</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModCharset" type="text" name="charset" value="utf8" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request">库主从关系</label>
+                        <div class="col-sm-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_master" value="1" checked /> 主库
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_master" value="0" /> 从库
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="addModRemark">备注</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="addModRemark" type="text" name="remark" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" onclick="submitAddConf();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edt Modal -->
+<div class="modal fade" id="edtMod" tabindex="-1" role="dialog" aria-labelledby="edtModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="edtModalLabel">修改外库配置</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="edtModForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="edtModHost">id</label>
+                        <div class="col-sm-6">
+                            <p class="form-control-static" id="edtModId"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request">游戏</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="edtModGame" name="game_id">
+                                <foreach name="gameMap" item="v">
+                                    <option value="{$key}">{$v}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request">类型</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="edtModType" name="db_type">
+                                <foreach name="dbTypeMap" item="v">
+                                    <option value="{$key}">{$v}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="edtModHost">服务器地址</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModHost" type="text" name="host" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="edtModPort">端口</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModPort" type="text" name="port" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="edtModUser">用户名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModUser" type="text" name="user" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="edtModPwd">密码</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModPwd" type="text" name="pwd" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="edtModDbName">库名</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModDbName" type="text" name="db_name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request" for="edtModCharset">库编码</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModCharset" type="text" name="charset" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label request">库主从关系</label>
+                        <div class="col-sm-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_master" id="edtModMaster" value="1" /> 主库
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_master" id="edtModSlave" value="0" /> 从库
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="edtModRemark">备注</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="edtModRemark" type="text" name="remark" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" onclick="submitEdtConf();">提交</button>
+                <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete modal -->
+<div class="modal fade" id="delMod" tabindex="-1" role="dialog" aria-labelledby="delModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="delModalLabel">删除外库配置</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">是否确定删除外库配置：
+                                <span class='text-danger' id='delModId'></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">游戏：
+                                <span class='text-danger' id='delModGame'></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">类型：
+                                <span class='text-danger' id='delModType'></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">地址：
+                                <span class='text-danger' id='delModHost'></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <p class="form-control-static text-success">库名：
+                                <span class='text-danger' id='delModDbName'></span>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="submitDelConf();">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// query bar 初始化参数
+var query = {$query};
+</script>
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Js/system/data-dbconf.js" />

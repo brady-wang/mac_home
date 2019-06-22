@@ -1,0 +1,195 @@
+
+<css href="/Public/Lib/bootstrap-datetimepicker-2.4.4/css/bootstrap-datetimepicker.min.css"/>
+
+<div class="header">
+    <h1 class="page-header">牌局日志</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <form class="form-inline form-filter" method="get" action="/Gamemgr/log/third/round">
+                            <!-- 房间号码 -->
+                            <div class="form-group form-group-filter">
+                                <input type="number" class="form-control" name="roomid"  id="roomid" placeholder="房间号码"  value="{$roomid}">
+                            </div>
+                            <!-- 玩家id -->
+                            <div class="form-group form-group-filter">
+                                <input type="number" class="form-control" name="userid"  id="userid"  placeholder="玩家id"  value="{$userid}">
+                            </div>
+                            <!-- 开始日期 -->
+                            <div class="form-group has-feedback">
+                                <div class="input-group" style="width: 250px;">
+                                    <div class="input-group-addon">开始日期</div>
+                                    <input class="form-control" id="stime" name="start" type="text" readonly="readonly"  value="{$start}" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <!-- 结束日期 -->
+                            <div class="form-group has-feedback">
+                                <div class="input-group" style="width: 250px;">
+                                    <div class="input-group-addon">结束日期</div>
+                                    <input class="form-control" id="etime" name="end" type="text" readonly="readonly"  value="{$end}"/>
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <!-- 参与人数 -->
+                            <div class="input-group">
+                                <div class="input-group-addon">参与人数</div>
+                                <select class="form-control" id="usercount" name="usercount">
+                                    <option value="0">不限</option>
+                                    <option value="4" >4人</option>
+                                    <option value="3" >3人</option>
+                                    <option value="2" >2人</option>
+                                </select>
+                            </div>
+                            <!-- 房间类型 -->
+                            <div class="input-group">
+                                <div class="input-group-addon">房间类型</div>
+                                <select class="form-control" id="roomtype" name="roomtype">
+                                    <option value="0">不限</option>
+                                    <option value="1" >普通房间</option>
+                                    <option value="2" >俱乐部房间</option>
+                                </select>
+                            </div>
+                            <!-- 结束状态 -->
+                            <div class="input-group">
+                                <div class="input-group-addon">正常结束</div>
+                                <select class="form-control" id="isnormal" name="isnormal">
+                                    <option value="0">不限</option>
+                                    <option value="1">是</option>
+                                    <option value="2">否</option>
+                                </select>
+                            </div>
+                            <!-- 查询 -->
+                            <button type="submit" class="btn btn-primary btn-sm">查询</button>
+                            <!-- 导出 -->
+                            <!-- <button type="button" class="btn btn-default btn-sm">导出excel</button> -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+        <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                <thead>
+                                    <tr role="row">
+                                        <th><div style="width: 80px;">ID</div></th>
+                                        <th><div style="width: 80px;">房间号</div></th>
+                                        <th><div style="width: 80px;">付费类型</div></th>
+                                        <th><div style="width: 80px;">房费</div></th>
+                                        <th><div style="width: 80px;">局数</div></th>
+                                        <th><div style="width: 130px;">参与者1</div></th>
+                                        <th><div style="width: 80px;">参与者1_ID</div></th>
+                                        <th><div style="width: 80px;">得分</div></th>
+                                        <th><div style="width: 130px;">参与者2</div></th>
+                                        <th><div style="width: 80px;">参与者2_ID</div></th>
+                                        <th><div style="width: 80px;">得分</div></th>
+                                        <th><div style="width: 130px;">参与者3</div></th>
+                                        <th><div style="width: 80px;">参与者3_ID</div></th>
+                                        <th><div style="width: 80px;">得分</div></th>
+                                        <th><div style="width: 130px;">参与者4</div></th>
+                                        <th><div style="width: 80px;">参与者4_ID</div></th>
+                                        <th><div style="width: 80px;">得分</div></th>
+                                        <th><div style="width: 140px;">开始时间</div></th>
+                                        <th><div style="width: 140px;">结束时间</div></th>
+                                        <th><div style="width: 80px;">操作</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <if condition="!empty($list)">
+                                        <volist name="list" id="vo">
+                                            <tr>
+                                                <td>{$vo.id}</td>
+                                                <td>{$vo.roomId}</td>
+                                                <td>{$vo.roomFreeType}</td>
+                                                <td>{$vo.gameCard}</td>
+                                                <td>{$vo.gameNum}</td>
+                                                <td>{$vo.userName1}</td>
+                                                <td>{$vo.userId1}</td>
+                                                <td>{$vo.userCashDiff1}</td>
+                                                <td>{$vo.userName2}</td>
+                                                <td>{$vo.userId2}</td>
+                                                <td>{$vo.userCashDiff2}</td>
+                                                <td>{$vo.userName3}</td>
+                                                <td>{$vo.userId3}</td>
+                                                <td>{$vo.userCashDiff3}</td>
+                                                <td>{$vo.userName4}</td>
+                                                <td>{$vo.userId4}</td>
+                                                <td>{$vo.userCashDiff4}</td>
+                                                <td>{$vo.gameStartTime}</td>
+                                                <td>{$vo.gameStopTime}</td>
+                                                <td>
+                                                    <a class="btn btn-default viewDetail" href="/Gamemgr/log/third/showroundlog?id={$vo.id}">查看详情</a>
+                                                </td>
+                                            </tr>
+                                        </volist>
+                                    <else />
+                                        <tr>
+                                            <td colspan="20" class="text-center">无相关查询数据</td>
+                                        </tr>
+                                    </if>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/bootstrap-datetimepicker.min.js"/>
+<js href="/Public/Lib/bootstrap-datetimepicker-2.4.4/js/locales/bootstrap-datetimepicker.zh-cn.js"/>
+
+<script>
+$(document).ready(function() {
+    // 参与人数
+    var usercount = {$usercount | default = "0"};
+    if (usercount) {
+        $('#usercount').children('[value=' + usercount + ']').prop('selected', true);
+    }
+    // 房间类型
+    var roomtype = {$roomtype | default = "0"};
+    if (roomtype) {
+        $('#roomtype').children('[value=' + roomtype + ']').prop('selected', true);
+    }
+    // 正常结束
+    var isnormal = {$isnormal | default = "0"};
+    if (isnormal) {
+        $('#isnormal').children('[value=' + isnormal + ']').prop('selected', true);
+    }
+
+    $("input[name=start]").datetimepicker({
+        language: "zh-CN",
+        autoclose: true,
+        clearBtn: true,
+        endDate: new Date(),//new Date(new Date().valueOf() - 24 * 3600 * 1000),
+        //todayBtn: true,
+        format: "yyyy-mm-dd hh:ii:ss"
+    });
+    $("input[name=end]").datetimepicker({
+        language: "zh-CN",
+        autoclose: true,
+        clearBtn: true,
+        endDate: new Date(),//new Date(new Date().valueOf() - 24 * 3600 * 1000),
+        format: "yyyy-mm-dd hh:ii:ss"
+    });
+});
+</script>

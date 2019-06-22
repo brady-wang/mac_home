@@ -1,0 +1,186 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+
+<div class="header">
+    <h1 class="page-header">操作流水</h1>
+</div>
+<div id="page-inner">
+    <!-- 查询栏 -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!-- 查询栏 -->
+                    <form class="form-horizontal" role="form" method="get" action="/System/log/third/operation">
+                        <!-- 第一行 -->
+                        <div class="form-group has-feedback">
+                            <!-- uid -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">用户id</div>
+                                    <input class="form-control" id="uid" name="uid" type="text" />
+                                </div>
+                            </div>
+                            <!-- 用户名 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">用户名</div>
+                                    <input class="form-control" id="username" name="username" type="text" />
+                                </div>
+                            </div>
+                            <!-- 开始日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">开始日期</div>
+                                    <input class="form-control" id="startDate" name="start_date" type="text" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                            <!-- 结束日期 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">结束日期</div>
+                                    <input class="form-control" id="endDate" name="end_date" type="text" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <!-- 第二行 -->
+                        <div class="form-group has-feedback">
+                            <!-- 游戏 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">游戏</div>
+                                    <select class="form-control" id="gameId" name="game_id">
+                                        <option value="0">全部</option>
+                                        <foreach name="gameMap" item="v">
+                                            <option value="{$key}">{$v}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- 一级权限 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">一级</div>
+                                    <select class="form-control" id="mainCode" name="main_code">
+                                        <foreach name="authMap" key="mCode" item="main">
+                                            <option value="{$mCode}">{$main.name}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- 二级权限 -->
+                            <div class="col-sm-3" id="sublevelDiv" hidden>
+                                <div class="input-group">
+                                    <div class="input-group-addon">二级</div>
+                                    <select class="form-control" id="sublevelCode" name="sublevel_code">
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- 三级权限 -->
+                            <div class="col-sm-3" id="thirdDiv" hidden>
+                                <div class="input-group">
+                                    <div class="input-group-addon">三级</div>
+                                    <select class="form-control" id="thirdCode" name="third_code">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 第三行 -->
+                        <div class="form-group has-feedback">
+                            <!-- 内容关键字 -->
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">内容</div>
+                                    <input class="form-control" id="contKey" name="cont_key" type="text" aria-describedby="contKeyDesc" />
+                                </div>
+                                <span class="form-control-feedback glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
+                                <span id="contKeyDesc" class="sr-only">(icon)</span>
+                            </div>
+                            <!-- 查询按钮 -->
+                            <div class="col-sm-1">
+                                <button class="btn btn-query" id="querySubmitBtn" type="submit">查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-lg-10 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>游戏</th>
+                                        <th>用户id</th>
+                                        <th>用户名</th>
+                                        <th>一级</th>
+                                        <th>二级</th>
+                                        <th>三级</th>
+                                        <th>操作</th>
+                                        <th>内容</th>
+                                        <th>执行时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <foreach name="list" item="v">
+                                        <tr>
+                                            <td>{$v['id']}</td>
+                                            <td>{$gameMap[$v['game_id']]}</td>
+                                            <td>{$v['uid']}</td>
+                                            <td>{$userMap[$v['uid']]}</td>
+                                            <td>{$authMap[$v['main_code']]['name']}</td>
+                                            <td>
+                                                <notempty name="v.sublevel_code">
+                                                    {$authMap[$v['main_code']]['sublevel'][$v['sublevel_code']]['name']}
+                                                </notempty>
+                                            </td>
+                                            <td>
+                                                <notempty name="v.third_code">
+                                                    {$authMap[$v['main_code']]['sublevel'][$v['sublevel_code']]['third'][$v['third_code']]}
+                                                </notempty>
+                                            </td>
+                                            <td>
+                                                <notempty name="v.oper_code">
+                                                    {$operMap[$v['oper_code']]}
+                                                </notempty>
+                                            </td>
+                                            <td id="tdShowCont{$v.id}"></td>
+                                            <td>{:date('Y-m-d H:i:s', $v['create_time'])}</td>
+                                        </tr>
+                                    </foreach>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div><!-- /.panel-body -->
+                </div><!-- /.panel panel-default -->
+            </div>
+        </div><!-- /.row -->
+    </present>
+</div>
+
+<script>
+// query bar 初始化参数
+var query = {$query};
+// 映射表
+var authMap = {:json_encode($authMap)};
+// 列表数据
+var loglist = {:json_encode($list)};
+</script>
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Js/system/log-operation.js" />

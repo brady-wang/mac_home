@@ -1,0 +1,319 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+<css href="/Public/Lib/tiptip-1.3/tipTip.css" />
+
+<style>
+/* 各复合数据右上角按钮active */
+.active-bg { background: #eee; }
+/* 各复合数据 chart 框高度 */
+.chart-cont-height { height: 320px; }
+</style>
+
+<div class="header">
+    <h1 class="page-header">收入趋势<small>{$data.statDate}</small></h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" id="queryForm" role="form" method="get" action="/Stat/clubIncome">
+                        <!-- 查看方式 -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">查看方式</div>
+                                <select class="form-control" id="queryType" name="query_type">
+                                    <option value='1'>近14天</option>
+                                    <option value='2'>时间区间</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 开始日期 -->
+                        <div class="form-group has-feedback type-interval" style="display:none;">
+                            <div class="input-group">
+                                <div class="input-group-addon">开始日期</div>
+                                <input class="form-control" id="startDate" name="start_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 结束日期 -->
+                        <div class="form-group has-feedback type-interval" style="display:none;">
+                            <div class="input-group">
+                                <div class="input-group-addon">结束日期</div>
+                                <input class="form-control" id="endDate" name="end_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 查询按钮 -->
+                        <button class="btn btn-query" type="submit">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <p class="text-danger">{$errMsg}</p>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">收入趋势</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default active-bg" id="amtChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="amtTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="amtDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="amtChartFS">
+                            <div class="chart-cont-height" id="amtChartCont"></div>
+                        </fieldset>
+                        <fieldset id="amtTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="每天代理收入总额">付费金额
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{:round($v['income_amount'] / 100)}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">付费人数</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default active-bg" id="numChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="numTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="numDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="numChartFS">
+                            <div class="chart-cont-height" id="numChartCont"></div>
+                        </fieldset>
+                        <fieldset id="numTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="每天代理付费总人数">付费人数
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{$v.pay_num}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">新增付费（付费额度）</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="namChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="namTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="namDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="namChartFS">
+                            <div class="chart-cont-height" id="namChartCont"></div>
+                        </fieldset>
+                        <fieldset id="namTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="当日转正代理当日新增当日即付费总额度">当日新增付费
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="转正代理新增 1-3 天才付费总额度">1-3日新增付费
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="转正代理新增 4-7 天才付费总额度">4-7日新增付费
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="转正代理新增 7 天以上才付费总额度">7日以上新增付费
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{:round($v['pay_type_one_amount'] / 100)}</td>
+                                                <td>{:round($v['pay_type_two_amount'] / 100)}</td>
+                                                <td>{:round($v['pay_type_three_amount'] / 100)}</td>
+                                                <td>{:round($v['pay_type_four_amount'] / 100)}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <p class="form-control-static">新增付费（付费人数）</p>
+                            </div>
+                            <div class="form-group pull-right">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" id="nnmChartBtn">
+                                        <i class="fa fa-chart-line fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="nnmTableBtn">
+                                        <i class="fa fa-th fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="nnmDownBtn">
+                                        <i class="fa fa-download fa-fw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="nnmChartFS">
+                            <div class="chart-cont-height" id="nnmChartCont"></div>
+                        </fieldset>
+                        <fieldset id="nnmTableFS" hidden>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="当日转正代理当日新增当日即付费人数">当日新增付费
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="转正代理新增 1-3 天才付费人数">1-3日新增付费
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="转正代理新增 4-7 天才付费人数">4-7日新增付费
+                                                </span>
+                                            </th>
+                                            <th class="text-info">
+                                                <span class="tiptip" title="转正代理新增 7 天以上才付费人数">7日以上新增付费
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <foreach name="data.compData.table" item="v">
+                                            <tr>
+                                                <td>{$v.stat_date}</td>
+                                                <td>{$v.pay_type_one_num}</td>
+                                                <td>{$v.pay_type_two_num}</td>
+                                                <td>{$v.pay_type_three_num}</td>
+                                                <td>{$v.pay_type_four_num}</td>
+                                            </tr>
+                                        </foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<script>
+var query = {:json_encode($query)};
+var comp = {:json_encode($data['compData'])};
+</script>
+
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Lib/tiptip-1.3/jquery.tipTip.minified.js" />
+<js href="/Public/Lib/echarts-4.1.0/dist/echarts.min.js" />
+<js href="/Public/Js/stat/club-income.js" />

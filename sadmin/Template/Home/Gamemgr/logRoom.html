@@ -1,0 +1,112 @@
+
+<css href="/Public/Lib/bootstrap-datepicker-1.7.1/css/bootstrap-datepicker3.min.css" />
+
+<div class="header">
+    <h1 class="page-header">房间日志</h1>
+</div>
+<div id="page-inner">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-inline" method="get" action="/Gamemgr/log/third/room">
+                        <!-- 玩家id -->
+                        <div class="form-group">
+                            <div class="input-group fixed-width-200">
+                                <div class="input-group-addon">玩家id</div>
+                                <input class="form-control" id="userId" name="userId" type="number" />
+                             </div>
+                        </div>
+                        <!-- 房间号码 -->
+                        <div class="form-group">
+                            <div class="input-group fixed-width-200">
+                                <div class="input-group-addon">房间号码</div>
+                                <input class="form-control" id="roomId" name="roomId" type="number" />
+                             </div>
+                        </div>
+                        <!-- 开始日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group fixed-width-220">
+                                <div class="input-group-addon">开始日期</div>
+                                <input class="form-control" id="startDate" name="start_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 结束日期 -->
+                        <div class="form-group has-feedback">
+                            <div class="input-group fixed-width-220">
+                                <div class="input-group-addon">结束日期</div>
+                                <input class="form-control" id="endDate" name="end_date" type="text" readonly />
+                            </div>
+                            <span class="form-control-feedback glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </div>
+                        <!-- 查询 -->
+                        <button class="btn btn-query btn-sm" type="submit">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <present name="errMsg">
+        <div class="row">
+            <div class="col-sm-12 well">
+                <!-- 房间牌局后端未发版兼容 -->
+                <present name="unPubFlag">
+                    <p class="text-danger">游戏后端未发布房间日志功能，待发布后可正常使用</p>
+                <else />
+                    <p class="text-danger">{$errMsg}</p>
+                </present>
+            </div>
+        </div>
+    <else />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr role="row">
+                                        <th>ID</th>
+                                        <th>房间号</th>
+                                        <th>玩家昵称</th>
+                                        <th>玩家ID</th>
+                                        <th>行为</th>
+                                        <th>时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <notempty  name="list">
+                                        <foreach name="list" item="v">
+                                            <tr>
+                                                <td>{$v.id}</td>
+                                                <td>{$v.roomId}</td>
+                                                <td>{$v.nickName}</td>
+                                                <td>{$v.userId}</td>
+                                                <td>{$actionTypeMap[$v['actionType']]}</td>
+                                                <td>{$v.datetime}</td>
+                                            </tr>
+                                        </foreach>
+                                    <else />
+                                        <tr>
+                                            <td colspan="6" class="text-center">无相关查询数据</td>
+                                        </tr>
+                                    </notempty>
+                                </tbody>
+                            </table>
+                            {$pagination}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </present>
+</div>
+
+<script>
+var query = {$query};
+</script>
+
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js" />
+<js href="/Public/Lib/bootstrap-datepicker-1.7.1/locales/bootstrap-datepicker.zh-CN.min.js" />
+<js href="/Public/Js/gamemgr/log-room.js" />

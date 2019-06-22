@@ -1,0 +1,85 @@
+
+<include file="./Template/Common/header.html" />
+
+<css href="/Public/Css/auth/login.css" />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-offset-4 col-sm-4 well login-box">
+            <form class="form-horizontal" id="loginForm" onkeydown="keydownLogin(event);">
+                <!-- 标题 -->
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <h4 class="form-control-static text-center" id="admin_title">大圣游戏管理后台</h4>
+                    </div>
+                </div>
+                <hr/>
+                <!-- 用户名 -->
+                <div class="form-group has-feedback">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <input class="form-control" id="username" name="username" type="text" aria-describedby="inputUsername">
+                        <span class="glyphicon glyphicon-user form-control-feedback" aria-hidden="true"></span>
+                        <span id="inputUsername" class="sr-only">(username)</span>
+                    </div>
+                </div>
+                <!-- 密码 -->
+                <div class="form-group has-feedback">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <input class="form-control" id="password" name="password" type="password" aria-describedby="inputPassword">
+                        <span class="glyphicon glyphicon-lock form-control-feedback" aria-hidden="true"></span>
+                        <span id="inputPassword" class="sr-only">(password)</span>
+                    </div>
+                </div>
+                <!-- 登录地区 -->
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <select class="form-control" name="region">
+                            <foreach name="regionMap" item="v">
+                                <option value="{$key}">{$v}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                <!-- 记住密码 -->
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="remember" /> 记住密码
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- 登录 btn -->
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <button class="btn btn-danger btn-group-justified" type="button" onclick="submitLogin();">登录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <p class="text-center" id="copy_right">Copyright © 2016-2017. stevengame.com. All rights reserved.</p>
+    </div>
+</div>
+
+<script>
+// 登录后跳转地址
+var referer = "{$referer}";
+
+// 强制下线提示
+<present name="forceLogoutFlag">
+    $(function() {
+        'use strict';
+        $.zmsg.error("您的账号已经在其他机器上登录，请重新登录！");
+    });
+</present>
+</script>
+
+<js href="/Public/Js/auth/login.js" />
+
+<include file="./Template/Common/footer.html" />
