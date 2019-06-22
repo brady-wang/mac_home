@@ -2,13 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ed4d207-a29e-4e5e-9926-ed83a3c51dc1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/go.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/a.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hello.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../wang/Core/Run.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fm" beforeDir="false" afterPath="$PROJECT_DIR$/../fm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gitlab/test" beforeDir="false" afterPath="$PROJECT_DIR$/../gitlab/test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../laravel" beforeDir="false" afterPath="$PROJECT_DIR$/../laravel" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lumen" beforeDir="false" afterPath="$PROJECT_DIR$/../lumen" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lv" beforeDir="false" afterPath="$PROJECT_DIR$/../lv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rbac" beforeDir="false" afterPath="$PROJECT_DIR$/../rbac" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../showdoc" beforeDir="false" afterPath="$PROJECT_DIR$/../showdoc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../spider_python" beforeDir="false" afterPath="$PROJECT_DIR$/../spider_python" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test3" beforeDir="false" afterPath="$PROJECT_DIR$/../test3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test4" beforeDir="false" afterPath="$PROJECT_DIR$/../test4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tool" beforeDir="false" afterPath="$PROJECT_DIR$/../tool" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tools" beforeDir="false" afterPath="$PROJECT_DIR$/../tools" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
