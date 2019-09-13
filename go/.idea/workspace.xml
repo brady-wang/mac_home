@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7ed4d207-a29e-4e5e-9926-ed83a3c51dc1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../fm" beforeDir="false" afterPath="$PROJECT_DIR$/../fm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gitlab/test" beforeDir="false" afterPath="$PROJECT_DIR$/../gitlab/test" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../laravel" beforeDir="false" afterPath="$PROJECT_DIR$/../laravel" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lumen" beforeDir="false" afterPath="$PROJECT_DIR$/../lumen" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lv" beforeDir="false" afterPath="$PROJECT_DIR$/../lv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../rbac" beforeDir="false" afterPath="$PROJECT_DIR$/../rbac" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../showdoc" beforeDir="false" afterPath="$PROJECT_DIR$/../showdoc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../spider_python" beforeDir="false" afterPath="$PROJECT_DIR$/../spider_python" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test3" beforeDir="false" afterPath="$PROJECT_DIR$/../test3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test4" beforeDir="false" afterPath="$PROJECT_DIR$/../test4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tool" beforeDir="false" afterPath="$PROJECT_DIR$/../tool" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tools" beforeDir="false" afterPath="$PROJECT_DIR$/../tools" afterDir="false" />
+    <list default="true" id="b4dd43b3-a74b-462e-9660-8f662a74c3de" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/a.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/bee" beforeDir="false" afterPath="$PROJECT_DIR$/bin/bee" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/blog" beforeDir="false" afterPath="$PROJECT_DIR$/bin/blog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/linux_amd64/github.com/astaxie/beego.a" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/linux_amd64/github.com/astaxie/beego.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/blog/blog" beforeDir="false" afterPath="$PROJECT_DIR$/src/blog/blog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/blog/controllers/default.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/blog/controllers/default.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/blog/controllers/hello.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/blog/controllers/hello.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/blog/routers/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/blog/routers/router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/github.com/Echosong/beego_blog" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/github.com/go-sql-driver/mysql" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,19 +20,61 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hello.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="12" selection-start-column="12" selection-end-column="12" />
+            <state relative-caret-position="120">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/blog/controllers/default.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+              <folding>
+                <element signature="e#21#59#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/a.go">
+        <entry file="file://$PROJECT_DIR$/src/blog/views/index.tpl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="382">
+              <caret line="84" column="20" selection-start-line="84" selection-start-column="15" selection-end-line="84" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/blog/controllers/hello.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/blog/main.go">
           <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/blog/routers/router.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="8" column="42" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
+              <folding>
+                <element signature="e#17#75#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -42,19 +82,21 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Go Application" />
+        <option value="Go File" />
       </list>
     </option>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/hello.go" />
-        <option value="$PROJECT_DIR$/a.go" />
+        <option value="$PROJECT_DIR$/src/blog/routers/router.go" />
+        <option value="$PROJECT_DIR$/src/blog/views/index.tpl" />
+        <option value="$PROJECT_DIR$/src/blog/controllers/hello.go" />
+        <option value="$PROJECT_DIR$/src/blog/controllers/default.go" />
       </list>
     </option>
   </component>
@@ -80,6 +122,31 @@
               <item name="go" type="b2602c69:ProjectViewProjectNode" />
               <item name="go" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="blog" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="blog" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="blog" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -87,15 +154,14 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="DefaultGoTemplateProperty" value="Go Application" />
+    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.vendoring.notification.had.been.shown" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -109,83 +175,78 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Build.go build a.go">
-    <configuration name="go build a.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="go" />
-      <working_directory value="$PROJECT_DIR$/" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/a.go" />
-      <directory value="$PROJECT_DIR$/" />
-      <method v="2" />
-    </configuration>
-    <configuration name="go build hello.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="go" />
-      <working_directory value="$PROJECT_DIR$/" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/hello.go" />
-      <directory value="$PROJECT_DIR$/" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Go Build.go build a.go" />
-        <item itemvalue="Go Build.go build hello.go" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="ToolWindowManager">
     <frame x="20" y="43" width="1400" height="757" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2496318" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2569956" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32932332" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32932332" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/a.go" />
     <entry file="file://$PROJECT_DIR$/hello.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="12" selection-start-column="12" selection-end-column="12" />
+        <state relative-caret-position="120">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/a.go">
+    <entry file="file://$PROJECT_DIR$/src/blog/controllers/default.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+          <folding>
+            <element signature="e#21#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/blog/controllers/hello.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/blog/main.go">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ScopeChooserConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
+    <entry file="file://$PROJECT_DIR$/src/blog/routers/router.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="8" column="42" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
+          <folding>
+            <element signature="e#17#75#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/blog/views/index.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="84" column="20" selection-start-line="84" selection-start-column="15" selection-end-line="84" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
