@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <HEAD>
+        <META    HTTP-EQUIV="Pragma" CONTENT="no-cache">
+        <META    HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+        <META    HTTP-EQUIV="Expires" CONTENT="0">
+
+    </HEAD>
+    <title>Title</title>
+</head>
+<body>
+test
+<script>
+    var wsServer = 'ws://192.168.1.200:9502';
+    var websocket = new WebSocket(wsServer);
+    websocket.onopen = function (evt) {
+        websocket.send("这是来自客户端的消息");
+        console.log("连接websocket服务");
+    };
+
+
+
+
+    websocket.onclose = function (evt) {
+        console.log("断开链接");
+    };
+
+
+    websocket.onmessage = function (evt) {
+        console.log('接收到服务器数据 ' + evt.data);
+    };
+
+    websocket.onerror = function (evt, e) {
+        console.log('Error occured: ' + evt.data);
+    };
+</script>
+</body>
+</html>
